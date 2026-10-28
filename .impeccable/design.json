@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-28T00:00:00Z",
+  "title": "Design System: 7D Studio",
+  "extensions": {
+    "colorMeta": {
+      "paper": { "role": "neutral", "displayName": "Papel" },
+      "ink": { "role": "neutral", "displayName": "Tinta" },
+      "muted": { "role": "neutral", "displayName": "Gris editorial" },
+      "line": { "role": "neutral", "displayName": "Filete" },
+      "accent": { "role": "primary", "displayName": "Azul puntual" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display del hero", "purpose": "Titular exclusivo del hero cinematográfico; no sustituye la rampa global." },
+      "hero-display-tablet": { "displayName": "Display del hero en tablet", "purpose": "768–1023px o desde 1024px con aspecto máximo 1:1." },
+      "hero-display-mobile": { "displayName": "Display del hero móvil", "purpose": "Hasta 767px, contenido en flujo; última frase al 78%." },
+      "hero-description": { "displayName": "Descripción del hero", "purpose": "Copia local de hasta 330px de ancho." },
+      "hero-description-mobile": { "displayName": "Descripción del hero móvil", "purpose": "Hasta 767px; no modifica body global." },
+      "hero-eyebrow": { "displayName": "Eyebrow del hero", "purpose": "Identificación del estudio; interlínea móvil 1.7, sin punto azul." },
+      "hero-scroll": { "displayName": "Scroll exploratorio", "purpose": "Enlace nativo a Servicios con área mínima de 44px." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "interaction-color", "value": ".25s ease", "purpose": "Fondo, color y subrayado en botones y enlaces." },
+      { "name": "arrow", "value": "transform .3s ease", "purpose": "Flecha al hover: translate(3px, -3px)." },
+      { "name": "cinematic-scroll", "value": "scrub: 1; end: 2 × stage height; ease: none", "purpose": "GSAP y ScrollTrigger diferidos solo desde 768px sin movimiento reducido; acercamiento y enderezado con homografía común para foto, primer plano y pantalla HTML, hasta la entrega a Servicios nativos." },
+      { "name": "cinematic-static", "value": "ResizeObserver", "purpose": "Proyección HTML estática en móvil o movimiento reducido, sin pin ni descarga inicial de GSAP; sin JavaScript quedan foto y contenido normal." }
+    ],
+    "breakpoints": [
+      { "name": "mobile-nav-max", "value": "640px" },
+      { "name": "stacked-layout-max", "value": "767px" },
+      { "name": "cinematic-motion-min", "value": "768px" },
+      { "name": "hero-tablet-max", "value": "1023px" },
+      { "name": "hero-landscape-left-crop", "value": "1024–1279px, min-aspect-ratio: 1/1" },
+      { "name": "hero-portrait-desktop", "value": "min-width: 1024px, max-aspect-ratio: 1/1" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción sólida de la home; foco azul y flecha desplazable.",
+      "html": "<a class=\"ds-button\" href=\"#contacto\">Cuéntanos tu proyecto<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a>",
+      "css": ".ds-button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-height:54px;padding:16px 22px;background:var(--color-ink);color:#fff;border:1px solid transparent;border-radius:3px;font-family:var(--font-sans);font-size:14px;font-weight:500;text-decoration:none;transition:background .25s,color .25s}.ds-button:hover{background:var(--color-accent)}.ds-button:focus-visible{outline:2px solid var(--color-accent);outline-offset:6px}.ds-button svg{transition:transform .3s}.ds-button:hover svg{transform:translate(3px,-3px)}@media(prefers-reduced-motion:reduce){.ds-button,.ds-button svg{transition:none}}"
+    },
+    {
+      "name": "Botón de contacto",
+      "kind": "button",
+      "refersTo": "button-contact",
+      "description": "Variante invertida de ancho completo. La muestra no envía datos.",
+      "html": "<div class=\"ds-contact-surface\"><button class=\"ds-contact-button\" type=\"button\">Hablemos de tu proyecto<svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></button></div>",
+      "css": ".ds-contact-surface{background:var(--color-ink);padding:24px}.ds-contact-button{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;width:100%;min-height:54px;padding:16px 22px;border:1px solid transparent;border-radius:3px;background:var(--color-paper);color:var(--color-ink);font-family:var(--font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:background .25s,color .25s}.ds-contact-button:hover{background:#dcd9d2}.ds-contact-button:focus-visible{outline:2px solid var(--color-accent);outline-offset:6px}.ds-contact-button:disabled{opacity:.6;cursor:wait}.ds-contact-button svg{transition:transform .3s}.ds-contact-button:hover svg{transform:translate(3px,-3px)}@media(prefers-reduced-motion:reduce){.ds-contact-button,.ds-contact-button svg{transition:none}}"
+    },
+    {
+      "name": "Enlace de texto",
+      "kind": "custom",
+      "description": "Acción secundaria con subrayado al hover.",
+      "html": "<a class=\"ds-link\" href=\"#contacto\">Mientras tanto, hablemos del tuyo<svg width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a>",
+      "css": ".ds-link{display:inline-flex;align-items:center;gap:16px;min-height:44px;color:var(--color-ink);font-family:var(--font-sans);font-size:14px;font-weight:500;text-decoration:underline;text-underline-offset:6px;text-decoration-color:transparent;transition:text-decoration-color .25s}.ds-link:hover{text-decoration-color:currentColor}.ds-link:focus-visible{outline:2px solid var(--color-accent);outline-offset:6px}.ds-link svg{transition:transform .3s}.ds-link:hover svg{transform:translate(3px,-3px)}@media(prefers-reduced-motion:reduce){.ds-link,.ds-link svg{transition:none}}"
+    },
+    {
+      "name": "Campo de contacto",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Campo sobre carbón con etiqueta visible y borde inferior.",
+      "html": "<div class=\"ds-field\"><label for=\"ds-name\">Tu nombre <span>(obligatorio)</span></label><input id=\"ds-name\" name=\"name\" autocomplete=\"name\" required maxlength=\"100\" placeholder=\"¿Cómo te llamas?\" /></div>",
+      "css": ".ds-field{background:var(--color-ink);color:var(--color-paper);padding:24px;font-family:var(--font-sans)}.ds-field label{display:block;margin-bottom:9px;font-size:12px}.ds-field label span{color:#aaa;font-size:10px;margin-left:5px}.ds-field input{display:block;width:100%;padding:10px 0 13px;border:0;border-bottom:1px solid #555;border-radius:0;background:transparent;color:#fff;font-family:var(--font-sans);font-size:15px;line-height:1.5;caret-color:#fff}.ds-field input::placeholder{color:#a0a0a0;opacity:1}.ds-field input:focus{border-bottom-color:#fff}.ds-field input:focus-visible{outline:2px solid var(--color-accent);outline-offset:6px}@media(max-width:767px){.ds-field input{font-size:16px}}"
+    },
+    {
+      "name": "Navegación de escritorio",
+      "kind": "nav",
+      "description": "Enlaces horizontales dentro de una cabecera fija con z-index 50, externa al escenario GSAP. Fondo papel al 97% tras scroll; altura medida para compensar anclas. La interacción del menú móvil se documenta en DESIGN.md, no se simula aquí.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Navegación principal\"><a href=\"#servicios\">Servicios</a><a href=\"#proyectos\">Proyectos</a><a href=\"#estudio\">Estudio</a><a href=\"#contacto\">Contacto<svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" aria-hidden=\"true\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a></nav>",
+      "css": ".ds-nav{display:flex;gap:36px;flex-wrap:wrap;color:var(--color-ink);font-family:var(--font-sans)}.ds-nav a{display:inline-flex;align-items:center;gap:11px;min-height:44px;color:inherit;font-size:13px;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:6px;transition:text-decoration-color .25s}.ds-nav a:hover{text-decoration-color:currentColor}.ds-nav a:focus-visible{outline:2px solid var(--color-accent);outline-offset:6px}@media(prefers-reduced-motion:reduce){.ds-nav a{transition:none}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Minimalismo editorial digital",
+    "overview": "El sistema construido presenta un estudio independiente mediante tipografía, espacio y filetes. Geist sobre papel cálido y tinta casi negra sostiene una composición asimétrica; el azul aparece como señal puntual y respuesta interactiva. El hero incorpora una fotografía aportada por el usuario: su pantalla conduce a la sección HTML real de Servicios; las demás superficies mantienen la profundidad plana, sin degradados, tarjetas flotantes ni fotografía artificial.\n\nEsta actualización documenta únicamente hero, navegación y Servicios después de las correcciones revisadas; portfolio y secciones posteriores conservan su documentación. Fuentes actuales: `src/components/home/Hero.astro`, `Services.astro`, `src/scripts/cinematic-hero.ts`, `hero-projection.ts`, `src/data/hero-scene.ts`, `src/layouts/BaseLayout.astro`, `src/styles/global.css` y `.impeccable/review/cinematic/qa.json`. Astro y Tailwind 4 se conservan. El contrato de BaseLayout fija la dirección cinematográfica editorial sobre el seed `1c1b8177`.",
+    "keyCharacteristics": [
+      "Geist como única familia, jerarquía por escala y peso contenido.",
+      "Papel, tinta, gris y filetes; azul puntual.",
+      "Retícula asimétrica y superficies planas.",
+      "Fotografía original, perspectiva HTML y entrega a Servicios semánticos; móvil y movimiento reducido estáticos.",
+      "Numeración de secciones, eyebrow y marca tipográfica con ® exigidos por el brief."
+    ],
+    "rules": [
+      { "name": "The Accent Rule", "body": "El azul señala y responde; no sustituye los grandes fondos de papel y carbón que existen en la home.", "section": "colors" }
+    ],
+    "dos": [
+      "**Do** conservar Geist, papel, tinta, gris, filetes y azul puntual.",
+      "**Do** mantener la numeración, el eyebrow y ® exigidos por el brief.",
+      "**Do** permitir que el titular y las retículas refluyan en móvil.",
+      "**Do** mostrar estados honestos de portfolio y contacto, con foco visible y movimiento reducido."
+    ],
+    "donts": [
+      "**Don't** introducir degradados, tarjetas flotantes ni fotografía artificial.",
+      "**Don't** inventar clientes, métricas, casos, imágenes de proyectos, email o envíos completados.",
+      "**Don't** confundir ramas futuras de código con capacidades actualmente activadas.",
+      "**Don't** convertir la composición concreta de esta home en una regla universal para otras superficies."
+    ]
+  }
+}

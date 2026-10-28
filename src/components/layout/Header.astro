@@ -1,0 +1,178 @@
+---
+import { navigation } from "../../data/site";
+---
+
+<header class="header">
+  <div class="header__inner container">
+  <a class="brand" href="/" aria-label="7D Studio, inicio"
+    >7D STUDIO<sup>®</sup></a
+  >
+  <button
+    class="menu-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="main-nav"
+    hidden
+  >
+    <span class="menu-label">Menú</span><span
+      class="menu-symbol"
+      aria-hidden="true"><i></i><i></i></span
+    >
+  </button>
+  <nav id="main-nav" class="nav" aria-label="Navegación principal">
+    {
+      navigation.map((item) => (
+        <a href={item.href}>
+          {item.label}
+          {item.label === "Contacto" && (
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <path d="M5 19 19 5M5 5h14v14" />
+            </svg>
+          )}
+        </a>
+      ))
+    }
+  </nav>
+  </div>
+</header>
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    background: var(--color-paper);
+  }
+  .header--scrolled {
+    background: rgb(248 247 244 / 97%);
+  }
+  .header__inner {
+    min-height: 104px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .nav {
+    display: flex;
+    gap: 36px;
+  }
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 44px;
+    font-size: 13px;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.25s;
+  }
+  .nav a:hover {
+    text-decoration-color: currentColor;
+  }
+  .menu-toggle {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .header__inner {
+      min-height: 84px;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+    .brand {
+      font-size: 22px;
+    }
+    .menu-toggle:not([hidden]) {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 48px;
+      padding: 0 0 0 12px;
+      border: 0;
+      background: transparent;
+      font-size: 13px;
+    }
+    .menu-symbol {
+      width: 20px;
+      display: grid;
+      gap: 5px;
+    }
+    .menu-symbol i {
+      height: 1px;
+      background: currentColor;
+      transition: transform 0.25s;
+    }
+    [aria-expanded="true"] .menu-symbol i:first-child {
+      transform: translateY(3px) rotate(45deg);
+    }
+    [aria-expanded="true"] .menu-symbol i:last-child {
+      transform: translateY(-3px) rotate(-45deg);
+    }
+    .nav {
+      width: 100%;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-bottom: 16px;
+    }
+    .header--enhanced .nav {
+      display: none;
+    }
+    .header--enhanced .nav--open {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-block: 10px 22px;
+    }
+    .nav a {
+      min-height: 48px;
+      justify-content: space-between;
+    }
+  }
+</style>
+<script>
+  const header = document.querySelector<HTMLElement>(".header");
+  const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+  const nav = header?.querySelector<HTMLElement>(".nav");
+  if (header && toggle && nav) {
+    header.classList.add("header--enhanced");
+    toggle.hidden = false;
+    const syncHeight = () => {
+      document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+    };
+    new ResizeObserver(syncHeight).observe(header);
+    syncHeight();
+    const syncScroll = () => header.classList.toggle("header--scrolled", window.scrollY > 8);
+    window.addEventListener("scroll", syncScroll, { passive: true });
+    syncScroll();
+    const close = () => {
+      toggle.setAttribute("aria-expanded", "false");
+      nav.classList.remove("nav--open");
+      syncHeight();
+    };
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      toggle.setAttribute("aria-expanded", String(open));
+      nav.classList.toggle("nav--open", open);
+      syncHeight();
+    });
+    nav.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) close();
+    });
+    header.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        close();
+        toggle.focus();
+      }
+    });
+    matchMedia("(min-width: 641px)").addEventListener("change", close);
+  }
+</script>

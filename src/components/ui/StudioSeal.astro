@@ -1,0 +1,104 @@
+---
+// Cada instancia conserva su propio trazado, sin colisiones de IDs SVG.
+const orbitId = `studio-seal-${crypto.randomUUID()}`;
+---
+
+<div class="studio-seal" aria-hidden="true">
+  <svg class="studio-seal__art" viewBox="0 0 200 200" width="200" height="200" fill="none" focusable="false">
+    <defs>
+      <path id={orbitId} d="M100 17a83 83 0 1 1 0 166a83 83 0 1 1 0-166" />
+    </defs>
+    <circle class="studio-seal__rule" cx="100" cy="100" r="65" />
+    <g class="studio-seal__orbit">
+      <g class="studio-seal__turn">
+        <text class="studio-seal__text" textLength="518" lengthAdjust="spacing">
+          <textPath href={`#${orbitId}`}>7D STUDIO — DISEÑO WEB — SEO LOCAL — SOLUCIONES DIGITALES — </textPath>
+        </text>
+      </g>
+    </g>
+    <text class="studio-seal__monogram" x="98" y="111" text-anchor="middle">7D</text>
+    <text class="studio-seal__signature" x="101" y="132" text-anchor="middle">STUDIO</text>
+    <circle class="studio-seal__accent" cx="100" cy="53" r="2" />
+  </svg>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.studio-seal').forEach(seal => {
+    let visible = true;
+    const update = () => {
+      seal.dataset.paused = String(!visible || document.hidden);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      update();
+    });
+    observer.observe(seal);
+    document.addEventListener('visibilitychange', update);
+    update();
+  });
+</script>
+
+<style>
+  .studio-seal {
+    width: 100%;
+    aspect-ratio: 1;
+    color: var(--color-ink);
+  }
+  .studio-seal__art {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: var(--font-sans);
+  }
+  .studio-seal__rule {
+    stroke: currentColor;
+    stroke-width: .65;
+    opacity: .45;
+  }
+  .studio-seal__text {
+    fill: currentColor;
+    font-size: 9.5px;
+    font-weight: 450;
+  }
+  .studio-seal__monogram {
+    fill: currentColor;
+    font-size: 49px;
+    font-weight: 450;
+    letter-spacing: -.04em;
+  }
+  .studio-seal__signature {
+    fill: currentColor;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: .2em;
+  }
+  .studio-seal__accent {
+    fill: var(--color-accent);
+  }
+  .studio-seal__orbit,
+  .studio-seal__turn {
+    transform-origin: 100px 100px;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    /* Velocidad constante y vuelta completa sin salto al reiniciar. */
+    .studio-seal__turn {
+      animation: seal-spin 30s linear infinite;
+    }
+    .studio-seal[data-paused="true"] .studio-seal__turn {
+      animation-play-state: paused;
+    }
+    @keyframes seal-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .studio-seal__orbit {
+      transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+    }
+    .studio-seal:hover .studio-seal__orbit {
+      transform: rotate(6deg);
+    }
+  }
+</style>

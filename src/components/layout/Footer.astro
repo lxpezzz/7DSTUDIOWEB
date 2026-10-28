@@ -1,0 +1,32 @@
+---
+import { site, navigation } from '../../data/site';
+---
+<footer class="footer container">
+  <div class="footer__top">
+    <div><a class="brand" href="/" aria-label="7D Studio, inicio">7D STUDIO<sup>®</sup></a><p class="footer__description">Diseño web, SEO local y soluciones digitales.<br />Un estudio independiente en Castellón.</p></div>
+    <nav class="footer__nav" aria-label="Navegación de pie de página">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
+    <div class="footer__contact"><span>Hablemos.</span><a href={site.phoneHref}>{site.phone}</a><a href={site.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp <span class="sr-only">(se abre en una pestaña nueva)</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></a></div>
+  </div>
+  <div class="footer__bottom"><span>© {new Date().getFullYear()} 7D Studio</span>{site.legalLinks.length > 0 && <nav aria-label="Información legal">{site.legalLinks.map(link => <a href={link.href}>{link.label}</a>)}</nav>}<span>Claridad. Diseño. Cercanía.</span></div>
+</footer>
+<style>
+  .footer { padding-top: 56px; }
+  .footer__top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
+  .footer__description { margin: 19px 0 0; font-size: 12px; color: var(--color-muted); line-height: 1.75; }
+  .footer__nav { display: grid; justify-content: start; gap: 0; margin-top: -9px; }
+  .footer__nav a { display: flex; align-items: center; min-height: 36px; font-size: 12px; }
+  .footer__nav a:hover, .footer__contact a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .footer__contact { display: flex; flex-direction: column; align-items: start; font-size: 12px; }
+  .footer__contact > span { color: var(--color-muted); margin-bottom: 14px; }
+  .footer__contact > a { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; }
+  .footer__bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 20px; border-top: 1px solid var(--color-line); padding-block: 24px; font-size: 10px; color: var(--color-muted); }
+  .footer__bottom nav { display: flex; flex-wrap: wrap; gap: 20px; }
+  @media (max-width: 767px) {
+    .footer { padding-top: 40px; }
+    .footer__top { grid-template-columns: 1fr 1fr; gap: 28px; padding-bottom: 32px; }
+    .footer__top > div:first-child { grid-column: 1 / -1; }
+    .footer__nav a { min-height: 44px; }
+    .footer__contact > a { min-height: 44px; }
+    .footer__bottom { font-size: 9px; gap: 16px; }
+  }
+</style>

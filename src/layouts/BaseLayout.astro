@@ -1,0 +1,55 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+import geistFont from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  telephone: '+34621200800',
+  areaServed: { '@type': 'Place', name: 'Castellón, España' },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog', name: 'Servicios digitales',
+    itemListElement: ['Diseño web', 'SEO local', 'Soluciones digitales'].map(name => ({
+      '@type': 'Offer', itemOffered: { '@type': 'Service', name },
+    })),
+  },
+};
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <link rel="canonical" href={`${site.url}/`} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href={geistFont} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#F8F7F4" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    <meta property="og:url" content={`${site.url}/`} />
+    <meta property="og:image" content={`${site.url}/og.png`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="7D Studio. Tu negocio, mejor presentado. Y más fácil de encontrar." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <!-- THESIS: Una escena fotográfica editorial se convierte, al entrar en el portátil, en la sección HTML real de Servicios.
+    OWN-WORLD: Papel #F8F7F4, tinta #171717, Geist, filetes finos, azul puntual, retícula editorial asimétrica.
+    STORY: Entender los tres servicios, conocer el proceso y comenzar una conversación sin fricción.
+    FIRST VIEWPORT: Fotografía a sangre, navegación superior, titular y CTA a la izquierda sin invadir el portátil; scroll conduce a su pantalla.
+    FORM: Dirección cinematográfica fijada por el brief, conservando Geist y paleta editorial; prevalece sobre el seed 1c1b8177. Perspectiva HTML y GSAP, móvil estático.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance -->
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+  </body>
+</html>

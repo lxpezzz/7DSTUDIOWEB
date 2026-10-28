@@ -1,0 +1,102 @@
+---
+import { site } from '../../data/site';
+const configured = Boolean(site.web3formsKey);
+---
+<section id="contacto" class="contact section" aria-labelledby="contact-title">
+  <div class="container">
+    <p class="section-label"><span>05 /</span>CONTACTO</p>
+    <div class="contact__grid">
+      <div class="contact__intro">
+        <h2 id="contact-title">¿Tienes un<br />proyecto en mente?</h2>
+        <p>Cuéntanos qué necesitas y vemos cómo podemos ayudarte. Sin formularios interminables ni complicaciones.</p>
+        <a class="contact__whatsapp text-link" href={site.whatsapp} target="_blank" rel="noopener noreferrer">¿Prefieres WhatsApp?<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+        <a class="contact__phone" href={site.phoneHref}>{site.phone}</a>
+      </div>
+      <form class="contact__form" action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp} method={configured ? 'POST' : 'GET'} data-configured={String(configured)}>
+        {configured && <><input type="hidden" name="access_key" value={site.web3formsKey} /><input type="hidden" name="subject" value="Nuevo proyecto · 7D Studio" /><input type="hidden" name="from_name" value="7D Studio" /></>}
+        <div class="contact__trap" aria-hidden="true"><label for="website">Deja este campo vacío</label><input id="website" type="text" name="botcheck" tabindex="-1" autocomplete="off" /></div>
+        <div class="contact__field"><label for="name">Tu nombre <span>(obligatorio)</span></label><input id="name" name="name" autocomplete="name" required maxlength="100" placeholder="¿Cómo te llamas?" /></div>
+        <div class="contact__field"><label for="email">Tu email <span>(obligatorio)</span></label><input id="email" type="email" name="email" autocomplete="email" required maxlength="254" placeholder="Para poder responderte" /></div>
+        <div class="contact__field"><label for="message">Tu proyecto <span>(obligatorio)</span></label><textarea id="message" name="message" required minlength="10" maxlength="4000" rows="3" placeholder="Unas líneas sobre lo que tienes en mente"></textarea></div>
+        <p class="contact__notice" id="contact-notice">{configured ? 'Usaremos los datos solo para responder a tu consulta. El envío se procesa a través de Web3Forms.' : 'El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente.'}</p>
+        <button class="button contact__submit" type="submit" disabled={!configured} aria-describedby="contact-notice">Hablemos de tu proyecto<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></button>
+        <p class="contact__feedback" role="status" aria-live="polite" tabindex="-1"></p>
+        <a class="contact__continue text-link" href={site.whatsapp} hidden>Abrir mi mensaje en WhatsApp<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></a>
+        <noscript><p class="contact__notice">{configured ? 'Puedes enviar este formulario sin JavaScript.' : 'Para contarnos tu proyecto, utiliza el enlace directo a WhatsApp o llámanos. El formulario necesita JavaScript para preparar el mensaje.'}</p></noscript>
+      </form>
+    </div>
+  </div>
+</section>
+<style>
+  .contact { background: var(--color-ink); color: var(--color-paper); padding-block: 80px 88px; }
+  .section-label { margin: 0 0 48px; }
+  .section-label span { color: #a8a8a8; }
+  .contact__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(48px, 8vw, 116px); }
+  h2 { margin: 0; font-size: clamp(40px, 4.4vw, 62px); font-weight: 450; line-height: 1.1; letter-spacing: -.04em; }
+  .contact__intro > p { max-width: 350px; margin: 28px 0 44px; color: #b4b4b4; font-size: 16px; line-height: 1.65; }
+  .contact__whatsapp { font-size: 14px; }
+  .contact__phone { display: block; width: fit-content; color: #b4b4b4; font-size: 14px; padding-block: 10px; margin-top: 3px; }
+  .contact__phone:hover { color: white; }
+  .contact__field { margin-bottom: 26px; }
+  label { display: block; margin-bottom: 9px; font-size: 12px; }
+  label span { color: #aaa; font-size: 10px; margin-left: 5px; }
+  input:not([type='hidden']), textarea { display: block; width: 100%; padding: 10px 0 13px; border: 0; border-bottom: 1px solid #555; border-radius: 0; background: transparent; color: white; font-size: 15px; line-height: 1.5; caret-color: #fff; }
+  input::placeholder, textarea::placeholder { color: #a0a0a0; opacity: 1; }
+  input:focus, textarea:focus { border-bottom-color: white; }
+  textarea { resize: vertical; min-height: 100px; }
+  .contact__notice { margin: -4px 0 24px; color: #aaa; font-size: 11px; line-height: 1.65; }
+  .contact__submit { background: var(--color-paper); color: var(--color-ink); width: 100%; }
+  .contact__submit:hover { background: #dcd9d2; }
+  .contact__feedback { color: #eee; margin: 16px 0 0; font-size: 13px; line-height: 1.6; }
+  .contact__feedback:empty { display: none; }
+  .contact__continue { margin-top: 12px; }
+  .contact__trap { display: none; }
+  @media (max-width: 767px) {
+    .contact { padding-block: 56px 64px; }
+    .section-label { margin-bottom: 32px; }
+    .contact__grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact__intro > p { margin-block: 24px; }
+    h2 { font-size: clamp(38px, 7.8vw, 56px); }
+    input:not([type='hidden']), textarea { font-size: 16px; }
+  }
+</style>
+<script>
+  const form = document.querySelector<HTMLFormElement>('.contact__form');
+  if (form) {
+    const feedback = form.querySelector<HTMLElement>('.contact__feedback')!;
+    const button = form.querySelector<HTMLButtonElement>('.contact__submit')!;
+    const continueLink = form.querySelector<HTMLAnchorElement>('.contact__continue')!;
+    button.disabled = false;
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      if (data.get('botcheck')) return;
+      feedback.textContent = '';
+      if (form.dataset.configured !== 'true') {
+        const text = `Hola, soy ${data.get('name')}.\nMi email: ${data.get('email')}\n\n${data.get('message')}`;
+        continueLink.href = `${form.action}?text=${encodeURIComponent(text)}`;
+        continueLink.hidden = false;
+        feedback.textContent = 'Tu mensaje está preparado, pero todavía no se ha enviado. Ábrelo en WhatsApp para revisarlo y enviarlo.';
+        feedback.focus();
+        return;
+      }
+      button.disabled = true;
+      button.setAttribute('aria-busy', 'true');
+      feedback.textContent = 'Enviando tu consulta…';
+      try {
+        const response = await fetch(form.action, { method: 'POST', body: data, signal: AbortSignal.timeout(20000) });
+        const result: { success?: boolean } = await response.json();
+        if (!response.ok || !result.success) throw new Error('Submission failed');
+        feedback.textContent = 'Tu consulta se ha enviado. Gracias por contarnos tu proyecto.';
+        form.reset();
+      } catch {
+        feedback.textContent = 'No hemos podido enviar tu consulta. Tus datos siguen aquí: inténtalo de nuevo o escríbenos por WhatsApp.';
+      } finally {
+        button.disabled = false;
+        button.removeAttribute('aria-busy');
+        feedback.focus();
+      }
+    });
+  }
+</script>

@@ -1,0 +1,185 @@
+---
+const services = [
+  {
+    title: "Diseño web",
+    text: "Páginas rápidas, atractivas y pensadas para presentar tu negocio de forma profesional.",
+    tags: ["Landing pages", "Webs corporativas", "Rediseños"],
+  },
+  {
+    title: "SEO local",
+    text: "Mejoramos tu presencia en Google para que tus clientes puedan encontrarte.",
+    tags: ["Perfil de Empresa en Google", "Reseñas", "Optimización local"],
+  },
+  {
+    title: "Soluciones digitales",
+    text: "Herramientas y experiencias digitales que conectan tu negocio con tus clientes.",
+    tags: ["QR y NFC", "Microlandings", "Formularios"],
+  },
+];
+---
+
+<div class="services-surface">
+  <section
+    id="servicios"
+    class="services section container"
+    aria-labelledby="services-title"
+  >
+    <div class="services__heading">
+      <p class="section-label"><span>01 /</span>SERVICIOS</p>
+      <h2 class="section-title" id="services-title">
+        Soluciones digitales que tienen sentido para tu negocio.
+      </h2>
+    </div>
+    <div class="services__list">
+      {
+        services.map((service, index) => (
+          <article class="service">
+            <span class="service__number" aria-hidden="true">
+              0{index + 1}
+            </span>
+            <h3>{service.title}</h3>
+            <div class="service__detail">
+              <>
+                <p>{service.text}</p>
+                <ul aria-label={`Especialidades de ${service.title}`}>
+                  {service.tags.map((tag) => (
+                    <li>{tag}</li>
+                  ))}
+                </ul>
+              </>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+    <p class="services__note">
+      <span>¿POR QUÉ 7D?</span>Una landing page puede estar lista en siete días.<br
+        class="desktop-break"
+      /> Siempre que el alcance y los materiales lo permitan.
+    </p>
+  </section>
+</div>
+<style>
+  .services-surface {
+    position: relative;
+    background: var(--color-paper);
+    padding-top: 20px;
+  }
+  .services__heading {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    margin-bottom: 58px;
+  }
+  .section-label {
+    margin: 7px 0 0;
+  }
+  .services__heading h2 {
+    max-width: 690px;
+  }
+  .service {
+    display: grid;
+    grid-template-columns: 56px 1fr 1fr;
+    gap: 32px;
+    border-top: 1px solid var(--color-line);
+    padding-block: 38px 42px;
+  }
+  .service:last-child {
+    border-bottom: 1px solid var(--color-line);
+  }
+  .service__number {
+    padding-top: 10px;
+    color: var(--color-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  h3 {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 41px);
+    font-weight: 450;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+  .service__detail {
+    max-width: 440px;
+  }
+  .service__detail p {
+    margin: 0 0 23px;
+    font-size: 16px;
+    color: var(--color-muted);
+    line-height: 1.65;
+  }
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  li:not(:last-child)::after {
+    content: "·";
+    margin: 0 10px;
+    color: var(--color-muted);
+  }
+  .services__note {
+    display: flex;
+    justify-content: flex-end;
+    gap: 34px;
+    margin: 26px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.65;
+  }
+  .services__note span {
+    padding-top: 2px;
+    color: var(--color-ink);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  @media (max-width: 767px) {
+    .services-surface {
+    position: relative;
+    background: var(--color-paper);
+    padding-top: 0px;
+    }
+    .services__heading {
+      grid-template-columns: 1fr;
+      gap: 26px;
+      margin-bottom: 36px;
+    }
+    .service {
+      grid-template-columns: 28px 1fr;
+      gap: 16px;
+      padding-block: 28px 32px;
+    }
+    .service__number {
+      padding-top: 6px;
+    }
+    .service__detail {
+      grid-column: 2;
+      max-width: none;
+    }
+    .service__detail p {
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+    .services__note {
+      display: block;
+      font-size: 11px;
+      margin-left: 44px;
+    }
+    .services__note span {
+      display: block;
+      margin-bottom: 8px;
+    }
+    .desktop-break {
+      display: none;
+    }
+  }
+</style>

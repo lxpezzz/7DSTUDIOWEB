@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://7dstudio.es/sitemap-index.xml

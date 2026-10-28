@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Hero from '../components/home/Hero.astro';
+import Services from '../components/home/Services.astro';
+import Projects from '../components/home/Projects.astro';
+import Process from '../components/home/Process.astro';
+import About from '../components/home/About.astro';
+import Contact from '../components/home/Contact.astro';
+import Footer from '../components/layout/Footer.astro';
+---
+<BaseLayout>
+  <Header />
+  <main id="contenido">
+    <Hero />
+    <Services />
+    <Projects />
+    <Process />
+    <About />
+    <Contact />
+  </main>
+  <Footer />
+</BaseLayout>

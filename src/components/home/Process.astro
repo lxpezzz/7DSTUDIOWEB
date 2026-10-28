@@ -1,0 +1,30 @@
+---
+const steps = [
+  { title: 'Nos cuentas tu idea.', text: 'Entendemos tu negocio, tus objetivos y lo que necesitas.' },
+  { title: 'Diseñamos la solución.', text: 'Preparamos una propuesta y desarrollamos lo acordado.' },
+  { title: 'Lo ponemos en marcha.', text: 'Publicamos, comprobamos que funciona y te explicamos cómo utilizarlo.' },
+];
+---
+<section class="process section container" aria-labelledby="process-title">
+  <div class="process__heading"><p class="section-label"><span>03 /</span>PROCESO</p><h2 id="process-title" class="section-title">De la idea a la realidad.<br />Sin complicaciones.</h2></div>
+  <ol class="process__steps">{steps.map((step, index) => <li><span class="process__number" aria-hidden="true">0{index + 1}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M3 12h17m-6-6 6 6-6 6" /></svg></span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
+</section>
+<style>
+  .process__heading { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; }
+  .section-label { margin: 7px 0 0; }
+  .process__steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin: 64px 0 0; padding: 0; list-style: none; }
+  li { border-top: 1px solid var(--color-line); padding-top: 20px; }
+  .process__number { display: flex; align-items: center; justify-content: space-between; color: var(--color-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  li:last-child svg { display: none; }
+  h3 { margin: 36px 0 13px; font-size: clamp(20px, 1.8vw, 25px); font-weight: 450; letter-spacing: -.03em; }
+  li p { margin: 0; max-width: 290px; color: var(--color-muted); font-size: 15px; line-height: 1.65; }
+  @media (max-width: 767px) {
+    .process__heading { grid-template-columns: 1fr; gap: 26px; }
+    .process__steps { grid-template-columns: 1fr; gap: 28px; margin-top: 36px; }
+    li { display: grid; grid-template-columns: 28px 1fr; column-gap: 16px; }
+    .process__number { align-self: start; padding-top: 6px; }
+    .process__number svg { display: none; }
+    h3 { margin: 0 0 10px; font-size: 23px; }
+    li p { grid-column: 2; max-width: none; }
+  }
+</style>

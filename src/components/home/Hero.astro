@@ -1,0 +1,289 @@
+---
+import { heroScene } from "../../data/hero-scene";
+const maskId = `screen-opening-${crypto.randomUUID()}`;
+---
+
+<section class="cinematic-hero" aria-labelledby="hero-title">
+  <div class="cinematic-hero__stage">
+    <div class="cinematic-hero__photo" aria-hidden="true">
+      <img
+        src={heroScene.image}
+        width={heroScene.width}
+        height={heroScene.height}
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <div class="cinematic-hero__projection" aria-hidden="true" inert></div>
+    <div class="cinematic-hero__foreground" aria-hidden="true">
+      <svg
+        viewBox={`0 0 ${heroScene.width} ${heroScene.height}`}
+        preserveAspectRatio="xMidYMid slice"
+        focusable="false"
+      >
+        <defs>
+          <mask
+            id={maskId}
+            maskUnits="userSpaceOnUse"
+            x="0"
+            y="0"
+            width={heroScene.width}
+            height={heroScene.height}
+          >
+            <rect width={heroScene.width} height={heroScene.height} fill="white"
+            ></rect>
+            <polygon points={heroScene.opening} fill="black"></polygon>
+          </mask>
+        </defs>
+        <image
+          href={heroScene.image}
+          width={heroScene.width}
+          height={heroScene.height}
+          mask={`url(#${maskId})`}
+        />
+      </svg>
+    </div>
+    <div class="cinematic-hero__outside">
+      <div class="cinematic-hero__copy">
+        <p class="cinematic-hero__eyebrow">
+          ESTUDIO DIGITAL INDEPENDIENTE · CASTELLÓN
+        </p>
+        <h1 id="hero-title">
+          Tu negocio,<br />mejor presentado.<br /><span
+            >Y más fácil de encontrar.</span>
+        </h1>
+        <p class="cinematic-hero__description">
+          Diseño web, SEO local y soluciones digitales para conectar tu negocio
+          con tus clientes.
+        </p>
+        <a class="button" href="#contacto"
+          >Cuéntanos tu proyecto <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
+          ></a
+        >
+      </div>
+      <a class="cinematic-hero__scroll" href="#servicios"
+        >SCROLL PARA EXPLORAR <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"></path></svg
+        ></a
+      >
+    </div>
+    <div class="cinematic-hero__debug" aria-hidden="true" hidden></div>
+  </div>
+</section>
+
+<script>
+  import { initCinematicHero } from "../../scripts/cinematic-hero";
+  initCinematicHero();
+</script>
+
+<style>
+  .cinematic-hero {
+    position: relative;
+    z-index: 1;
+  }
+  .cinematic-hero__stage {
+    position: relative;
+    height: 100svh;
+    min-height: 680px;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--color-paper);
+  }
+  .cinematic-hero__photo,
+  .cinematic-hero__foreground {
+    position: absolute;
+    inset: 0;
+    transform-origin: 0 0;
+  }
+  .cinematic-hero__photo img,
+  .cinematic-hero__foreground svg {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: 50% 50%;
+  }
+  .cinematic-hero__foreground {
+    z-index: 2;
+    display: none;
+    pointer-events: none;
+  }
+  .cinematic-hero__projection {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--color-paper);
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .cinematic-hero__outside {
+    position: relative;
+    z-index: 3;
+    height: 100%;
+  }
+  .cinematic-hero__copy {
+    position: absolute;
+    top: max(150px, 20%);
+    left: var(--gutter);
+    width: 31%;
+    max-width: 470px;
+  }
+  .cinematic-hero__eyebrow {
+    margin: 0 0 26px;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.075em;
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(36px, 3.4vw, 58px);
+    font-weight: 450;
+    line-height: 1.045;
+    letter-spacing: -0.04em;
+  }
+  h1 span {
+    display: block;
+    max-width: 12ch;
+    margin-top: 14px;
+    color: #565656;
+    font-size: 0.78em;
+  }
+  .cinematic-hero__description {
+    max-width: 330px;
+    margin: 26px 0 22px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .cinematic-hero__scroll {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    min-height: 44px;
+    color: var(--color-paper);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+  }
+  .cinematic-hero__debug {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .cinematic-hero.cinematic-projected .cinematic-hero__projection {
+    visibility: visible;
+  }
+  .cinematic-hero.cinematic-projected .cinematic-hero__foreground {
+    display: block;
+  }
+  .cinematic-hero.cinematic-ready .cinematic-hero__stage {
+    min-height: 0;
+  }
+  .cinematic-hero.cinematic-complete .cinematic-hero__stage {
+    visibility: hidden;
+  }
+  :global(.cinematic-ready ~ .services-surface) {
+    margin-top: -100svh;
+  }
+  @media (min-width: 1024px) and (max-width: 1279px) and (min-aspect-ratio: 1/1) {
+    .cinematic-hero__photo img {
+      object-position: 0% 50%;
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px),
+    (min-width: 1024px) and (max-aspect-ratio: 1/1) {
+    .cinematic-hero__photo,
+    .cinematic-hero__foreground {
+      top: 180px;
+    }
+    .cinematic-hero__copy {
+      top: 135px;
+      width: 55%;
+      max-width: 440px;
+    }
+    h1 {
+      font-size: clamp(36px, 4.6vw, 48px);
+    }
+    .cinematic-hero__eyebrow {
+      margin-bottom: 18px;
+    }
+    .cinematic-hero__description {
+      margin-top: 18px;
+    }
+    .cinematic-hero__scroll {
+      color: var(--color-ink);
+      background: var(--color-paper);
+      padding-inline: 12px;
+      margin-left: -12px;
+    }
+  }
+  @media (max-width: 767px) {
+    .cinematic-hero__stage {
+      height: auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: var(--header-height);
+    }
+    .cinematic-hero__outside {
+      display: contents;
+    }
+    .cinematic-hero__copy {
+      position: static;
+      order: 1;
+      width: auto;
+      max-width: none;
+      margin: 36px var(--gutter) 32px;
+    }
+    .cinematic-hero__eyebrow {
+      max-width: 300px;
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(43px, 8.6vw, 64px);
+      max-width: 12ch;
+    }
+    h1 span {
+      max-width: 13ch;
+    }
+    .cinematic-hero__description {
+      margin-top: 24px;
+      font-size: 16px;
+    }
+    .cinematic-hero__photo {
+      position: relative;
+      order: 2;
+      aspect-ratio: 1672 / 941;
+    }
+    .cinematic-hero__photo img {
+      position: absolute;
+      inset: 0;
+    }
+    .cinematic-hero__scroll {
+      position: static;
+      order: 3;
+      margin: 12px var(--gutter) 0;
+      color: var(--color-ink);
+    }
+  }
+</style>

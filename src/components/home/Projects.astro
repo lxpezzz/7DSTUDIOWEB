@@ -1,0 +1,45 @@
+---
+import { projects } from '../../data/projects';
+---
+<section id="proyectos" class="projects section" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="projects__heading">
+      <p class="section-label"><span>02 /</span>PROYECTOS</p>
+      <div><h2 class="section-title" id="projects-title">Nuestro trabajo<br />habla por nosotros.</h2>
+        <p class="body-copy">{projects.length ? 'Una selección de proyectos que muestran cómo entendemos el diseño, la funcionalidad y los detalles.' : 'El diseño, la funcionalidad y los detalles se entienden mejor cuando puedes verlos.'}</p>
+      </div>
+    </div>
+    {projects.length > 0 ? <div class="projects__grid">{projects.map(project => <article class="project">
+      {project.href ? <a href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`Ver ${project.name} (se abre en una pestaña nueva)`}><img src={project.image} width={project.width} height={project.height} alt={project.alt} loading="lazy" decoding="async" /></a> : <img src={project.image} width={project.width} height={project.height} alt={project.alt} loading="lazy" decoding="async" />}
+      <div class="project__caption"><h3>{project.name}</h3><span>{project.kind} · {project.category}</span></div><p>{project.services}</p>
+    </article>)}</div> : <div class="projects__empty">
+      <div class="projects__status"><span aria-hidden="true"></span>PORTFOLIO EN PREPARACIÓN</div>
+      <p>Estamos preparando una selección de trabajos para compartir aquí. Preferimos enseñarte proyectos con contexto, no solo una imagen bonita.</p>
+      <a class="text-link" href="#contacto">Mientras tanto, hablemos del tuyo<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></a>
+    </div>}
+  </div>
+</section>
+<style>
+  .projects { background: #eeede9; }
+  .projects__heading { display: grid; grid-template-columns: 1fr 2fr; gap: 48px; }
+  .section-label { margin: 7px 0 0; }
+  .body-copy { max-width: 420px; margin: 26px 0 0; }
+  .projects__empty { margin-top: 64px; border-top: 1px solid #d7d5cf; padding-top: 30px; display: grid; grid-template-columns: 1fr 2fr; column-gap: 48px; }
+  .projects__status { display: flex; align-items: center; align-self: start; gap: 9px; margin-top: 7px; font-size: 9px; letter-spacing: .06em; }
+  .projects__status span { width: 5px; height: 5px; background: var(--color-accent); border-radius: 50%; }
+  .projects__empty > p { max-width: 575px; margin: 0; font-size: clamp(20px, 2vw, 27px); line-height: 1.45; letter-spacing: -.02em; }
+  .projects__empty > a { grid-column: 2; justify-self: start; margin-top: 24px; }
+  .projects__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px 32px; margin-top: 56px; }
+  .project img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: opacity .3s; }
+  .project a:hover img { opacity: .85; }
+  .project__caption { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; margin-top: 20px; }
+  .project h3 { margin: 0; font-size: 24px; letter-spacing: -.03em; font-weight: 500; }
+  .project__caption span, .project > p { font-size: 12px; color: var(--color-muted); }
+  @media (max-width: 767px) {
+    .projects__heading { grid-template-columns: 1fr; gap: 26px; }
+    .body-copy { margin-top: 22px; }
+    .projects__empty { margin-top: 36px; grid-template-columns: 1fr; gap: 24px; padding-top: 24px; }
+    .projects__empty > a { grid-column: 1; margin-top: 0; font-size: 13px; }
+    .projects__grid { grid-template-columns: 1fr; }
+  }
+</style>

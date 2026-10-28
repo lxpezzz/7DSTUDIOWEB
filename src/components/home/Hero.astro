@@ -44,6 +44,7 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
         />
       </svg>
     </div>
+    <div class="cinematic-hero__interaction" hidden></div>
     <div class="cinematic-hero__outside">
       <div class="cinematic-hero__copy">
         <h1 id="hero-title">
@@ -106,6 +107,26 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     position: absolute;
     inset: 0;
     transform-origin: 0 0;
+    pointer-events: none;
+  }
+  .cinematic-hero__interaction {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    overflow: hidden;
+    transform-origin: 0 0;
+    pointer-events: none;
+  }
+  .cinematic-hero__interaction :global(a) {
+    position: absolute;
+    display: block;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+  .cinematic-hero__interaction :global(a:focus-visible) {
+    outline: 3px solid #171717;
+    outline-offset: -4px;
   }
   .cinematic-hero__photo img,
   .cinematic-hero__foreground svg {
@@ -135,6 +156,11 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     position: relative;
     z-index: 3;
     height: 100%;
+    pointer-events: none;
+  }
+  .cinematic-hero__copy,
+  .cinematic-hero__scroll {
+    pointer-events: auto;
   }
   .cinematic-hero__copy {
     position: absolute;
@@ -188,6 +214,10 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   .cinematic-hero.cinematic-projected .cinematic-hero__foreground {
     display: block;
   }
+  /* Las reglas de presentación no deben anular el atributo hidden del traspaso. */
+  .cinematic-hero [hidden] {
+    display: none !important;
+  }
   .cinematic-hero.cinematic-ready .cinematic-hero__stage {
     min-height: 0;
   }
@@ -196,10 +226,16 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   }
   /* El pin-spacer conserva su altura, pero no debe interceptar la sección real. */
   .cinematic-hero.cinematic-complete {
+    visibility: hidden;
     pointer-events: none;
   }
   :global(.cinematic-ready ~ .services-surface) {
     margin-top: -100svh;
+  }
+  /* El padding interno de Servicios ya deja sus títulos bajo el header fijo.
+     Cancelar la compensación global para no aterrizar antes de liberar el pin. */
+  :global(.cinematic-ready ~ .services-surface #servicios) {
+    scroll-margin-top: calc(-1 * (var(--header-height) + 24px));
   }
   @media (min-width: 1024px) and (max-width: 1279px) and (min-aspect-ratio: 1/1) {
     .cinematic-hero__photo img {

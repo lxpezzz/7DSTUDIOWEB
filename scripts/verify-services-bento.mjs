@@ -14,7 +14,7 @@ const failures = [];
 function check(test, message) { if (!test) failures.push(message); }
 for (const service of services) {
   const files = [`../../pages/${service.route.replace(/^\/|\/$/g, '')}/index.astro`];
-  assert.equal(getServiceHref(service, files), undefined);
+  assert.equal(getServiceHref(service, files), service.published ? service.route : undefined);
   assert.equal(getServiceHref({ ...service, published: true }, []), undefined);
   assert.equal(getServiceHref({ ...service, published: true }, files), service.route);
 }
@@ -35,20 +35,22 @@ try {
       const browser = section.querySelector('.web-scene__browser').getBoundingClientRect();
       return { width: innerWidth, documentWidth: document.documentElement.scrollWidth,
         background: getComputedStyle(section.parentElement).backgroundColor,
-        cards: cards.map(card => ({ ...box(card), title: card.querySelector('h3').textContent, tag: card.tagName,
+        cards: cards.map(card => ({ ...box(card), title: card.querySelector('h3').textContent, tag: card.tagName, href: card.getAttribute('href'),
           links: card.querySelectorAll('a,button,input,[tabindex]').length, cursor: getComputedStyle(card).cursor,
           clippedText: card.querySelector('.service-card__copy').scrollWidth > card.querySelector('.service-card__copy').clientWidth + 1 })),
         images: [...section.querySelectorAll('img')].map(image => ({ src: image.currentSrc, loaded: image.complete && image.naturalWidth > 0 })),
         browserContained: browser.left >= scene.left - 1 && browser.right <= scene.right + 1 && browser.top >= scene.top - 1 && browser.bottom <= scene.bottom + 1,
-        illustrationMarked: section.querySelector('.local-scene__caption').textContent,
+        illustrationMarked: section.querySelector('.local-scene__caption')?.textContent ?? null,
+        ctas: cards.map(card => card.querySelector('.service-card__cta')?.textContent.trim()),
         reducedMotion: getComputedStyle(cards[0]).transitionDuration,
       };
     });
     check(layout.documentWidth === width, `Overflow documento a ${width}`);
     check(layout.background === 'rgb(244, 241, 235)', `Fondo incorrecto a ${width}`);
     check(layout.cards.length === 3, `Número de tarjetas a ${width}`);
+    check(layout.ctas.every(Boolean), `CTA visible por tarjeta a ${width}`);
     check(layout.cards.every(card => card.x >= 0 && card.right <= width + 1 && !card.clippedText), `Recorte de tarjeta/texto a ${width}`);
-    check(layout.cards.every(card => card.tag === 'ARTICLE' && card.links === 0 && card.cursor !== 'pointer'), `Enlaces no publicados a ${width}`);
+    check(layout.cards.every((card, index) => card.tag === 'A' && card.href === (services[index].published ? services[index].route : '#contacto') && card.links === 0 && card.cursor === 'pointer'), `Destino temporal/publicado o enlace único incorrecto a ${width}`);
     check(layout.images.every(image => image.loaded), `Imagen no cargada a ${width}`);
     check(layout.browserContained, `Navegador cortado a ${width}`);
     if (width < 960) check(layout.cards[0].bottom <= layout.cards[1].y + 1 && layout.cards[1].bottom <= layout.cards[2].y + 1, `Orden vertical a ${width}`);
@@ -65,40 +67,32 @@ try {
     results.push({ ...layout, accessibilityViolations: violations, errors });
     await context.close();
   }
-  // Prueba del contenido real tras el pin y del estado enlazado futuro, solo en el DOM de QA.
+  // Prueba del contenido real tras el pin y de los enlaces temporales a Contacto.
   const interactive = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
   await interactive.goto(process.argv[3] || 'http://127.0.0.1:4330', { waitUntil: 'networkidle' });
   await interactive.waitForSelector('.cinematic-ready');
-  await interactive.evaluate(() => scrollTo({ top: 1800, behavior: 'instant' }));
+  await interactive.evaluate(() => scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }));
   await interactive.waitForTimeout(1500);
   await interactive.locator('#services-title').dblclick();
   check(await interactive.evaluate(() => getSelection().toString().length > 0), 'Selección de texto tras completar el zoom');
   await interactive.evaluate(() => getSelection().removeAllRanges());
-  await interactive.locator('#servicios .service-card').first().evaluate(article => {
-    const link = document.createElement('a');
-    for (const attribute of article.attributes) link.setAttribute(attribute.name, attribute.value);
-    link.classList.add('service-card--linked');
-    link.href = '#contacto';
-    link.innerHTML = article.innerHTML;
-    article.replaceWith(link);
-  });
-  const linked = interactive.locator('#servicios a.service-card');
+  const linked = interactive.locator('#servicios a.service-card').first();
   check(await linked.locator('a, button, input, [tabindex]').count() === 0, 'Sin controles anidados en tarjeta enlazada');
   await linked.hover();
   await interactive.waitForTimeout(400);
-  check(await linked.evaluate(el => getComputedStyle(el).cursor === 'pointer' && getComputedStyle(el).transform !== 'none'), 'Hover y cursor de tarjeta futura');
+  check(await linked.evaluate(el => getComputedStyle(el).cursor === 'pointer' && getComputedStyle(el).transform === 'none' && getComputedStyle(el).boxShadow.includes('0.34')), 'Halo y cursor sin desplazamiento de tarjeta');
   await interactive.locator('#servicios .section-cta a').focus();
-  await interactive.keyboard.press('Shift+Tab');
+  for (let index = 0; index < 3; index++) await interactive.keyboard.press('Shift+Tab');
   check(await linked.evaluate(el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle === 'solid'), 'Foco visible de tarjeta futura');
   await linked.locator('h3').click();
   await interactive.waitForTimeout(900);
   check(new URL(interactive.url()).hash === '#contacto', 'Click en contenido de la tarjeta futura');
-  await interactive.evaluate(() => scrollTo({ top: 1800, behavior: 'instant' }));
+  await interactive.evaluate(() => scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }));
   await interactive.waitForTimeout(1400);
   await interactive.locator('#servicios .section-cta a').click();
   check(new URL(interactive.url()).hash === '#contacto', 'CTA real accesible tras el pin');
   await interactive.close();
-  await writeFile(`${output}/qa.json`, JSON.stringify({ results, failures, realSectionInteraction: 'checked', futureLinkState: 'browser-only QA, no route published' }, null, 2));
+  await writeFile(`${output}/qa.json`, JSON.stringify({ results, failures, realSectionInteraction: 'checked', routeState: 'SEO local published; other services use contact fallback' }, null, 2));
   console.log(JSON.stringify({ results, failures }, null, 2));
   assert.deepEqual(failures, []);
 } finally { await browser.close(); }

@@ -16,7 +16,7 @@ const browser = await chromium.launch();
 const errors = [];
 const results = [];
 async function settle(page) {
-  await page.waitForTimeout(1450); // scrub de 1s y un frame de margen
+  await page.waitForTimeout(250); // ScrollTrigger y pintura, sin scrub diferido
 }
 async function dimensions(page) {
   return page.evaluate(() => {
@@ -78,11 +78,12 @@ try {
     const checkpoints = [];
     if (width >= 768) {
       assert.equal(initial.pinned, true);
-      assert.ok(Math.abs(initial.services.top - height * 2) < 2, 'Posición semántica de Servicios');
-      const percentages = width === 1440 ? [.15, .30, .45, .60, .75, .95, 1, 1.12] : [.60, .95, 1];
+      const pinDistance = height * 1.5;
+      assert.ok(Math.abs(initial.services.top - pinDistance) < 2, 'Posición semántica de Servicios');
+      const percentages = width === 1440 ? [.15, .30, .45, .60, .75, .95, .999, 1, 1.12] : [.60, .95, .999, 1];
       let projected;
       for (const progress of percentages) {
-        await scroll(page, height * 2 * progress);
+        await scroll(page, pinDistance * progress);
         const result = await dimensions(page);
         result.registrationError = await page.evaluate(() => {
           const photo = document.querySelector('.cinematic-hero__photo');
@@ -103,19 +104,21 @@ try {
           }));
         });
         // getComputedStyle serializa matrix3d con precisión limitada; tolerancia subpíxel.
-        assert.ok(result.registrationError < .5, `Registro foto/HTML a ${width}px y ${progress}: ${result.registrationError}`);
+        if (progress < 1) assert.ok(result.registrationError < .5, `Registro foto/HTML a ${width}px y ${progress}: ${result.registrationError}`);
         assert.equal(result.width, result.documentWidth);
-        if (progress >= .75 && progress < 1) {
+        if (progress === .999) {
           assert.ok(Math.abs(result.projection.width - width) < 2);
           assert.ok(Math.abs(result.projection.height - height) < 2);
           assert.ok(Math.abs(result.projection.top) < 2);
           assert.ok(Math.abs(result.projection.left) < 2);
         }
         const capture = await page.screenshot({ path: `${output}/${width}-${Math.round(progress * 100)}.png` });
-        if (progress === .95) projected = capture.toString('base64');
+        if (progress === .999) projected = capture.toString('base64');
         if (progress === 1) {
           assert.ok(result.complete);
           assert.ok(Math.abs(result.services.top) < 2);
+          result.layers = await page.locator('.cinematic-hero__photo, .cinematic-hero__projection, .cinematic-hero__foreground, .cinematic-hero__outside').evaluateAll(layers => layers.map(el => ({ hidden: el.hidden, display: getComputedStyle(el).display, rects: el.getClientRects().length })));
+          assert.ok(result.layers.every(layer => layer.hidden && layer.display === 'none' && layer.rects === 0), 'Ninguna capa decorativa debe seguir pintándose');
           result.handoff = await page.evaluate(async ({ before, after }) => {
             const load = src => new Promise(resolve => { const img = new Image(); img.onload = () => resolve(img); img.src = `data:image/png;base64,${src}`; });
             const [a, b] = await Promise.all([load(before), load(after)]);
@@ -130,23 +133,34 @@ try {
             }
             return { changedRatio: changed / (a.width * a.height), meanChannelDifference: difference / (a.width * a.height * 3) };
           }, { before: projected, after: capture.toString('base64') });
-          assert.ok(result.handoff.changedRatio < .01, `Salto visual: ${JSON.stringify(result.handoff)}`);
+          // Transformado vs HTML nativo cambia el antialiasing de los bordes.
+          // Además de la geometría <2px, limitar tanto su área como el error medio.
+          assert.ok(result.handoff.changedRatio < .04 && result.handoff.meanChannelDifference < 1, `Salto visual: ${JSON.stringify(result.handoff)}`);
           result.realContentReceivesPointer = await page.locator('#services-title').evaluate(title => {
             const box = title.getBoundingClientRect();
             return Boolean(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('#servicios'));
           });
           assert.equal(result.realContentReceivesPointer, true, 'El pin no debe bloquear Servicios al terminar');
-          await page.locator('#services-title').dblclick();
-          assert.ok(await page.evaluate(() => getSelection().toString().length > 0), 'El texto real de Servicios debe poder seleccionarse');
+          const title = page.locator('#servicios [data-service="diseno-web"] h3');
+          await title.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+          await settle(page);
+          const box = await title.boundingBox();
+          await page.mouse.move(box.x + 1, box.y + box.height / 2);
+          await page.mouse.down();
+          await page.mouse.move(box.x + box.width - 1, box.y + box.height / 2, { steps: 18 });
+          await page.mouse.up();
+          assert.equal(await page.evaluate(() => getSelection().toString().trim()), 'Diseño web', 'Selección nativa del título real');
           await page.evaluate(() => getSelection().removeAllRanges());
+          await scroll(page, pinDistance);
         }
         checkpoints.push({ progress, ...result });
       }
-      await scroll(page, height * 2 + 120);
+      await scroll(page, pinDistance + 120);
       assert.ok(Math.abs((await dimensions(page)).services.top + 120) < 2, 'Scroll natural después del pin');
       await scroll(page, height * .9);
       const reverse = await dimensions(page);
       assert.equal(reverse.complete, false);
+      assert.equal(await page.locator('.cinematic-hero__projection').evaluate(el => el.hidden), false, 'Restaurar clon en reversa');
       await page.reload({ waitUntil: 'networkidle' });
       await page.waitForSelector('.cinematic-ready');
       await settle(page);

@@ -20,13 +20,13 @@ export const services: readonly Service[] = [
     id: 'seo-local', title: 'SEO local', scene: 'local',
     description: 'Mejoramos tu visibilidad en Google para que tus clientes puedan encontrarte.',
     tags: ['Perfil de Empresa', 'Reseñas', 'Optimización local'],
-    route: '/seo-local/', published: false,
+    route: '/seo-local/', published: true,
   },
   {
     id: 'productos-fisicos', title: 'Productos físicos', scene: 'digital',
     description: 'Productos físicos personalizados con QR y NFC para mejorar la experiencia de tus clientes.',
     tags: ['QR', 'NFC', 'Personalizados'],
-    route: '/soluciones-digitales/', published: false,
+    route: '/productos/', published: false,
   },
 ];
 

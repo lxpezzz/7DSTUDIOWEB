@@ -1,0 +1,184 @@
+---
+import { seoPlans, getSeoPlanHref } from '../../data/seoPlans';
+const plans = [...seoPlans].sort((a, b) => a.order - b.order);
+const currency = new Intl.NumberFormat('es-ES', {
+  style: 'currency',
+  currency: 'EUR',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+---
+
+<section id="planes" class="plans container" aria-labelledby="plans-title">
+  <div class="plans__heading">
+    <p class="plans__label">PLANES SEO LOCAL</p>
+    <h2 id="plans-title">Un punto de partida para tu negocio.</h2>
+    <p>Dos opciones para empezar a trabajar tu presencia local. Consúltanos para conocer el alcance de cada plan y valorar cuál encaja contigo.</p>
+  </div>
+  <div class="plans__grid">
+    {plans.map(plan => <article class:list={['plan', { 'plan--featured': plan.featured }]} data-plan={plan.id} aria-labelledby={`${plan.id}-title`}>
+      <div class="plan__intro">
+        {plan.badge && <p class="plan__badge">{plan.badge}</p>}
+        <h3 id={`${plan.id}-title`}>{plan.name}</h3>
+        <p class="plan__description">{plan.description}</p>
+        <p class="plan__price"><strong>{currency.format(plan.price)}</strong><span>{plan.period}</span><small>{plan.taxLabel}</small></p>
+      </div>
+      {plan.included.length > 0 && <div class="plan__features"><h4>Incluye</h4><ul>{plan.included.map(feature => <li>{feature}</li>)}</ul></div>}
+      {plan.excluded.length > 0 && <div class="plan__features plan__features--excluded"><h4>No incluye</h4><ul>{plan.excluded.map(feature => <li>{feature}</li>)}</ul></div>}
+      <a class="plan__button button" href={getSeoPlanHref(plan)} target="_blank" rel="noopener noreferrer">{plan.cta}<span aria-hidden="true">↗</span><span class="sr-only"> por WhatsApp (se abre en una pestaña nueva)</span></a>
+    </article>)}
+  </div>
+  <p class="plans__note">El Perfil de Empresa de Google es gratuito. Nuestros honorarios corresponden al trabajo profesional de optimización y seguimiento, no a un pago a Google por aparecer.</p>
+</section>
+
+<style>
+  .plans {
+    padding-block: 96px;
+  }
+  .plans__heading {
+    max-width: 750px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+  .plans__label {
+    margin: 0 0 18px;
+    color: #59674f;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(30px, 3.3vw, 46px);
+    font-weight: 450;
+    line-height: 1.13;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+  .plans__heading > p:last-child {
+    margin: 24px 0 0;
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .plans__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .plan {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 40px;
+    border: 1px solid var(--color-line);
+    border-radius: 18px;
+    background: #fff;
+  }
+  .plan--featured {
+    border-color: #b6c1aa;
+    background: #e7e9e0;
+  }
+  .plan__badge {
+    width: fit-content;
+    margin: 0 0 20px;
+    padding: 5px 10px;
+    border: 1px solid #b6c1aa;
+    border-radius: 5px;
+    color: #47563e;
+    font-size: 12px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -.035em;
+  }
+  .plan__description {
+    max-width: 43ch;
+    min-height: 56px;
+    margin: 20px 0 28px;
+    color: #626158;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .plan__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 36px;
+    font-variant-numeric: tabular-nums;
+  }
+  .plan__price strong {
+    font-size: clamp(44px, 4.5vw, 60px);
+    font-weight: 450;
+    line-height: 1.1;
+    letter-spacing: -.04em;
+  }
+  .plan__price > span {
+    color: #626158;
+    font-size: 16px;
+  }
+  .plan__price small {
+    margin-left: 4px;
+    color: #626158;
+    font-size: 12px;
+  }
+  .plan__features {
+    padding-top: 20px;
+    border-top: 1px solid #cfd4c7;
+    margin-bottom: 28px;
+  }
+  .plan__features h4 {
+    margin: 0 0 14px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .plan__features ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .plan__features li {
+    padding-block: 5px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .plan__features--excluded {
+    color: #626158;
+  }
+  .plan__button {
+    margin-top: auto;
+  }
+  .plan__button:focus-visible {
+    outline: 2px solid #47563e;
+    outline-offset: 5px;
+  }
+  .plans__note {
+    max-width: 84ch;
+    margin: 24px auto 0;
+    color: var(--color-muted);
+    font-size: 13px;
+    line-height: 1.7;
+    text-align: center;
+  }
+  @media (max-width: 767px) {
+    .plans {
+      padding-block: 64px;
+    }
+    .plans__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .plan {
+      padding: 28px;
+    }
+    .plan__description {
+      min-height: 0;
+    }
+    .plan__button {
+      gap: 14px;
+      padding-inline: 16px;
+    }
+  }
+</style>

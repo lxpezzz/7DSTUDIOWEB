@@ -1,60 +1,246 @@
 ---
-import type { Service } from '../../data/services';
-interface Props { service: Service; href?: string; }
-const { service, href } = Astro.props;
-const Card = href ? 'a' : 'article';
+import type { Service } from "../../data/services";
+interface Props {
+  service: Service;
+  href?: string;
+  pending?: boolean;
+}
+const { service, href, pending = !href } = Astro.props;
+const Card = href ? "a" : "article";
 const titleId = `service-${service.id}-${crypto.randomUUID()}`;
+const serviceLabel = { web: "diseño web", local: "SEO local", digital: "productos" }[service.scene];
+const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
 ---
 
-<Card class:list={['service-card', `service-card--${service.scene}`, { 'service-card--linked': !!href }]}
-  href={href} aria-labelledby={titleId} data-service={service.id}>
+<Card
+  class:list={[
+    "service-card",
+    `service-card--${service.scene}`,
+    { "service-card--linked": !!href, "service-card--pending": pending },
+  ]}
+  href={href}
+  draggable={href ? "false" : undefined}
+  aria-labelledby={pending && href ? undefined : titleId}
+  aria-label={pending && href
+    ? `${service.title}: consultar en Contacto`
+    : undefined}
+  data-service={service.id}
+>
   <div class="service-card__scene"><slot /></div>
   <div class="service-card__copy">
     <div class="service-card__heading">
       <h3 id={titleId}>{service.title}</h3>
-      <svg class="service-card__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+      <svg
+        class="service-card__arrow"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
+      >
     </div>
     <p class="service-card__description">{service.description}</p>
-    <ul class="service-card__tags" aria-label={`Especialidades de ${service.title}`}>
-      {service.tags.map(tag => <li>{tag}</li>)}
+    <ul
+      class="service-card__tags"
+      aria-label={`Especialidades de ${service.title}`}
+    >
+      {service.tags.map((tag) => <li>{tag}</li>)}
     </ul>
-    {!href && <span class="service-card__availability">Página del servicio próximamente</span>}
+    {href && (
+      <span class="service-card__cta">
+        {ctaLabel}
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+      </span>
+    )}
   </div>
+      
 </Card>
 
 <style>
-  .service-card { display: flex; flex-direction: column; gap: 24px; min-width: 0; padding: 28px; border: 1px solid #e5e0d8; border-radius: 20px; background: #fff; color: #171717; }
-  .service-card--web { grid-row: span 2; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
-  .service-card--local, .service-card--digital { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 24px; padding: 24px; min-height: 244px; }
-  .service-card__scene { min-width: 0; border-radius: 12px; overflow: hidden; isolation: isolate; }
-  .service-card__copy { min-width: 0; align-self: center; }
-  .service-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  h3 { margin: 0; font-size: clamp(25px, 2.1vw, 34px); line-height: 1.12; font-weight: 500; letter-spacing: -.035em; }
-  .service-card--local h3, .service-card--digital h3 { font-size: clamp(23px, 1.9vw, 28px); }
-  .service-card__arrow { flex-shrink: 0; margin-top: 4px; opacity: .45; }
-  .service-card__description { max-width: 44ch; margin: 14px 0 0; color: #66615c; font-size: 15px; line-height: 1.6; }
-  .service-card__tags { display: flex; flex-wrap: wrap; gap: 5px 0; margin: 18px 0 0; padding: 0; list-style: none; color: #66615c; font-size: 11px; line-height: 1.6; }
-  .service-card__tags li:not(:last-child)::after { content: '·'; margin-inline: 8px; }
-  .service-card__availability { display: block; margin-top: 12px; color: #66615c; font-size: 10px; line-height: 1.5; }
-  .service-card--linked { cursor: pointer; }
-  .service-card--linked .service-card__arrow { opacity: 1; }
-  .service-card--linked:focus-visible { outline: 2px solid #171717; outline-offset: 4px; }
-  @media (prefers-reduced-motion: no-preference) {
-    .service-card, .service-card__arrow { transition: transform .3s cubic-bezier(.16, 1, .3, 1); }
-    .service-card--linked:focus-visible .service-card__arrow { transform: translate(3px, -3px); }
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid #e5e0d8;
+    border-radius: 20px;
+    background: #fff;
+    color: #171717;
+    overflow: visible;
+    box-shadow: 0 2px 12px 0 transparent, 0 4px 24px -4px transparent;
   }
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .service-card--linked:hover { transform: translateY(-3px); }
-    .service-card--linked:hover .service-card__arrow { transform: translate(3px, -3px); }
+  .service-card--web {
+    --card-accent: #e9dfd1;
+    --card-accent-ink: #82705c;
+    grid-row: span 2;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .service-card--local { --card-accent: #dfe4d7; --card-accent-ink: #59674f; }
+  .service-card--digital { --card-accent: #e9dee5; --card-accent-ink: #7e6072; }
+  .service-card--local,
+  .service-card--digital {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 24px;
+    padding: 24px;
+    min-height: 244px;
+  }
+  .service-card__scene {
+    min-width: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .service-card__copy {
+    min-width: 0;
+    align-self: center;
+    user-select: text;
+  }
+  .service-card__heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  h3 {
+    margin: 0;
+    font-size: clamp(25px, 2.1vw, 34px);
+    line-height: 1.12;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+  .service-card--local h3,
+  .service-card--digital h3 {
+    font-size: clamp(23px, 1.9vw, 28px);
+  }
+  .service-card__arrow {
+    flex-shrink: 0;
+    margin-top: 4px;
+    opacity: 0.45;
+  }
+  .service-card__description {
+    max-width: 44ch;
+    margin: 14px 0 0;
+    color: #66615c;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .service-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 0;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+    color: #66615c;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .service-card__tags li:not(:last-child)::after {
+    content: "·";
+    margin-inline: 8px;
+  }
+  .service-card__availability {
+    display: block;
+    margin-top: 12px;
+    color: #66615c;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+  .service-card--linked {
+    cursor: pointer;
+  }
+  .service-card__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 44px;
+    margin-top: 18px;
+    padding: 10px 14px;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    user-select: none;
+  }
+  .service-card__cta svg { flex-shrink: 0; }
+  .service-card--linked:focus-visible .service-card__cta {
+    background: #171717;
+    color: #fff;
+  }
+  @media (hover: hover) {
+    .service-card--linked:hover .service-card__cta {
+      background: #171717;
+      color: #fff;
+    }
+  }
+  .service-card--linked:not(.service-card--pending) .service-card__arrow {
+    opacity: 1;
+  }
+  .service-card--linked:focus-visible {
+    outline: 2px solid #171717;
+    outline-offset: 4px;
+  }
+  .service-card--linked:focus-visible {
+    border-color: color-mix(in srgb, var(--card-accent) 65%, var(--card-accent-ink));
+    box-shadow: 0 2px 12px 0 color-mix(in srgb, var(--card-accent) 34%, transparent),
+      0 4px 24px -4px color-mix(in srgb, var(--card-accent) 30%, transparent);
+  }
+  .service-card--linked:focus-visible .service-card__arrow {
+    color: var(--card-accent-ink);
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .service-card__cta { transition: background-color .2s, color .2s; }
+    .service-card { transition: border-color 225ms ease-out, box-shadow 225ms ease-out; }
+    .service-card__arrow { transition: color 225ms ease-out, opacity 225ms ease-out; }
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .service-card--linked:hover {
+      border-color: color-mix(in srgb, var(--card-accent) 65%, var(--card-accent-ink));
+      box-shadow: 0 2px 12px 0 color-mix(in srgb, var(--card-accent) 34%, transparent),
+        0 4px 24px -4px color-mix(in srgb, var(--card-accent) 30%, transparent);
+    }
+    .service-card--linked:hover .service-card__arrow {
+      color: var(--card-accent-ink);
+      opacity: 1;
+    }
   }
   @media (max-width: 959px) {
-    .service-card, .service-card--web, .service-card--local, .service-card--digital { display: flex; flex-direction: column; gap: 24px; grid-row: auto; min-height: 0; }
-    .service-card__copy { align-self: stretch; }
-    .service-card__scene { width: 100%; }
-    .service-card__description { max-width: 52ch; }
+    .service-card,
+    .service-card--web,
+    .service-card--local,
+    .service-card--digital {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      grid-row: auto;
+      min-height: 0;
+    }
+    .service-card__copy {
+      align-self: stretch;
+    }
+    .service-card__scene {
+      width: 100%;
+    }
+    .service-card__description {
+      max-width: 52ch;
+    }
   }
   @media (max-width: 767px) {
-    .service-card { padding: 20px; }
-    h3, .service-card--local h3, .service-card--digital h3 { font-size: 28px; }
+    .service-card {
+      padding: 20px;
+    }
+    h3,
+    .service-card--local h3,
+    .service-card--digital h3 {
+      font-size: 28px;
+    }
   }
 </style>

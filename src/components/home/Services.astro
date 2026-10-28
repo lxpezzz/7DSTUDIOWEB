@@ -1,46 +1,119 @@
 ---
-import { services, getServiceHref } from '../../data/services';
-import ServiceCard from '../services/ServiceCard.astro';
-import WebScene from '../services/WebScene.astro';
-import LocalScene from '../services/LocalScene.astro';
-import DigitalScene from '../services/DigitalScene.astro';
-import SectionCta from '../ui/SectionCta.astro';
+import { services, getServiceHref } from "../../data/services";
+import ServiceCard from "../services/ServiceCard.astro";
+import WebScene from "../services/WebScene.astro";
+import LocalScene from "../services/LocalScene.astro";
+import DigitalScene from "../services/DigitalScene.astro";
+import SectionCta from "../ui/SectionCta.astro";
 
-const pageFiles = Object.keys(import.meta.glob('../../pages/**/*.{astro,md}'));
+const pageFiles = Object.keys(import.meta.glob("../../pages/**/*.{astro,md}"));
 const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
 ---
 
 <div class="services-surface">
-  <section id="servicios" class="services section container" aria-labelledby="services-title">
+  <section
+    id="servicios"
+    class="services section container"
+    aria-labelledby="services-title"
+  >
     <div class="services__heading">
       <p class="services__label">01 / SERVICIOS</p>
-      <h2 class="section-title" id="services-title">Soluciones digitales para tu negocio.</h2>
-      <p class="services__description">Diseño, visibilidad y herramientas que te ayudan a conectar con tus clientes.</p>
+      <h2 class="section-title" id="services-title">
+        Soluciones digitales para tu negocio.
+      </h2>
+      <p class="services__description">
+        Diseño, visibilidad y herramientas que te ayudan a conectar con tus
+        clientes.
+      </p>
     </div>
     <div class="services__bento">
-      {services.map(service => {
-        const Scene = scenes[service.scene];
-        return <ServiceCard service={service} href={getServiceHref(service, pageFiles)}><Scene /></ServiceCard>;
-      })}
+      {
+        services.map((service) => {
+          const Scene = scenes[service.scene];
+          const publishedHref = getServiceHref(service, pageFiles);
+          return (
+            <ServiceCard
+              service={service}
+              href={publishedHref ?? "#contacto"}
+              pending={!publishedHref}
+            >
+              <Scene />
+            </ServiceCard>
+          );
+        })
+      }
     </div>
-    <SectionCta label="Cuéntanos qué necesitas" href="#contacto" variant="button" />
+    <SectionCta
+      label="Cuéntanos qué necesitas"
+      href="#contacto"
+      variant="button"
+    />
   </section>
 </div>
 
 <style>
-  .services-surface { position: relative; isolation: isolate; min-height: 100svh; overflow-x: clip; background: #f4f1eb; color: #171717; }
-  .services { padding-block: 120px 80px; }
-  .services__heading { max-width: 860px; margin: 0 auto 36px; text-align: center; }
-  .services__label { margin: 0 0 16px; color: #66615c; font-size: 11px; font-weight: 500; line-height: 1.5; letter-spacing: .08em; }
-  .services__heading h2 { max-width: 840px; margin-inline: auto; font-size: clamp(34px, 3.6vw, 52px); }
-  .services__description { max-width: 610px; margin: 18px auto 0; color: #66615c; font-size: 16px; line-height: 1.6; }
-  .services__bento { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 18px; align-items: stretch; }
-  @media (max-width: 959px) { .services__bento { grid-template-columns: minmax(0, 1fr); } }
+  .services-surface {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    overflow-x: clip;
+    background: #f4f1eb;
+    color: #171717;
+  }
+  .services {
+    padding-block: 120px 80px;
+  }
+  .services__heading {
+    max-width: 860px;
+    margin: 0 auto 36px;
+    text-align: center;
+  }
+  .services__label {
+    margin: 0 0 16px;
+    color: #66615c;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+  }
+  .services__heading h2 {
+    max-width: 840px;
+    margin-inline: auto;
+    font-size: clamp(34px, 3.6vw, 52px);
+  }
+  .services__description {
+    max-width: 610px;
+    margin: 18px auto 0;
+    color: #66615c;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .services__bento {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+  @media (max-width: 959px) {
+    .services__bento {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
   @media (max-width: 767px) {
-    .services { padding-block: 72px; }
-    .services__heading { margin-bottom: 28px; }
-    .services__label { margin-bottom: 14px; }
-    .services__description { font-size: 15px; }
-    .services__bento { gap: 16px; }
+    .services {
+      padding-block: 72px;
+    }
+    .services__heading {
+      margin-bottom: 28px;
+    }
+    .services__label {
+      margin-bottom: 14px;
+    }
+    .services__description {
+      font-size: 15px;
+    }
+    .services__bento {
+      gap: 16px;
+    }
   }
 </style>

@@ -1,5 +1,7 @@
 import { heroScene } from '../data/hero-scene';
 import { coverQuad, createPhotoProjector, projectiveMatrix, type Quad } from './hero-projection';
+import { applyCinematicHandoff } from './cinematic-handoff';
+import { createCinematicLinks } from './cinematic-links';
 
 export async function initCinematicHero() {
   const root = document.querySelector<HTMLElement>('.cinematic-hero');
@@ -95,10 +97,13 @@ export async function initCinematicHero() {
     createReplica();
     hero.classList.add('cinematic-ready', 'cinematic-projected');
     const state = { progress: 0 };
+    const visualEnd = heroScene.handoffProgress;
     let pastEnd = false;
     let width = 0, height = 0, quad: Quad, center = { x: 0, y: 0 }, zoom = 1;
     let projectPhoto: ReturnType<typeof createPhotoProjector>;
     const debugMode = import.meta.env.DEV && new URLSearchParams(location.search).has('debugScreen');
+    const handoff = { hero, stage, layers: [photo, foreground, projection, outside], debug, debugMode };
+    const interaction = createCinematicLinks(hero, projection, surface);
     debug.hidden = !debugMode;
     if (debugMode) {
       debug.innerHTML = '<svg width="100%" height="100%" style="overflow:visible"><polygon fill="none" stroke="#3159e8" stroke-width="2"/><g></g></svg>';
@@ -120,20 +125,29 @@ export async function initCinematicHero() {
       const camera = projectPhoto(current);
       photo.style.transform = camera;
       foreground.style.transform = camera;
-      projection.style.transform = projectiveMatrix(current, width, height);
+      const screenMatrix = projectiveMatrix(current, width, height);
+      projection.style.transform = screenMatrix;
       outside.style.opacity = String(1 - smooth((p - .15) / .22));
       outside.inert = p > .37;
       // La foto original desaparece sin reaparecer debajo de la interfaz nueva.
       const photoOpacity = String(1 - smooth((p - .68) / .07));
       photo.style.opacity = photoOpacity;
       foreground.style.opacity = photoOpacity;
-      hero.classList.toggle('cinematic-complete', pastEnd || p >= .99999);
-      if (debugMode) {
+      const complete = pastEnd || p >= visualEnd;
+      // Reverse: reveal the stage before transferring keyboard focus into it.
+      if (!complete) applyCinematicHandoff(handoff, false);
+      interaction.render(screenMatrix, complete, Number(photoOpacity) > 0);
+      if (complete) applyCinematicHandoff(handoff, true);
+      if (debugMode && !complete) {
         debug.querySelector('polygon')!.setAttribute('points', current.map(point => `${point.x},${point.y}`).join(' '));
         debug.querySelector('g')!.innerHTML = current.map((point, i) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="#3159e8"/><text x="${point.x + 9}" y="${point.y - 9}" fill="#3159e8">${i + 1}</text>`).join('');
       }
     }
     function measure() {
+      // hidden retira las imágenes del layout al completar. Medirlas temporalmente
+      // bajo el escenario oculto y volver a aplicar el estado antes del siguiente paint.
+      photo.hidden = false;
+      foreground.hidden = false;
       width = stage.clientWidth;
       height = stage.clientHeight;
       projection.style.width = `${width}px`;
@@ -147,30 +161,48 @@ export async function initCinematicHero() {
       projectPhoto = createPhotoProjector(quad, { x: left, y: top, ...frame });
       center = { x: quad.reduce((sum, point) => sum + point.x, 0) / 4, y: quad.reduce((sum, point) => sum + point.y, 0) / 4 };
       zoom = Math.max(width / (quad[1].x - quad[0].x), height / (quad[3].y - quad[0].y)) * 1.12;
+      // Read the clone's untransformed layout, including after a completed resize.
+      projection.hidden = false;
+      const screenInverse = new DOMMatrix(projectiveMatrix(quad, width, height)).inverse();
+      const opening = heroScene.opening.split(' ').map(pair => {
+        const [x, y] = pair.split(',').map(Number);
+        return [x / heroScene.width, y / heroScene.height] as const;
+      });
+      const aperture = coverQuad(opening, heroScene, frame, position).map(point => {
+        const local = new DOMPoint(point.x + left, point.y + top).matrixTransform(screenInverse);
+        return `${local.x / local.w}px ${local.y / local.w}px`;
+      });
+      interaction.measure(`polygon(${aperture.join(',')})`);
       render();
     }
     measure();
     const timeline = gsap.timeline({
       scrollTrigger: {
-        trigger: hero, start: 'top top', end: () => `+=${height * heroScene.scrollViewports}`,
-        pin: stage, pinSpacing: true, scrub: 1, invalidateOnRefresh: true,
+        trigger: hero, start: 'top top', end: () => `+=${height * heroScene.scrollViewports * visualEnd}`,
+        // Un único reloj de scroll: no queda un tween con retraso que pueda volver
+        // a pintar la foto o el clon después de mostrar el HTML real.
+        pin: stage, pinSpacing: true, scrub: true, invalidateOnRefresh: true,
         onRefreshInit: measure,
-        onLeave: () => { pastEnd = true; render(); },
-        onEnterBack: () => { pastEnd = false; render(); },
+        onLeave: () => { pastEnd = true; state.progress = visualEnd; render(); },
+        onEnterBack: self => { pastEnd = false; state.progress = self.progress * visualEnd; render(); },
       },
     });
-    timeline.to(state, { progress: 1, ease: 'none', duration: 1, onUpdate: render });
+    timeline.to(state, { progress: visualEnd, ease: 'none', duration: 1, onUpdate: render });
     // Recupera el mismo encuadre tras recargar a mitad del recorrido.
     ScrollTrigger.refresh();
     const restoration = requestAnimationFrame(() => {
       const trigger = timeline.scrollTrigger!;
-      state.progress = trigger.progress;
+      pastEnd = trigger.progress >= 1;
+      state.progress = trigger.progress * visualEnd;
       timeline.progress(trigger.progress);
       render();
     });
     return () => {
       cancelAnimationFrame(restoration);
+      interaction.destroy();
       hero.classList.remove('cinematic-ready', 'cinematic-complete', 'cinematic-projected');
+      for (const layer of handoff.layers) layer.hidden = false;
+      stage.inert = false;
       projection.replaceChildren();
       for (const element of [photo, foreground, projection, outside]) element.removeAttribute('style');
       outside.inert = false;

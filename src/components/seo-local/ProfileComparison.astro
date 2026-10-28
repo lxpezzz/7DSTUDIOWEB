@@ -1,0 +1,227 @@
+---
+const profiles = [
+  {
+    id: 'before', label: 'Una ficha descuidada', note: 'Cuesta saber si encaja contigo.',
+    description: 'Asesoría.', photos: 'Pocas fotografías',
+    rows: [
+      ['Servicios', 'Sin detallar'],
+      ['Horarios', 'Sin actualizar'],
+      ['Reseñas', 'Sin respuesta'],
+    ],
+  },
+  {
+    id: 'after', label: 'Una ficha bien trabajada', note: 'La información ayuda a decidir.',
+    description: 'Asesoría fiscal, laboral y contable para autónomos y pequeños negocios.', photos: 'Fotografías adecuadas del negocio',
+    rows: [
+      ['Servicios', 'Organizados y explicados'],
+      ['Horarios', 'Revisados y visibles'],
+      ['Reseñas', 'Gestionadas con atención'],
+    ],
+  },
+];
+---
+
+<section class="comparison container" aria-labelledby="comparison-title">
+  <div class="comparison__heading">
+    <p class="comparison__label">LA MISMA EMPRESA. OTRA PRESENTACIÓN.</p>
+    <h2 id="comparison-title">Una ficha puede decir muy poco.<br />O ayudarte a dar el siguiente paso.</h2>
+    <p>No se trata solo de estar. Se trata de que quien te encuentre entienda qué haces y cómo contactar contigo.</p>
+  </div>
+  <div class="comparison__grid">
+    {profiles.map(profile => <article class:list={['profile', `profile--${profile.id}`]} aria-labelledby={`profile-${profile.id}`}>
+      <div class="profile__heading">
+        <h3 id={`profile-${profile.id}`}>{profile.label}</h3>
+        <p>{profile.note}</p>
+      </div>
+      <div class="profile__sheet">
+        <div class="profile__photos" aria-hidden="true"><span></span><span></span><span></span></div>
+        <p class="profile__photo-label">{profile.photos}</p>
+        <p class="profile__name">Asesoría de ejemplo</p>
+        <p class="profile__description">{profile.description}</p>
+        <dl class="profile__details">
+          {profile.rows.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
+        </dl>
+        <p class="profile__contact">{profile.id === 'after' ? 'Datos de contacto fáciles de encontrar' : 'Información de contacto incompleta'}</p>
+      </div>
+    </article>)}
+  </div>
+  <p class="comparison__disclaimer">Comparativa ilustrativa: no representa un cliente ni un resultado de 7D Studio. Una ficha mejor presentada no garantiza una posición en Google.</p>
+</section>
+
+<style>
+  .comparison {
+    padding-block: 96px;
+  }
+  .comparison__heading {
+    max-width: 800px;
+    margin-bottom: 40px;
+  }
+  .comparison__label {
+    margin: 0 0 18px;
+    color: #59674f;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(30px, 3.3vw, 46px);
+    font-weight: 450;
+    line-height: 1.13;
+    letter-spacing: -.04em;
+    text-wrap: balance;
+  }
+  .comparison__heading > p:last-child {
+    max-width: 62ch;
+    margin: 24px 0 0;
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .comparison__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .profile {
+    min-width: 0;
+    padding: 28px;
+    border: 1px solid #dfdcd5;
+    border-radius: 18px;
+    background: #eeece7;
+  }
+  .profile--after {
+    border-color: #cbd2c1;
+    background: #e7e9e0;
+  }
+  .profile__heading {
+    margin-bottom: 24px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 500;
+    letter-spacing: -.025em;
+  }
+  .profile__heading > p {
+    margin: 8px 0 0;
+    font-size: 14px;
+    color: #626158;
+    line-height: 1.6;
+  }
+  .profile__sheet {
+    padding: 24px;
+    border: 1px solid #dfdcd5;
+    border-radius: 12px;
+    background: #fff;
+  }
+  .profile__photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    height: 92px;
+  }
+  .profile__photos > span {
+    border: 1px dashed #d8d4cd;
+    border-radius: 5px;
+    background: #f4f2ee;
+  }
+  .profile--before .profile__photos > span:not(:first-child) {
+    background: #fff;
+  }
+  .profile--after .profile__photos > span {
+    border: 1px solid #cbd2c1;
+    background: #e7e9e0;
+  }
+  .profile--after .profile__photos > span:nth-child(2) {
+    background: #dce2d5;
+  }
+  .profile--after .profile__photos > span:last-child {
+    background: #cbd4c1;
+  }
+  .profile__photo-label {
+    margin: 8px 0 24px;
+    color: #626158;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .profile__name {
+    margin: 0 0 12px;
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -.025em;
+  }
+  .profile__description {
+    min-height: 52px;
+    margin: 0 0 22px;
+    color: #626158;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .profile__details {
+    margin: 0;
+  }
+  .profile__details > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 14px;
+    border-top: 1px solid #e7e4de;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  dt {
+    flex-shrink: 0;
+    color: #626158;
+  }
+  dd {
+    margin: 0;
+    text-align: right;
+  }
+  .profile--after dd {
+    color: #47563e;
+    font-weight: 500;
+  }
+  .profile__contact {
+    margin: 22px 0 0;
+    padding: 12px;
+    border: 1px solid #e1ddd6;
+    border-radius: 6px;
+    color: #626158;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .profile--after .profile__contact {
+    border-color: #d4d9cd;
+    background: #f2f4ee;
+    color: #47563e;
+  }
+  .comparison__disclaimer {
+    max-width: 86ch;
+    margin: 22px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  @media (max-width: 767px) {
+    .comparison {
+      padding-block: 64px;
+    }
+    .comparison__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .profile {
+      padding: 20px;
+    }
+    .profile__sheet {
+      padding: 18px;
+    }
+    .profile__details > div {
+      gap: 12px;
+    }
+    .profile__description {
+      min-height: 0;
+    }
+  }
+</style>

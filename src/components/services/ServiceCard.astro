@@ -1,0 +1,60 @@
+---
+import type { Service } from '../../data/services';
+interface Props { service: Service; href?: string; }
+const { service, href } = Astro.props;
+const Card = href ? 'a' : 'article';
+const titleId = `service-${service.id}-${crypto.randomUUID()}`;
+---
+
+<Card class:list={['service-card', `service-card--${service.scene}`, { 'service-card--linked': !!href }]}
+  href={href} aria-labelledby={titleId} data-service={service.id}>
+  <div class="service-card__scene"><slot /></div>
+  <div class="service-card__copy">
+    <div class="service-card__heading">
+      <h3 id={titleId}>{service.title}</h3>
+      <svg class="service-card__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+    </div>
+    <p class="service-card__description">{service.description}</p>
+    <ul class="service-card__tags" aria-label={`Especialidades de ${service.title}`}>
+      {service.tags.map(tag => <li>{tag}</li>)}
+    </ul>
+    {!href && <span class="service-card__availability">Página del servicio próximamente</span>}
+  </div>
+</Card>
+
+<style>
+  .service-card { display: flex; flex-direction: column; gap: 24px; min-width: 0; padding: 28px; border: 1px solid #e5e0d8; border-radius: 20px; background: #fff; color: #171717; }
+  .service-card--web { grid-row: span 2; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+  .service-card--local, .service-card--digital { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 24px; padding: 24px; min-height: 244px; }
+  .service-card__scene { min-width: 0; border-radius: 12px; overflow: hidden; isolation: isolate; }
+  .service-card__copy { min-width: 0; align-self: center; }
+  .service-card__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  h3 { margin: 0; font-size: clamp(25px, 2.1vw, 34px); line-height: 1.12; font-weight: 500; letter-spacing: -.035em; }
+  .service-card--local h3, .service-card--digital h3 { font-size: clamp(23px, 1.9vw, 28px); }
+  .service-card__arrow { flex-shrink: 0; margin-top: 4px; opacity: .45; }
+  .service-card__description { max-width: 44ch; margin: 14px 0 0; color: #66615c; font-size: 15px; line-height: 1.6; }
+  .service-card__tags { display: flex; flex-wrap: wrap; gap: 5px 0; margin: 18px 0 0; padding: 0; list-style: none; color: #66615c; font-size: 11px; line-height: 1.6; }
+  .service-card__tags li:not(:last-child)::after { content: '·'; margin-inline: 8px; }
+  .service-card__availability { display: block; margin-top: 12px; color: #66615c; font-size: 10px; line-height: 1.5; }
+  .service-card--linked { cursor: pointer; }
+  .service-card--linked .service-card__arrow { opacity: 1; }
+  .service-card--linked:focus-visible { outline: 2px solid #171717; outline-offset: 4px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .service-card, .service-card__arrow { transition: transform .3s cubic-bezier(.16, 1, .3, 1); }
+    .service-card--linked:focus-visible .service-card__arrow { transform: translate(3px, -3px); }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .service-card--linked:hover { transform: translateY(-3px); }
+    .service-card--linked:hover .service-card__arrow { transform: translate(3px, -3px); }
+  }
+  @media (max-width: 959px) {
+    .service-card, .service-card--web, .service-card--local, .service-card--digital { display: flex; flex-direction: column; gap: 24px; grid-row: auto; min-height: 0; }
+    .service-card__copy { align-self: stretch; }
+    .service-card__scene { width: 100%; }
+    .service-card__description { max-width: 52ch; }
+  }
+  @media (max-width: 767px) {
+    .service-card { padding: 20px; }
+    h3, .service-card--local h3, .service-card--digital h3 { font-size: 28px; }
+  }
+</style>

@@ -4,11 +4,12 @@ const configured = Boolean(site.web3formsKey);
 ---
 <section id="contacto" class="contact section" aria-labelledby="contact-title">
   <div class="container">
-    <p class="section-label"><span>05 /</span>CONTACTO</p>
+    <div class="contact__heading">
+      <h2 id="contact-title">¿Tienes un<br />proyecto en mente?</h2>
+      <p>Cuéntanos qué necesitas y vemos cómo podemos ayudarte. Sin formularios interminables ni complicaciones.</p>
+    </div>
     <div class="contact__grid">
       <div class="contact__intro">
-        <h2 id="contact-title">¿Tienes un<br />proyecto en mente?</h2>
-        <p>Cuéntanos qué necesitas y vemos cómo podemos ayudarte. Sin formularios interminables ni complicaciones.</p>
         <a class="contact__whatsapp text-link" href={site.whatsapp} target="_blank" rel="noopener noreferrer">¿Prefieres WhatsApp?<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
         <a class="contact__phone" href={site.phoneHref}>{site.phone}</a>
       </div>
@@ -29,11 +30,10 @@ const configured = Boolean(site.web3formsKey);
 </section>
 <style>
   .contact { background: var(--color-ink); color: var(--color-paper); padding-block: 80px 88px; }
-  .section-label { margin: 0 0 48px; }
-  .section-label span { color: #a8a8a8; }
+  .contact__heading { text-align: center; margin-bottom: 56px; }
   .contact__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(48px, 8vw, 116px); }
-  h2 { margin: 0; font-size: clamp(40px, 4.4vw, 62px); font-weight: 450; line-height: 1.1; letter-spacing: -.04em; }
-  .contact__intro > p { max-width: 350px; margin: 28px 0 44px; color: #b4b4b4; font-size: 16px; line-height: 1.65; }
+  h2 { max-width: 900px; margin: 0 auto; font-size: clamp(40px, 4.4vw, 62px); font-weight: 450; line-height: 1.1; letter-spacing: -.04em; }
+  .contact__heading > p { max-width: 510px; margin: 28px auto 0; color: #b4b4b4; font-size: 16px; line-height: 1.65; }
   .contact__whatsapp { font-size: 14px; }
   .contact__phone { display: block; width: fit-content; color: #b4b4b4; font-size: 14px; padding-block: 10px; margin-top: 3px; }
   .contact__phone:hover { color: white; }
@@ -53,9 +53,9 @@ const configured = Boolean(site.web3formsKey);
   .contact__trap { display: none; }
   @media (max-width: 767px) {
     .contact { padding-block: 56px 64px; }
-    .section-label { margin-bottom: 32px; }
+    .contact__heading { margin-bottom: 40px; }
     .contact__grid { grid-template-columns: 1fr; gap: 40px; }
-    .contact__intro > p { margin-block: 24px; }
+    .contact__heading > p { margin-top: 24px; }
     h2 { font-size: clamp(38px, 7.8vw, 56px); }
     input:not([type='hidden']), textarea { font-size: 16px; }
   }

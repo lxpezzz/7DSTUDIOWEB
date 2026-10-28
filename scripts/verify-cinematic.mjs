@@ -131,6 +131,14 @@ try {
             return { changedRatio: changed / (a.width * a.height), meanChannelDifference: difference / (a.width * a.height * 3) };
           }, { before: projected, after: capture.toString('base64') });
           assert.ok(result.handoff.changedRatio < .01, `Salto visual: ${JSON.stringify(result.handoff)}`);
+          result.realContentReceivesPointer = await page.locator('#services-title').evaluate(title => {
+            const box = title.getBoundingClientRect();
+            return Boolean(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('#servicios'));
+          });
+          assert.equal(result.realContentReceivesPointer, true, 'El pin no debe bloquear Servicios al terminar');
+          await page.locator('#services-title').dblclick();
+          assert.ok(await page.evaluate(() => getSelection().toString().length > 0), 'El texto real de Servicios debe poder seleccionarse');
+          await page.evaluate(() => getSelection().removeAllRanges());
         }
         checkpoints.push({ progress, ...result });
       }
@@ -151,7 +159,7 @@ try {
     } else {
       assert.equal(initial.pinned, false);
       assert.ok(await page.locator('.cinematic-hero__copy').isVisible());
-      assert.ok(await page.locator('.cinematic-hero__photo img').isVisible());
+      assert.equal(await page.locator('.cinematic-hero__photo').isVisible(), false);
       const requests = await page.evaluate(() => performance.getEntriesByType('resource').map(entry => entry.name));
       assert.equal(requests.some(name => /ScrollTrigger|gsap/i.test(name)), false, 'Móvil sin descarga de GSAP');
     }

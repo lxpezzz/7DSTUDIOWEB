@@ -12,8 +12,10 @@ export const site = {
 };
 
 export const navigation = [
-  { label: 'Servicios', href: '/#servicios' },
-  { label: 'Proyectos', href: '/#proyectos' },
-  { label: 'Estudio', href: '/#estudio' },
+  { label: 'Páginas web', href: '/#servicios' },
+  { label: 'Seo Local', href: '/#proyectos' },
+  { label: 'Productos', href: '/#estudio' },
+  { label: 'Preguntas frecuentes', href: '/#contacto' },
+  { label: 'Quienes somos', href: '/#contacto' },
   { label: 'Contacto', href: '/#contacto' },
 ];

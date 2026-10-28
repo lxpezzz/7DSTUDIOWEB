@@ -1,0 +1,31 @@
+---
+import { Image } from 'astro:assets';
+import huella from '../../images/projects/huella.webp';
+---
+
+<div class="web-scene" aria-hidden="true">
+  <div class="web-scene__browser">
+    <div class="web-scene__bar"><span class="web-scene__dots"><i></i><i></i><i></i></span><span>HUELLA · DEMOSTRACIÓN</span><span class="web-scene__window"></span></div>
+    <Image src={huella} width={960} widths={[640, 960]} sizes="(max-width: 959px) 80vw, 40vw" format="webp" quality={82} alt="" loading="eager" decoding="async" />
+  </div>
+</div>
+
+<style>
+  .web-scene { display: grid; place-items: center; min-height: clamp(280px, 25vw, 360px); height: 100%; padding: 16px; background: #ede5da; }
+  .web-scene__browser { width: min(80%, 460px); overflow: hidden; border: 1px solid #d5cec4; border-radius: 8px; background: #fff; transform: rotate(-2deg); }
+  .web-scene__bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-bottom: 1px solid #e8e3dc; color: #66615c; font-size: 8px; line-height: 1.2; letter-spacing: .06em; }
+  .web-scene__dots { display: flex; gap: 4px; }
+  .web-scene__dots i { width: 4px; height: 4px; border-radius: 50%; background: #b4aca0; }
+  .web-scene__window { width: 9px; height: 7px; border: 1px solid #b4aca0; border-radius: 1px; }
+  .web-scene__browser img { display: block; width: 100%; height: auto; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .web-scene__browser { transition: transform .35s cubic-bezier(.16, 1, .3, 1); }
+    .web-scene:hover .web-scene__browser { transform: rotate(-1deg) scale(1.015); }
+  }
+  @media (max-width: 959px) { .web-scene { height: auto; min-height: 280px; padding-block: 24px; } }
+  @media (max-width: 767px) {
+    .web-scene { min-height: 210px; padding: 24px 12px; }
+    .web-scene__browser { width: 88%; }
+    .web-scene__bar { padding: 8px; font-size: 7px; gap: 6px; }
+  }
+</style>

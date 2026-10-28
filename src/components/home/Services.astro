@@ -1,227 +1,46 @@
 ---
-import symbol from "../../images/branding/simbolo-7dstudio.webp";
+import { services, getServiceHref } from '../../data/services';
+import ServiceCard from '../services/ServiceCard.astro';
+import WebScene from '../services/WebScene.astro';
+import LocalScene from '../services/LocalScene.astro';
+import DigitalScene from '../services/DigitalScene.astro';
+import SectionCta from '../ui/SectionCta.astro';
 
-const services = [
-  {
-    title: "Diseño web",
-    text: "Páginas rápidas, atractivas y pensadas para presentar tu negocio de forma profesional.",
-    tags: ["Landing pages", "Webs corporativas", "Rediseños"],
-  },
-  {
-    title: "SEO local",
-    text: "Mejoramos tu presencia en Google para que tus clientes puedan encontrarte.",
-    tags: ["Perfil de Empresa en Google", "Reseñas", "Optimización local"],
-  },
-  {
-    title: "Soluciones digitales",
-    text: "Herramientas y experiencias digitales que conectan tu negocio con tus clientes.",
-    tags: ["QR y NFC", "Microlandings", "Formularios"],
-  },
-];
+const pageFiles = Object.keys(import.meta.glob('../../pages/**/*.{astro,md}'));
+const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
 ---
 
 <div class="services-surface">
-  <section
-    id="servicios"
-    class="services section container"
-    aria-labelledby="services-title"
-  >
-    <div class="services__symbol" aria-hidden="true">
-      <img
-        src={symbol.src}
-        width={symbol.width}
-        height={symbol.height}
-        alt=""
-        decoding="async"
-      />
-    </div>
+  <section id="servicios" class="services section container" aria-labelledby="services-title">
     <div class="services__heading">
-      <p class="section-label"><span>01 /</span>SERVICIOS</p>
-      <h2 class="section-title" id="services-title">
-        Soluciones digitales que tienen sentido para tu negocio.
-      </h2>
+      <p class="services__label">01 / SERVICIOS</p>
+      <h2 class="section-title" id="services-title">Soluciones digitales para tu negocio.</h2>
+      <p class="services__description">Diseño, visibilidad y herramientas que te ayudan a conectar con tus clientes.</p>
     </div>
-    <div class="services__list">
-      {
-        services.map((service, index) => (
-          <article class="service">
-            <span class="service__number" aria-hidden="true">
-              0{index + 1}
-            </span>
-            <h3>{service.title}</h3>
-            <div class="service__detail">
-              <>
-                <p>{service.text}</p>
-                <ul aria-label={`Especialidades de ${service.title}`}>
-                  {service.tags.map((tag) => (
-                    <li>{tag}</li>
-                  ))}
-                </ul>
-              </>
-            </div>
-          </article>
-        ))
-      }
+    <div class="services__bento">
+      {services.map(service => {
+        const Scene = scenes[service.scene];
+        return <ServiceCard service={service} href={getServiceHref(service, pageFiles)}><Scene /></ServiceCard>;
+      })}
     </div>
-    <p class="services__note">
-      <span>¿POR QUÉ 7D?</span>Una landing page puede estar lista en siete días.<br
-        class="desktop-break"
-      /> Siempre que el alcance y los materiales lo permitan.
-    </p>
+    <SectionCta label="Cuéntanos qué necesitas" href="#contacto" variant="button" />
   </section>
 </div>
+
 <style>
-  .services-surface {
-    position: relative;
-    background: var(--color-paper);
-    padding-top: 20px;
-  }
-  .services {
-    position: relative;
-    isolation: isolate;
-  }
-  .services__heading,
-  .services__list,
-  .services__note {
-    position: relative;
-    z-index: 1;
-  }
-  .services__heading {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 48px;
-    margin-bottom: 58px;
-  }
-  .section-label {
-    margin: 7px 0 0;
-  }
-  .services__heading h2 {
-    max-width: 690px;
-  }
-  .service {
-    display: grid;
-    grid-template-columns: 56px 1fr 1fr;
-    gap: 32px;
-    border-top: 1px solid var(--color-line);
-    padding-block: 38px 42px;
-  }
-  .service:last-child {
-    border-bottom: 1px solid var(--color-line);
-  }
-  .service__number {
-    padding-top: 10px;
-    color: var(--color-muted);
-    font-size: 11px;
-    font-variant-numeric: tabular-nums;
-  }
-  h3 {
-    margin: 0;
-    font-size: clamp(28px, 3vw, 41px);
-    font-weight: 450;
-    line-height: 1.12;
-    letter-spacing: -0.035em;
-  }
-  .service__detail {
-    max-width: 440px;
-  }
-  .service__detail p {
-    margin: 0 0 23px;
-    font-size: 16px;
-    color: #565656;
-    line-height: 1.65;
-  }
-  ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 0;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  li {
-    font-size: 11px;
-    line-height: 1.5;
-  }
-  li:not(:last-child)::after {
-    content: "·";
-    margin: 0 10px;
-    color: var(--color-muted);
-  }
-  .services__note {
-    display: flex;
-    justify-content: flex-end;
-    gap: 34px;
-    margin: 26px 0 0;
-    color: var(--color-muted);
-    font-size: 12px;
-    line-height: 1.65;
-  }
-  .services__note span {
-    padding-top: 2px;
-    color: var(--color-ink);
-    font-size: 9px;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-  }
-  .services__symbol {
-    position: absolute;
-    z-index: 0;
-    top: 340px;
-    right: -400px;
-    width: min(52%, 650px);
-    opacity: 0.16;
-    pointer-events: none;
-  }
-  .services__symbol img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
+  .services-surface { position: relative; isolation: isolate; min-height: 100svh; overflow-x: clip; background: #f4f1eb; color: #171717; }
+  .services { padding-block: 120px 80px; }
+  .services__heading { max-width: 860px; margin: 0 auto 36px; text-align: center; }
+  .services__label { margin: 0 0 16px; color: #66615c; font-size: 11px; font-weight: 500; line-height: 1.5; letter-spacing: .08em; }
+  .services__heading h2 { max-width: 840px; margin-inline: auto; font-size: clamp(34px, 3.6vw, 52px); }
+  .services__description { max-width: 610px; margin: 18px auto 0; color: #66615c; font-size: 16px; line-height: 1.6; }
+  .services__bento { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); gap: 18px; align-items: stretch; }
+  @media (max-width: 959px) { .services__bento { grid-template-columns: minmax(0, 1fr); } }
   @media (max-width: 767px) {
-    .services-surface {
-      position: relative;
-      background: var(--color-paper);
-      padding-top: 0px;
-    }
-    .services__heading {
-      grid-template-columns: 1fr;
-      gap: 26px;
-      margin-bottom: 36px;
-    }
-    .service {
-      grid-template-columns: 28px 1fr;
-      gap: 16px;
-      padding-block: 28px 32px;
-    }
-    .service__number {
-      padding-top: 6px;
-    }
-    .service__detail {
-      grid-column: 2;
-      max-width: none;
-    }
-    .service__detail p {
-      margin-bottom: 18px;
-      font-size: 15px;
-    }
-    .services__note {
-      display: block;
-      font-size: 11px;
-      margin-left: 44px;
-    }
-    .services__note span {
-      display: block;
-      margin-bottom: 8px;
-    }
-    .desktop-break {
-      display: none;
-    }
-    .services__symbol {
-      display: none;
-      top: 220px;
-      right: 0;
-      width: min(68%, 280px);
-      opacity: 0.09;
-    }
+    .services { padding-block: 72px; }
+    .services__heading { margin-bottom: 28px; }
+    .services__label { margin-bottom: 14px; }
+    .services__description { font-size: 15px; }
+    .services__bento { gap: 16px; }
   }
 </style>

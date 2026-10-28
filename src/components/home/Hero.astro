@@ -46,12 +46,10 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     </div>
     <div class="cinematic-hero__outside">
       <div class="cinematic-hero__copy">
-        <p class="cinematic-hero__eyebrow">
-          ESTUDIO DIGITAL INDEPENDIENTE · CASTELLÓN
-        </p>
         <h1 id="hero-title">
           Tu negocio,<br />mejor presentado.<br /><span
-            >Y más fácil de encontrar.</span>
+            >Y más fácil de encontrar.</span
+          >
         </h1>
         <p class="cinematic-hero__description">
           Diseño web, SEO local y soluciones digitales para conectar tu negocio
@@ -70,7 +68,7 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
         >
       </div>
       <a class="cinematic-hero__scroll" href="#servicios"
-        >SCROLL PARA EXPLORAR <svg
+        >DESLIZA PARA EXPLORAR <svg
           width="15"
           height="15"
           viewBox="0 0 24 24"
@@ -145,12 +143,6 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     width: 31%;
     max-width: 470px;
   }
-  .cinematic-hero__eyebrow {
-    margin: 0 0 26px;
-    font-size: 9px;
-    font-weight: 500;
-    letter-spacing: 0.075em;
-  }
   h1 {
     margin: 0;
     font-size: clamp(36px, 3.4vw, 58px);
@@ -172,8 +164,9 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     line-height: 1.6;
   }
   .cinematic-hero__scroll {
-    position: absolute;
+    position: none;
     left: var(--gutter);
+    padding-top: 18px;
     bottom: 32px;
     display: inline-flex;
     align-items: center;
@@ -201,6 +194,10 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   .cinematic-hero.cinematic-complete .cinematic-hero__stage {
     visibility: hidden;
   }
+  /* El pin-spacer conserva su altura, pero no debe interceptar la sección real. */
+  .cinematic-hero.cinematic-complete {
+    pointer-events: none;
+  }
   :global(.cinematic-ready ~ .services-surface) {
     margin-top: -100svh;
   }
@@ -223,9 +220,6 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     h1 {
       font-size: clamp(36px, 4.6vw, 48px);
     }
-    .cinematic-hero__eyebrow {
-      margin-bottom: 18px;
-    }
     .cinematic-hero__description {
       margin-top: 18px;
     }
@@ -233,7 +227,6 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       color: var(--color-ink);
       background: var(--color-paper);
       padding-inline: 12px;
-      margin-left: -12px;
     }
   }
   @media (max-width: 767px) {
@@ -254,11 +247,6 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       max-width: none;
       margin: 36px var(--gutter) 32px;
     }
-    .cinematic-hero__eyebrow {
-      max-width: 300px;
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
     h1 {
       font-size: clamp(43px, 8.6vw, 64px);
       max-width: 12ch;
@@ -271,19 +259,34 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       font-size: 16px;
     }
     .cinematic-hero__photo {
-      position: relative;
-      order: 2;
-      aspect-ratio: 1672 / 941;
+      display: none;
     }
-    .cinematic-hero__photo img {
-      position: absolute;
-      inset: 0;
+    .cinematic-hero.cinematic-projected .cinematic-hero__foreground,
+    .cinematic-hero__projection {
+      display: none;
     }
     .cinematic-hero__scroll {
       position: static;
       order: 3;
-      margin: 12px var(--gutter) 0;
+
+      /* Centrado horizontal */
+      align-self: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+
+      /* Distribución del texto y la flecha */
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+
+      /* Estética */
+      width: max-content;
+      max-width: 100%;
       color: var(--color-ink);
+      white-space: nowrap;
+
+      /* Eliminar desplazamientos */
+      transform: none;
     }
   }
 </style>

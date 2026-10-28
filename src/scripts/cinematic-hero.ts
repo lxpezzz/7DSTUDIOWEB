@@ -19,7 +19,18 @@ export async function initCinematicHero() {
       element.removeAttribute('aria-labelledby');
       element.removeAttribute('aria-describedby');
     });
-    replica.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(element => element.remove());
+    // Conserva el aspecto de los CTA en la proyección, sin duplicar enlaces ni foco.
+    replica.querySelectorAll('a').forEach(link => {
+      const visual = document.createElement('span');
+      for (const attribute of link.attributes) {
+        if (attribute.name === 'class' || attribute.name === 'style' || attribute.name.startsWith('data-astro-cid-')) {
+          visual.setAttribute(attribute.name, attribute.value);
+        }
+      }
+      visual.innerHTML = link.innerHTML;
+      link.replaceWith(visual);
+    });
+    replica.querySelectorAll('button, input, select, textarea, [tabindex]').forEach(element => element.remove());
     projection.replaceChildren(replica);
   }
   function staticScreen() {

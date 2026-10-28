@@ -22,8 +22,16 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
     {
       items.map((project) => {
         const demoUrl = getDemoUrl(project.demoUrl);
+        const Card = demoUrl ? "a" : "article";
         return (
-          <article class="project" data-project-id={project.id}>
+          <Card
+            class:list={["project", { "project--linked": !!demoUrl }]}
+            data-project-id={project.id}
+            href={demoUrl}
+            target={demoUrl ? "_blank" : undefined}
+            rel={demoUrl ? "noopener noreferrer" : undefined}
+            aria-label={demoUrl ? `Explorar demo de ${project.title} (se abre en una pestaña nueva)` : undefined}
+          >
             <div class="project__image">
               <img
                 src={project.image.src}
@@ -43,12 +51,8 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
             <h3>{project.title}</h3>
             <p class="project__description">{project.description}</p>
             {demoUrl && (
-              <a
+              <span
                 class="text-link project__link"
-                href={demoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Explorar demo de ${project.title} (se abre en una pestaña nueva)`}
               >
                 Explorar
                 <svg
@@ -62,9 +66,9 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
                 >
                   <path d="M5 19 19 5M5 5h14v14" />
                 </svg>
-              </a>
+              </span>
             )}
-          </article>
+          </Card>
         );
       })
     }
@@ -140,9 +144,17 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
     outline-offset: 2px;
   }
   .project {
+    display: block;
     flex: 0 0 calc((100% - 48px) / 2.25);
     min-width: 0;
     scroll-snap-align: start;
+  }
+  .project--linked {
+    cursor: pointer;
+  }
+  .project--linked:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: -2px;
   }
   .project:only-child {
     flex-basis: min(100%, 900px);
@@ -237,15 +249,15 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
     .project__link svg {
       transition: transform 0.3s ease;
     }
-    .project__link:focus-visible svg {
+    .project--linked:focus-visible .project__link svg {
       transform: translate(3px, -3px);
     }
   }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .project:hover .project__image img {
+    .project--linked:hover .project__image img {
       transform: scale(1.03);
     }
-    .project__link:hover svg {
+    .project--linked:hover .project__link svg {
       transform: translate(3px, -3px);
     }
   }

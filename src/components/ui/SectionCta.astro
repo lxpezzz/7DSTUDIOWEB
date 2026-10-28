@@ -1,0 +1,27 @@
+---
+interface Props {
+  label: string;
+  href: string;
+  variant?: 'button' | 'text';
+  external?: boolean;
+}
+const { label, href, variant = 'text', external = false } = Astro.props;
+---
+
+<div class="section-cta">
+  <a class={variant === 'button' ? 'button' : 'text-link'} href={href}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+    aria-label={external ? `${label} (se abre en una pestaña nueva)` : undefined}>
+    {label}
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+  </a>
+</div>
+
+<style>
+  .section-cta { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 48px; text-align: center; }
+  .section-cta > a { max-width: 100%; }
+  @media (max-width: 767px) {
+    .section-cta { margin-top: 32px; }
+  }
+</style>

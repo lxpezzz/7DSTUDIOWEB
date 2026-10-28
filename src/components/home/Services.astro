@@ -1,4 +1,6 @@
 ---
+import symbol from "../../images/branding/simbolo-7dstudio.webp";
+
 const services = [
   {
     title: "Diseño web",
@@ -24,6 +26,15 @@ const services = [
     class="services section container"
     aria-labelledby="services-title"
   >
+    <div class="services__symbol" aria-hidden="true">
+      <img
+        src={symbol.src}
+        width={symbol.width}
+        height={symbol.height}
+        alt=""
+        decoding="async"
+      />
+    </div>
     <div class="services__heading">
       <p class="section-label"><span>01 /</span>SERVICIOS</p>
       <h2 class="section-title" id="services-title">
@@ -64,6 +75,16 @@ const services = [
     position: relative;
     background: var(--color-paper);
     padding-top: 20px;
+  }
+  .services {
+    position: relative;
+    isolation: isolate;
+  }
+  .services__heading,
+  .services__list,
+  .services__note {
+    position: relative;
+    z-index: 1;
   }
   .services__heading {
     display: grid;
@@ -106,7 +127,7 @@ const services = [
   .service__detail p {
     margin: 0 0 23px;
     font-size: 16px;
-    color: var(--color-muted);
+    color: #565656;
     line-height: 1.65;
   }
   ul {
@@ -142,11 +163,25 @@ const services = [
     letter-spacing: 0.06em;
     white-space: nowrap;
   }
+  .services__symbol {
+    position: absolute;
+    z-index: 0;
+    top: 340px;
+    right: -400px;
+    width: min(52%, 650px);
+    opacity: 0.16;
+    pointer-events: none;
+  }
+  .services__symbol img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
   @media (max-width: 767px) {
     .services-surface {
-    position: relative;
-    background: var(--color-paper);
-    padding-top: 0px;
+      position: relative;
+      background: var(--color-paper);
+      padding-top: 0px;
     }
     .services__heading {
       grid-template-columns: 1fr;
@@ -180,6 +215,13 @@ const services = [
     }
     .desktop-break {
       display: none;
+    }
+    .services__symbol {
+      display: none;
+      top: 220px;
+      right: 0;
+      width: min(68%, 280px);
+      opacity: 0.09;
     }
   }
 </style>

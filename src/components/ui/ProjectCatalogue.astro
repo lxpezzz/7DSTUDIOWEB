@@ -1,0 +1,274 @@
+---
+import { getDemoUrl, type Project } from "../../data/projects";
+interface Props {
+  items: readonly Project[];
+}
+const { items } = Astro.props;
+const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
+---
+
+<div class="catalogue" data-project-catalogue hidden={items.length === 0}>
+  <p class="catalogue__hint" id={`${catalogueId}-hint`}>
+    Desliza para explorar. También puedes usar las flechas del teclado.
+  </p>
+  <div
+    class="catalogue__track"
+    id={catalogueId}
+    role="region"
+    aria-label="Catálogo horizontal de proyectos"
+    aria-describedby={`${catalogueId}-hint`}
+    tabindex="0"
+  >
+    {
+      items.map((project) => {
+        const demoUrl = getDemoUrl(project.demoUrl);
+        return (
+          <article class="project" data-project-id={project.id}>
+            <div class="project__image">
+              <img
+                src={project.image.src}
+                width={project.image.width}
+                height={project.image.height}
+                alt={project.image.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="project__meta">
+              <span>{project.sector}</span>
+              {project.type === "demo" && (
+                <span class="project__type">Demostración</span>
+              )}
+            </div>
+            <h3>{project.title}</h3>
+            <p class="project__description">{project.description}</p>
+            {demoUrl && (
+              <a
+                class="text-link project__link"
+                href={demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Explorar demo de ${project.title} (se abre en una pestaña nueva)`}
+              >
+                Explorar
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  aria-hidden="true"
+                >
+                  <path d="M5 19 19 5M5 5h14v14" />
+                </svg>
+              </a>
+            )}
+          </article>
+        );
+      })
+    }
+  </div>
+  <div class="catalogue__controls" hidden>
+    <p class="catalogue__position" aria-live="polite" aria-atomic="true"></p>
+    <div class="catalogue__arrows">
+      <button
+        type="button"
+        class="catalogue__previous"
+        aria-label="Ver proyectos anteriores"
+        aria-controls={catalogueId}
+        disabled
+        ><svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"><path d="M20 12H4m6-6-6 6 6 6"></path></svg
+        ></button
+      >
+      <button
+        type="button"
+        class="catalogue__next"
+        aria-label="Ver proyectos siguientes"
+        aria-controls={catalogueId}
+        disabled
+        ><svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"></path></svg
+        ></button
+      >
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initProjectCatalogues } from "../../scripts/project-catalogue";
+  initProjectCatalogues();
+</script>
+
+<style>
+  .catalogue {
+    margin-top: 48px;
+    min-width: 0;
+  }
+  .catalogue__hint {
+    margin: 0 0 16px;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .catalogue__track {
+    position: relative;
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 2px;
+    overscroll-behavior-x: contain;
+    padding: 6px 2px 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-muted) var(--color-line);
+  }
+  .catalogue__track:focus-visible {
+    outline-offset: 2px;
+  }
+  .project {
+    flex: 0 0 calc((100% - 48px) / 2.25);
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  .project:only-child {
+    flex-basis: min(100%, 900px);
+  }
+  .project__image {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--color-line);
+  }
+  .project__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .project__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: space-between;
+    margin-top: 22px;
+    color: var(--color-muted);
+    font-size: 11px;
+    line-height: 1.6;
+  }
+  .project__type {
+    color: var(--color-ink);
+  }
+  h3 {
+    margin: 10px 0 0;
+    font-size: clamp(25px, 2.6vw, 36px);
+    font-weight: 450;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    overflow-wrap: anywhere;
+  }
+  .project__description {
+    max-width: 44ch;
+    margin: 14px 0 0;
+    color: var(--color-muted);
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+  .project__link {
+    margin-top: 14px;
+  }
+  .catalogue__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-block: 16px 28px;
+  }
+  .catalogue__position {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .catalogue__arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .catalogue__arrows button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid var(--color-line);
+    border-radius: 0;
+    background: transparent;
+    color: var(--color-ink);
+  }
+  .catalogue__arrows button:hover:not(:disabled) {
+    background: var(--color-line);
+  }
+  .catalogue__arrows button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .catalogue__track {
+      scroll-behavior: smooth;
+    }
+    .project__image img {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project__link svg {
+      transition: transform 0.3s ease;
+    }
+    .project__link:focus-visible svg {
+      transform: translate(3px, -3px);
+    }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .project:hover .project__image img {
+      transform: scale(1.03);
+    }
+    .project__link:hover svg {
+      transform: translate(3px, -3px);
+    }
+  }
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .project {
+      flex-basis: 62%;
+    }
+  }
+  @media (max-width: 767px) {
+    .catalogue {
+      margin-top: 32px;
+    }
+    .catalogue__track {
+      gap: 18px;
+    }
+    .project {
+      flex-basis: 86%;
+    }
+    .project__meta {
+      margin-top: 18px;
+    }
+    .project__description {
+      font-size: 14px;
+    }
+  }
+</style>

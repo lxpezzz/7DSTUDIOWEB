@@ -1,3 +1,0 @@
-{
-  "prompt": "Derivado optimizado del recurso aportado por el usuario public/hero-7dstudio.png (1672 x 941), sin recorte ni cambio de dimensiones. Conversión local: ffmpeg -y -i public/hero-7dstudio.png -c:v libwebp -quality 86 public/hero-7dstudio.webp. El PNG original permanece intacto. No se ha generado una nueva imagen ni se presenta esta escena como caso de portfolio."
-}

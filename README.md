@@ -62,10 +62,12 @@ Evidencia en `.impeccable/review/` (local, ignorada en Git). Scripts reproducibl
 
 ## Imágenes
 
-`public/hero-7dstudio.png` es el recurso original aportado por el usuario (1672×941), conservado sin modificar. La home sirve `public/hero-7dstudio.webp`, conversión WebP de unos 50 KiB; no descarga el PNG. La escena es un recurso visual proporcionado, no un caso de portfolio ni una afirmación de trabajo para un cliente. Procedencia y conversión en sus sidecars `.json`.
+`src/images/hero/hero-7dstudio.png` es el recurso original aportado por el usuario (1672×941), conservado sin modificar. La home sirve `src/images/hero/hero-7dstudio.webp`, conversión WebP de unos 50 KiB; no descarga el PNG. La escena es un recurso visual proporcionado, no un caso de portfolio ni una afirmación de trabajo para un cliente. Procedencia y conversión en sus sidecars `.json`.
 
-Conversión reproducible: `ffmpeg -y -i public/hero-7dstudio.png -c:v libwebp -quality 86 public/hero-7dstudio.webp`.
+Conversión reproducible: `ffmpeg -y -i src/images/hero/hero-7dstudio.png -c:v libwebp -quality 86 src/images/hero/hero-7dstudio.webp`.
 
-`public/og.png` es una composición tipográfica de la marca, generada localmente desde la propia home; no representa un proyecto ni un cliente. `public/favicon.svg` es un monograma vectorial de 7D, no un logotipo gráfico recuperado.
+`src/images/branding/` contiene el logo completo y el símbolo metálico en WebP, importados desde los componentes. Las imágenes utilizadas por la interfaz se importan desde `src/images` para que Astro genere sus URL de producción.
+
+`public/og.png` es una composición tipográfica de la marca, generada localmente desde la propia home; no representa un proyecto ni un cliente. Se conserva en `public` para mantener su URL estable al compartir la web. `public/favicon.svg` es un monograma vectorial de 7D, no un logotipo gráfico recuperado.
 
 La licencia de Geist se distribuye en `public/geist-OFL.txt`.

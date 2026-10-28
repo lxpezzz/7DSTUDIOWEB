@@ -1,9 +1,10 @@
 ---
 import { site, navigation } from '../../data/site';
+import logo from '../../images/branding/logo-7dstudio.webp';
 ---
 <footer class="footer container">
   <div class="footer__top">
-    <div><a class="brand" href="/" aria-label="7D Studio, inicio">7D STUDIO<sup>®</sup></a><p class="footer__description">Diseño web, SEO local y soluciones digitales.<br />Un estudio independiente en Castellón.</p></div>
+    <div><a class="brand" href="/" aria-label="7D Studio, inicio"><img src={logo.src} width={logo.width} height={logo.height} alt="7DStudio" decoding="async" /></a><p class="footer__description">Diseño web, SEO local y soluciones digitales.<br />Un estudio independiente en Castellón.</p></div>
     <nav class="footer__nav" aria-label="Navegación de pie de página">{navigation.map(item => <a href={item.href}>{item.label}</a>)}</nav>
     <div class="footer__contact"><span>Hablemos.</span><a href={site.phoneHref}>{site.phone}</a><a href={site.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp <span class="sr-only">(se abre en una pestaña nueva)</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg></a></div>
   </div>
@@ -11,6 +12,7 @@ import { site, navigation } from '../../data/site';
 </footer>
 <style>
   .footer { padding-top: 56px; }
+  .brand img { display: block; width: 240px; height: auto; }
   .footer__top { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 48px; }
   .footer__description { margin: 19px 0 0; font-size: 12px; color: var(--color-muted); line-height: 1.75; }
   .footer__nav { display: grid; justify-content: start; gap: 0; margin-top: -9px; }
@@ -23,6 +25,7 @@ import { site, navigation } from '../../data/site';
   .footer__bottom nav { display: flex; flex-wrap: wrap; gap: 20px; }
   @media (max-width: 767px) {
     .footer { padding-top: 40px; }
+    .brand img { width: 200px; }
     .footer__top { grid-template-columns: 1fr 1fr; gap: 28px; padding-bottom: 32px; }
     .footer__top > div:first-child { grid-column: 1 / -1; }
     .footer__nav a { min-height: 44px; }

@@ -1,15 +1,15 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'Geist Variable';
+  font-family: 'Manrope Variable';
   font-style: normal;
-  font-weight: 100 900;
+  font-weight: 200 800;
   font-display: swap;
-  src: url('@fontsource-variable/geist/files/geist-latin-wght-normal.woff2') format('woff2');
+  src: url('@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2') format('woff2');
 }
 
 @theme {
-  --font-sans: 'Geist Variable', Arial, sans-serif;
+  --font-sans: 'Manrope Variable', Arial, sans-serif;
   --color-paper: #f8f7f4;
   --color-ink: #171717;
   --color-muted: #686868;

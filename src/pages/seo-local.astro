@@ -1,120 +1,226 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import SectionCta from '../components/ui/SectionCta.astro';
-import SearchPreview from '../components/seo-local/SearchPreview.astro';
-import ProfileComparison from '../components/seo-local/ProfileComparison.astro';
-import SeoPlans from '../components/seo-local/SeoPlans.astro';
-import { site } from '../data/site';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import SectionCta from "../components/ui/SectionCta.astro";
+import SearchPreview from "../components/seo-local/SearchPreview.astro";
+import ProfileComparison from "../components/seo-local/ProfileComparison.astro";
+import SeoPlans from "../components/seo-local/SeoPlans.astro";
+import { site } from "../data/site";
 
-const title = 'SEO local en Castellón para pequeños negocios | 7D Studio';
-const description = 'Ayudamos a pequeños negocios a mejorar su presencia en Google. Descubre cómo trabajamos el SEO local y consulta nuestros planes Estándar y Premium.';
+const title = "SEO local en Castellón para pequeños negocios | 7D Studio";
+const description =
+  "Ayudamos a pequeños negocios a mejorar su presencia en Google. Descubre cómo trabajamos el SEO local y consulta nuestros planes Estándar y Premium.";
 const contactUrl = new URL(site.whatsapp);
-contactUrl.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?');
+contactUrl.searchParams.set(
+  "text",
+  "Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?",
+);
 const contactHref = contactUrl.href;
 const work = [
-  { label: 'Tu punto de partida', title: 'Analizamos tu presencia', text: 'Revisamos cómo aparece tu negocio en Google y detectamos posibles mejoras.' },
-  { label: 'Información que ayuda', title: 'Mejoramos tu información', text: 'Trabajamos la presentación de tu negocio para que tus clientes encuentren información clara y útil.' },
-  { label: 'Confianza, no solo visibilidad', title: 'Cuidamos tu reputación digital', text: 'Te ayudamos a gestionar aspectos de tu presencia online que influyen en la confianza de tus clientes.' },
-  { label: 'Una visión de lo que cambia', title: 'Revisamos la evolución', text: 'Analizamos los indicadores disponibles para conocer cómo evoluciona tu presencia local.' },
+  {
+    label: "Tu punto de partida",
+    title: "Analizamos tu presencia",
+    text: "Revisamos cómo aparece tu negocio en Google y detectamos posibles mejoras.",
+  },
+  {
+    label: "Información que ayuda",
+    title: "Mejoramos tu información",
+    text: "Trabajamos la presentación de tu negocio para que tus clientes encuentren información clara y útil.",
+  },
+  {
+    label: "Confianza, no solo visibilidad",
+    title: "Cuidamos tu reputación digital",
+    text: "Te ayudamos a gestionar aspectos de tu presencia online que influyen en la confianza de tus clientes.",
+  },
+  {
+    label: "Una visión de lo que cambia",
+    title: "Revisamos la evolución",
+    text: "Analizamos los indicadores disponibles para conocer cómo evoluciona tu presencia local.",
+  },
 ];
 const steps = [
-  { title: 'Nos cuentas tu negocio', text: 'Nos explicas qué haces, dónde trabajas y qué necesitas mejorar.' },
-  { title: 'Revisamos tu situación', text: 'Analizamos tu presencia actual y las oportunidades de mejora.' },
-  { title: 'Te proponemos cómo avanzar', text: 'Te explicamos qué plan encaja mejor con tu situación.' },
+  {
+    title: "Nos cuentas tu negocio",
+    text: "Nos explicas qué haces, dónde trabajas y qué necesitas mejorar.",
+  },
+  {
+    title: "Revisamos tu situación",
+    text: "Analizamos tu presencia actual y las oportunidades de mejora.",
+  },
+  {
+    title: "Te proponemos cómo avanzar",
+    text: "Te explicamos qué plan encaja mejor con tu situación.",
+  },
 ];
 const faqs = [
   {
-    question: '¿Qué es exactamente el SEO local?',
-    answer: 'Es el trabajo de mejorar la presencia de un negocio cuando alguien busca un servicio en su zona. Por ejemplo, una asesoría en Castellón. Incluye cuidar la información que permite entender qué haces, dónde estás y cómo contactar contigo.',
+    question: "¿Qué es exactamente el SEO local?",
+    answer:
+      "Es el trabajo de mejorar la presencia de un negocio cuando alguien busca un servicio en su zona. Por ejemplo, una asesoría en Castellón. Incluye cuidar la información que permite entender qué haces, dónde estás y cómo contactar contigo.",
   },
   {
-    question: '¿Necesito una página web para trabajar mi SEO local?',
-    answer: 'No siempre. Podemos empezar por revisar tu Perfil de Empresa de Google y tu presencia actual. Una web puede complementar esa información y explicar mejor tus servicios. Valoramos qué tiene sentido para tu negocio antes de proponerte nada.',
+    question: "¿Necesito una página web para trabajar mi SEO local?",
+    answer:
+      "No siempre. Podemos empezar por revisar tu Perfil de Empresa de Google y tu presencia actual. Una web puede complementar esa información y explicar mejor tus servicios. Valoramos qué tiene sentido para tu negocio antes de proponerte nada.",
   },
   {
-    question: '¿Cuánto tiempo se tarda en ver resultados?',
-    answer: 'Depende de tu punto de partida, de la competencia y de las búsquedas de tu zona. Hay mejoras de información que se ven al actualizar la ficha; los cambios de visibilidad pueden ser graduales. No garantizamos plazos concretos ni posiciones.',
+    question: "¿Cuánto tiempo se tarda en ver resultados?",
+    answer:
+      "Depende de tu punto de partida, de la competencia y de las búsquedas de tu zona. Hay mejoras de información que se ven al actualizar la ficha; los cambios de visibilidad pueden ser graduales. No garantizamos plazos concretos ni posiciones.",
   },
   {
-    question: '¿Qué diferencia hay entre SEO local y Google Ads?',
-    answer: 'Google Ads muestra anuncios con un presupuesto publicitario. El SEO local trabaja tu presencia en los resultados que no son anuncios. Son enfoques distintos que pueden complementarse; pagar anuncios no sustituye tener una información clara y actualizada.',
+    question: "¿Qué diferencia hay entre SEO local y Google Ads?",
+    answer:
+      "Google Ads muestra anuncios con un presupuesto publicitario. El SEO local trabaja tu presencia en los resultados que no son anuncios. Son enfoques distintos que pueden complementarse; pagar anuncios no sustituye tener una información clara y actualizada.",
   },
   {
-    question: '¿Mi negocio puede mejorar si ya aparece en Google?',
-    answer: 'Sí. Aparecer es solo una parte. Conviene revisar si los horarios son correctos, si se entienden tus servicios y si la ficha responde a las dudas de tus clientes. Una presentación más útil puede ayudarles a decidir, sin que eso garantice una posición mejor.',
+    question: "¿Mi negocio puede mejorar si ya aparece en Google?",
+    answer:
+      "Sí. Aparecer es solo una parte. Conviene revisar si los horarios son correctos, si se entienden tus servicios y si la ficha responde a las dudas de tus clientes. Una presentación más útil puede ayudarles a decidir, sin que eso garantice una posición mejor.",
   },
   {
-    question: '¿Tengo que pagar a Google para tener una ficha de empresa?',
-    answer: 'No. El Perfil de Empresa de Google es gratuito. El servicio de 7D Studio corresponde al trabajo profesional de optimización y seguimiento. No es una tasa de Google ni un pago por ocupar un puesto en sus resultados.',
+    question: "¿Tengo que pagar a Google para tener una ficha de empresa?",
+    answer:
+      "No. El Perfil de Empresa de Google es gratuito. El servicio de 7D Studio corresponde al trabajo profesional de optimización y seguimiento. No es una tasa de Google ni un pago por ocupar un puesto en sus resultados.",
   },
 ];
 const structuredData = [
   {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
+    "@context": "https://schema.org",
+    "@type": "WebPage",
     name: title,
     description,
     url: `${site.url}/seo-local/`,
-    about: { '@type': 'Service', name: 'SEO local', provider: { '@type': 'Organization', name: site.name, url: site.url } },
+    about: {
+      "@type": "Service",
+      name: "SEO local",
+      provider: { "@type": "Organization", name: site.name, url: site.url },
+    },
   },
   {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
-      { '@type': 'ListItem', position: 2, name: 'SEO local', item: `${site.url}/seo-local/` },
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Inicio",
+        item: `${site.url}/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "SEO local",
+        item: `${site.url}/seo-local/`,
+      },
     ],
   },
 ];
 ---
 
-<BaseLayout title={title} description={description} structuredData={structuredData}>
+<BaseLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
   <Header />
   <main id="contenido" class="seo-page">
     <section class="seo-hero container" aria-labelledby="seo-title">
       <nav class="seo-hero__breadcrumb" aria-label="Ruta de navegación">
-        <a href="/">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">SEO local</span>
+        <a href="/">Inicio</a><span aria-hidden="true">/</span><span
+          aria-current="page">SEO local</span
+        >
       </nav>
       <div class="seo-hero__layout">
         <div class="seo-hero__copy">
           <p class="seo-page__label">SEO LOCAL / 7D STUDIO</p>
-          <h1 id="seo-title">Tus próximos clientes te están buscando en Google. ¿Te encuentran a ti?</h1>
-          <p class="seo-hero__description">Trabajamos tu presencia local para ayudarte a aparecer en búsquedas relevantes y transmitir confianza.</p>
-          <a class="button" href={contactHref} target="_blank" rel="noopener noreferrer">Quiero mejorar mi visibilidad <span aria-hidden="true">↗</span><span class="sr-only"> por WhatsApp (se abre en una pestaña nueva)</span></a>
-          <a class="seo-hero__secondary" href="#como-funciona">Primero, te contamos cómo funciona <span aria-hidden="true">↓</span></a>
+          <h1 id="seo-title">
+            <span class="seo-hero__statement">Tus próximos clientes te están buscando en Google.</span>{" "}
+            <span class="seo-hero__question">¿Te encuentran a ti?</span>
+          </h1>
+          <p class="seo-hero__description">
+            Trabajamos tu presencia local para ayudarte a aparecer en búsquedas
+            relevantes y transmitir confianza.
+          </p>
+          <a
+            class="button"
+            href={contactHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            >Quiero que encuentren mi negocio <span aria-hidden="true">↗</span
+            ><span class="sr-only">
+              por WhatsApp (se abre en una pestaña nueva)</span
+            ></a
+          >
+          <a class="seo-hero__secondary" href="#como-funciona"
+            >Primero, te contamos cómo funciona <span aria-hidden="true">↓</span
+            ></a
+          >
         </div>
         <SearchPreview />
       </div>
     </section>
 
-    <section id="como-funciona" class="journey container" aria-labelledby="journey-title">
+    <section
+      id="como-funciona"
+      class="journey container"
+      aria-labelledby="journey-title"
+    >
       <div class="seo-page__heading">
-        <h2 id="journey-title">El cliente necesita algo.<br />La pregunta es a quién encuentra.</h2>
-        <p>No necesita saber qué es el SEO. Necesita encontrar un negocio que pueda ayudarle.</p>
+        <h2 id="journey-title">
+          El cliente necesita algo.<br />La pregunta es a quién encuentra.
+        </h2>
+        <p>
+          No necesita saber qué es el SEO. Necesita encontrar un negocio que
+          pueda ayudarle.
+        </p>
       </div>
       <ol class="journey__steps">
         <li>
-          <span class="journey__number" aria-hidden="true">01</span>
+          <svg class="journey__icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A67838" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m21 21-4.34-4.34" />
+            <circle cx="11" cy="11" r="8" />
+          </svg>
           <h3>Busca</h3>
           <p>Una persona necesita un servicio y lo busca en Google.</p>
           <div class="journey__example">“asesoría cerca de mí”</div>
         </li>
         <li>
-          <span class="journey__number" aria-hidden="true">02</span>
+          <svg class="journey__icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#A96553" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v18" />
+            <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />
+            <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />
+            <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />
+            <path d="M7 21h10" />
+          </svg>
           <h3>Compara</h3>
-          <p>Encuentra distintos negocios. Consulta sus horarios, servicios, fotografías y reseñas.</p>
-          <div class="journey__example journey__example--compare" aria-label="Ejemplos de negocios que compara"><span>Negocio A</span><span>Negocio B</span><span>Negocio C</span></div>
+          <p>
+            Encuentra distintos negocios. Consulta sus horarios, servicios,
+            fotografías y reseñas.
+          </p>
+          <div
+            class="journey__example journey__example--compare"
+            aria-label="Ejemplos de negocios que compara"
+          >
+            <span>Negocio A</span><span>Negocio B</span><span>Negocio C</span>
+          </div>
         </li>
         <li>
-          <span class="journey__number" aria-hidden="true">03</span>
+          <svg class="journey__icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#617858" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M13 2a9 9 0 0 1 9 9" />
+            <path d="M13 6a5 5 0 0 1 5 5" />
+            <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" />
+          </svg>
           <h3>Contacta</h3>
           <p>Escoge un negocio que le parece adecuado y fiable.</p>
           <div class="journey__example">Encuentra cómo llamar o escribir</div>
         </li>
       </ol>
-      <p class="journey__takeaway">Si tu negocio no aparece en esas búsquedas, o tu ficha no transmite confianza, puedes quedar fuera de la elección.</p>
+      <p class="journey__takeaway">
+        Si tu negocio no aparece en esas búsquedas, o tu ficha no transmite
+        confianza, puedes quedar fuera de la elección.
+      </p>
     </section>
 
     <ProfileComparison />
@@ -123,17 +229,30 @@ const structuredData = [
       <div class="container work__layout">
         <div class="work__intro">
           <p class="seo-page__label">CÓMO TE AYUDAMOS</p>
-          <h2 id="work-title">Que te encuentren.<br />Y entiendan por qué elegirte.</h2>
-          <p>Nos ocupamos de traducir tu negocio a una presencia local clara, útil y cuidada.</p>
+          <h2 id="work-title">
+            Que te encuentren.<br />Y entiendan por qué elegirte.
+          </h2>
+          <p>
+            Nos ocupamos de traducir tu negocio a una presencia local clara,
+            útil y cuidada.
+          </p>
         </div>
         <div class="work__modules">
-          {work.map(item => <article class="work__module">
-            <p class="work__label">{item.label}</p>
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
-          </article>)}
+          {
+            work.map((item) => (
+              <article class="work__module">
+                <p class="work__label">{item.label}</p>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
+            ))
+          }
         </div>
-        <p class="work__scope">Estos bloques explican nuestra forma de trabajar. No son una lista de prestaciones incluidas en ambos planes: el alcance concreto se define contigo.</p>
+        <p class="work__scope">
+          Estos bloques explican nuestra forma de trabajar. No son una lista de
+          prestaciones incluidas en ambos planes: el alcance concreto se define
+          contigo.
+        </p>
       </div>
     </section>
 
@@ -145,11 +264,17 @@ const structuredData = [
         <h2 id="starting-title">Empezamos por conocerte.</h2>
       </div>
       <ol class="starting__steps">
-        {steps.map((step, index) => <li>
-          <span class="starting__number" aria-hidden="true">0{index + 1}</span>
-          <h3>{step.title}</h3>
-          <p>{step.text}</p>
-        </li>)}
+        {
+          steps.map((step, index) => (
+            <li>
+              <span class="starting__number" aria-hidden="true">
+                0{index + 1}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
       </ol>
     </section>
 
@@ -157,23 +282,46 @@ const structuredData = [
       <div class="faq__intro">
         <p class="seo-page__label">SIN TECNICISMOS</p>
         <h2 id="faq-title">Es normal tener preguntas.</h2>
-        <p>Estas son algunas de las primeras que suelen surgir al hablar de visibilidad local.</p>
+        <p>
+          Estas son algunas de las primeras que suelen surgir al hablar de
+          visibilidad local.
+        </p>
       </div>
       <div class="faq__list">
-        {faqs.map(faq => <details>
-          <summary>{faq.question}<span class="faq__indicator" aria-hidden="true"></span></summary>
-          <p>{faq.answer}</p>
-        </details>)}
+        {
+          faqs.map((faq) => (
+            <details>
+              <summary>
+                {faq.question}
+                <span class="faq__indicator" aria-hidden="true" />
+              </summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))
+        }
       </div>
     </section>
 
     <section class="seo-contact container" aria-labelledby="seo-contact-title">
       <div class="seo-contact__panel">
-        <h2 id="seo-contact-title">¿Sabes cómo aparece tu negocio en Google?</h2>
-        <p>Cuéntanos qué negocio tienes y vemos cómo podemos ayudarte a mejorar tu presencia local.</p>
-        <SectionCta label="Hablemos de tu negocio" href={contactHref} variant="button" external />
+        <h2 id="seo-contact-title">
+          ¿Sabes cómo aparece tu negocio en Google?
+        </h2>
+        <p>
+          Cuéntanos qué negocio tienes y vemos cómo podemos ayudarte a mejorar
+          tu presencia local.
+        </p>
+        <SectionCta
+          label="Hablemos de tu negocio"
+          href={contactHref}
+          variant="button"
+          external
+        />
       </div>
-      <p class="seo-contact__related">¿También necesitas una web o productos QR/NFC? <a href="/#servicios">Conoce los otros servicios de 7D Studio ↗</a></p>
+      <p class="seo-contact__related">
+        ¿También necesitas una web o productos QR/NFC? <a href="/#servicios"
+          >Conoce los otros servicios de 7D Studio ↗</a>
+      </p>
     </section>
   </main>
   <Footer />
@@ -197,18 +345,18 @@ const structuredData = [
     color: #59674f;
     font-size: 11px;
     font-weight: 500;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
     line-height: 1.6;
   }
   .seo-hero {
-    padding-top: calc(var(--header-height) + 36px);
-    padding-bottom: 80px;
+    padding-top: calc(var(--header-height) + 24px);
+    padding-bottom: 72px;
   }
   .seo-hero__breadcrumb {
     display: flex;
     gap: 12px;
     align-items: center;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
     color: var(--color-muted);
     font-size: 12px;
   }
@@ -222,30 +370,40 @@ const structuredData = [
   .seo-hero__layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(32px, 5vw, 72px);
+    gap: clamp(32px, 4vw, 56px);
     align-items: center;
   }
   .seo-hero__copy {
     min-width: 0;
   }
-  h1 {
-    max-width: 19ch;
+  .seo-hero h1 {
+    max-width: 20ch;
     margin: 0;
-    font-size: clamp(40px, 4vw, 60px);
+    font-size: clamp(40px, 4.1vw, 60px);
     font-weight: 450;
-    line-height: 1.07;
-    letter-spacing: -.04em;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
     text-wrap: balance;
+  }
+  .seo-hero__statement,
+  .seo-hero__question {
+    display: block;
+  }
+  .seo-hero__question {
+    margin-top: 0.2em;
+    color: #60734f;
   }
   .seo-hero__description {
     max-width: 43ch;
-    margin: 28px 0 32px;
+    margin: 24px 0 28px;
     color: var(--color-muted);
     font-size: 17px;
     line-height: 1.7;
   }
   .seo-hero__copy > .button {
     max-width: 100%;
+    gap: 16px;
+    text-wrap: pretty;
   }
   .seo-hero__secondary {
     display: flex;
@@ -253,9 +411,9 @@ const structuredData = [
     gap: 12px;
     width: fit-content;
     min-height: 44px;
-    margin-top: 12px;
+    margin-top: 8px;
     color: #59674f;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.6;
     text-decoration: underline;
     text-underline-offset: 4px;
@@ -265,7 +423,7 @@ const structuredData = [
     font-size: clamp(30px, 3.3vw, 46px);
     font-weight: 450;
     line-height: 1.13;
-    letter-spacing: -.04em;
+    letter-spacing: -0.04em;
     text-wrap: balance;
   }
   .seo-page__heading {
@@ -301,7 +459,9 @@ const structuredData = [
   .journey__steps > li + li {
     border-left: 1px solid #cbd2c1;
   }
-  .journey__number,
+  .journey__icon {
+    flex-shrink: 0;
+  }
   .starting__number {
     color: #59674f;
     font-size: 12px;
@@ -312,7 +472,7 @@ const structuredData = [
     margin: 22px 0 12px;
     font-size: 24px;
     font-weight: 500;
-    letter-spacing: -.025em;
+    letter-spacing: -0.025em;
     line-height: 1.2;
   }
   .journey__steps p {
@@ -354,7 +514,7 @@ const structuredData = [
   }
   .work__layout {
     display: grid;
-    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     gap: 40px 64px;
   }
   .work__intro > p:last-child {
@@ -383,7 +543,7 @@ const structuredData = [
     margin: 0 0 16px;
     font-size: 21px;
     font-weight: 500;
-    letter-spacing: -.025em;
+    letter-spacing: -0.025em;
     line-height: 1.25;
   }
   .work__module > p:last-child {
@@ -425,7 +585,7 @@ const structuredData = [
   }
   .faq {
     display: grid;
-    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
     gap: 64px;
     padding-block: 80px;
     border-top: 1px solid var(--color-line);
@@ -464,7 +624,7 @@ const structuredData = [
   }
   .faq__indicator::before,
   .faq__indicator::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 6px;
     left: 0;
@@ -544,20 +704,23 @@ const structuredData = [
       gap: 28px;
     }
   }
+  @media (max-width: 959px) {
+    .seo-hero__layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+    .seo-hero h1 {
+      max-width: 22ch;
+      font-size: clamp(36px, 6.5vw, 56px);
+    }
+  }
   @media (max-width: 767px) {
     .seo-hero {
-      padding-top: calc(var(--header-height) + 24px);
+      padding-top: calc(var(--header-height) + 20px);
       padding-bottom: 64px;
     }
     .seo-hero__breadcrumb {
-      margin-bottom: 28px;
-    }
-    .seo-hero__layout {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 40px;
-    }
-    h1 {
-      font-size: clamp(40px, 8vw, 54px);
+      margin-bottom: 20px;
     }
     .seo-hero__description {
       font-size: 16px;

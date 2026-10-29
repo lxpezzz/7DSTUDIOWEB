@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
-import geistFont from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
+import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 interface Props {
   title?: string;
   description?: string;
@@ -16,7 +16,7 @@ const schema = {
   url: site.url,
   description: site.description,
   telephone: '+34621200800',
-  areaServed: { '@type': 'Place', name: 'Castellón, España' },
+  areaServed: { '@type': 'Place', name: 'Castellón de la Plana, España' },
   hasOfferCatalog: {
     '@type': 'OfferCatalog', name: 'Servicios digitales',
     itemListElement: ['Diseño web', 'SEO local', 'Soluciones digitales'].map(name => ({
@@ -34,7 +34,7 @@ const schema = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href={geistFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={manropeFont} as="font" type="font/woff2" crossorigin />
     <meta name="theme-color" content="#F8F7F4" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />

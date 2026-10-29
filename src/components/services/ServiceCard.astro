@@ -13,6 +13,7 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
 ---
 
 <Card
+  id={service.id === 'productos-fisicos' ? 'productos' : undefined}
   class:list={[
     "service-card",
     `service-card--${service.scene}`,

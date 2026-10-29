@@ -1,6 +1,16 @@
 ---
-import { navigation } from "../../data/site";
+import { site, getNavigation } from "../../data/site";
+import { Menu, Phone, X } from 'lucide';
 import logo from "../../images/branding/logo-7dstudio.webp";
+const navigation = getNavigation(Astro.url.pathname);
+const mobileNavigation = [
+  { label: 'Inicio', href: '/' },
+  ...navigation.map(item => ({
+    ...item,
+    label: item.label === 'Cómo trabajamos' ? 'Quiénes somos' : item.label === 'Seo Local' ? 'SEO Local' : item.label,
+  })),
+];
+const contactHref = navigation.find(item => item.label === 'Contacto')!.href;
 ---
 
 <header class="header">
@@ -8,17 +18,23 @@ import logo from "../../images/branding/logo-7dstudio.webp";
   <a class="brand" href="/" aria-label="7D Studio, inicio">
     <img src={logo.src} width={logo.width} height={logo.height} alt="7DStudio" decoding="async" />
   </a>
+  <a class="header__phone" href={site.phoneHref} aria-label={`Llamar a 7D Studio: ${site.phone}`}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      {Phone.map(([Tag, attributes]) => <Tag {...attributes} />)}
+    </svg>
+  </a>
   <button
     class="menu-toggle"
     type="button"
     aria-expanded="false"
-    aria-controls="main-nav"
+    aria-controls="mobile-menu"
+    aria-haspopup="dialog"
+    aria-label="Abrir navegación"
     hidden
   >
-    <span class="menu-label">Menú</span><span
-      class="menu-symbol"
-      aria-hidden="true"><i></i><i></i></span
-    >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      {Menu.map(([Tag, attributes]) => <Tag {...attributes} />)}
+    </svg>
   </button>
   <nav id="main-nav" class="nav" aria-label="Navegación principal">
     {
@@ -44,6 +60,23 @@ import logo from "../../images/branding/logo-7dstudio.webp";
   </nav>
   </div>
 </header>
+
+<dialog id="mobile-menu" class="mobile-menu" aria-labelledby="mobile-menu-title">
+  <div class="mobile-menu__heading">
+    <h2 id="mobile-menu-title">7D Studio</h2>
+    <button class="mobile-menu__close" type="button" aria-label="Cerrar navegación" autofocus>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        {X.map(([Tag, attributes]) => <Tag {...attributes} />)}
+      </svg>
+    </button>
+  </div>
+  <nav class="mobile-menu__links" aria-label="Navegación móvil">
+    {mobileNavigation.map(item => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <div class="mobile-menu__footer">
+    <a class="button" href={contactHref}>Cuéntanos tu proyecto <span aria-hidden="true">↗</span></a>
+  </div>
+</dialog>
 <style>
   .header {
     position: fixed;
@@ -88,10 +121,12 @@ import logo from "../../images/branding/logo-7dstudio.webp";
   .nav a:hover {
     text-decoration-color: currentColor;
   }
-  .menu-toggle {
+  .menu-toggle,
+  .header__phone,
+  .mobile-menu {
     display: none;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 1023px) {
     .header__inner {
       min-height: 84px;
       flex-wrap: wrap;
@@ -103,28 +138,22 @@ import logo from "../../images/branding/logo-7dstudio.webp";
     .menu-toggle:not([hidden]) {
       display: inline-flex;
       align-items: center;
-      gap: 14px;
-      min-height: 48px;
-      padding: 0 0 0 12px;
+      justify-content: center;
+      width: 44px;
+      min-height: 44px;
+      padding: 0;
       border: 0;
       background: transparent;
-      font-size: 13px;
+      color: var(--color-ink);
     }
-    .menu-symbol {
-      width: 20px;
-      display: grid;
-      gap: 5px;
-    }
-    .menu-symbol i {
-      height: 1px;
-      background: currentColor;
-      transition: transform 0.25s;
-    }
-    [aria-expanded="true"] .menu-symbol i:first-child {
-      transform: translateY(3px) rotate(45deg);
-    }
-    [aria-expanded="true"] .menu-symbol i:last-child {
-      transform: translateY(-3px) rotate(-45deg);
+    .header__phone {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      min-height: 44px;
+      margin-left: auto;
+      color: var(--color-ink);
     }
     .nav {
       width: 100%;
@@ -135,23 +164,106 @@ import logo from "../../images/branding/logo-7dstudio.webp";
     .header--enhanced .nav {
       display: none;
     }
-    .header--enhanced .nav--open {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      padding-block: 10px 22px;
-    }
     .nav a {
       min-height: 48px;
       justify-content: space-between;
+    }
+    .mobile-menu {
+      position: fixed;
+      inset: 0 0 0 auto;
+      width: min(89vw, 360px);
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      margin: 0;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+      border: 0;
+      background: var(--color-paper);
+      color: var(--color-ink);
+    }
+    .mobile-menu[open] {
+      display: flex;
+      flex-direction: column;
+      animation: mobile-menu-enter 180ms ease-out;
+    }
+    .mobile-menu::backdrop {
+      background: rgb(25 25 25 / 28%);
+    }
+    .mobile-menu__heading {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--color-line);
+    }
+    .mobile-menu__heading h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+    .mobile-menu__close {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      min-height: 44px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: inherit;
+    }
+    .mobile-menu__links {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 12px 24px;
+    }
+    .mobile-menu__links a {
+      display: flex;
+      align-items: center;
+      min-height: 52px;
+      padding-block: 12px;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .mobile-menu__links a[aria-current] {
+      color: #965e4e;
+      font-weight: 600;
+    }
+    .mobile-menu__footer {
+      flex-shrink: 0;
+      padding: 20px 24px;
+      border-top: 1px solid var(--color-line);
+    }
+    .mobile-menu__footer .button {
+      display: flex;
+      gap: 12px;
+      padding-inline: 16px;
+    }
+    .mobile-menu :focus-visible,
+    .menu-toggle:focus-visible,
+    .header__phone:focus-visible {
+      outline: 2px solid #965e4e;
+      outline-offset: -3px;
+    }
+    @keyframes mobile-menu-enter {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mobile-menu[open] { animation: none; }
     }
   }
 </style>
 <script>
   const header = document.querySelector<HTMLElement>(".header");
   const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
-  const nav = header?.querySelector<HTMLElement>(".nav");
-  if (header && toggle && nav) {
+  const dialog = document.querySelector<HTMLDialogElement>('#mobile-menu');
+  if (header && toggle && dialog) {
     header.classList.add("header--enhanced");
     toggle.hidden = false;
     const syncHeight = () => {
@@ -162,26 +274,81 @@ import logo from "../../images/branding/logo-7dstudio.webp";
     const syncScroll = () => header.classList.toggle("header--scrolled", window.scrollY > 8);
     window.addEventListener("scroll", syncScroll, { passive: true });
     syncScroll();
+    let savedScrollY = 0;
+    let savedBodyStyles: { position: string; top: string; width: string } | null = null;
+    let savedOverflow = '';
     const close = () => {
-      toggle.setAttribute("aria-expanded", "false");
-      nav.classList.remove("nav--open");
-      syncHeight();
+      if (!dialog.open) return;
+      dialog.close();
     };
+    dialog.addEventListener('close', () => {
+      toggle.setAttribute("aria-expanded", "false");
+      if (savedBodyStyles) {
+        Object.assign(document.body.style, savedBodyStyles);
+        document.documentElement.style.overflow = savedOverflow;
+        window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+        savedBodyStyles = null;
+      }
+      if (matchMedia('(max-width: 1023px)').matches) toggle.focus({ preventScroll: true });
+    });
     toggle.addEventListener("click", () => {
-      const open = toggle.getAttribute("aria-expanded") !== "true";
-      toggle.setAttribute("aria-expanded", String(open));
-      nav.classList.toggle("nav--open", open);
-      syncHeight();
+      if (dialog.open) return;
+      savedScrollY = window.scrollY;
+      savedBodyStyles = { position: document.body.style.position, top: document.body.style.top, width: document.body.style.width };
+      savedOverflow = document.documentElement.style.overflow;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${savedScrollY}px`;
+      document.body.style.width = '100%';
+      document.documentElement.style.overflow = 'hidden';
+      dialog.showModal();
+      toggle.setAttribute('aria-expanded', 'true');
     });
-    nav.addEventListener("click", (event) => {
-      if ((event.target as Element).closest("a")) close();
+    dialog.querySelector('.mobile-menu__close')?.addEventListener('click', close);
+    dialog.addEventListener('cancel', event => {
+      event.preventDefault();
+      close();
     });
-    header.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        close();
-        toggle.focus();
+    dialog.addEventListener('keydown', event => {
+      if (event.key !== 'Tab') return;
+      const focusable = [...dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href]')];
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     });
-    matchMedia("(min-width: 641px)").addEventListener("change", close);
+    dialog.addEventListener('click', event => {
+      if ((event.target as Element).closest('a')) {
+        const link = (event.target as Element).closest<HTMLAnchorElement>('a')!;
+        const target = new URL(link.href);
+        if (target.origin === location.origin && target.pathname === location.pathname && target.hash) {
+          event.preventDefault();
+          close();
+          dialog.addEventListener('close', () => {
+            location.hash = target.hash;
+            document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView({ block: 'start', behavior: 'instant' });
+          }, { once: true });
+        } else close();
+      } else if (event.target === dialog) {
+        const bounds = dialog.getBoundingClientRect();
+        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) close();
+      }
+    });
+    const syncActive = () => {
+      const links = [...dialog.querySelectorAll<HTMLAnchorElement>('.mobile-menu__links a')];
+      const active = links.find(link => link.pathname === location.pathname && link.hash && link.hash === location.hash)
+        || links.find(link => link.pathname === location.pathname && !link.hash);
+      links.forEach(link => {
+        if (link === active) link.setAttribute('aria-current', link.hash ? 'location' : 'page');
+        else link.removeAttribute('aria-current');
+      });
+    };
+    window.addEventListener('hashchange', syncActive);
+    syncActive();
+    matchMedia("(min-width: 1024px)").addEventListener("change", close);
   }
 </script>

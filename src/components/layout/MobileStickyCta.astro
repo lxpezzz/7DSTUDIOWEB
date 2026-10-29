@@ -1,0 +1,128 @@
+---
+import { House, PanelsTopLeft, MapPin, Package, MessageCircle } from 'lucide';
+import { site } from '../../data/site';
+
+const pathname = Astro.url.pathname;
+const items = [
+  { id: 'home', label: 'Inicio', href: '/', icon: House, active: pathname === '/' },
+  { id: 'web', label: 'Web', href: '/diseno-web/', icon: PanelsTopLeft, active: pathname.startsWith('/diseno-web'), name: 'Páginas web' },
+  { id: 'seo', label: 'SEO local', href: '/seo-local/', icon: MapPin, active: pathname.startsWith('/seo-local') },
+  { id: 'products', label: 'Productos', href: '/#productos', icon: Package, active: false },
+  { id: 'whatsapp', label: 'WhatsApp', href: site.whatsapp, icon: MessageCircle, active: false },
+];
+---
+
+<nav class="mobile-sticky-cta" aria-label="Accesos rápidos móviles">
+  {items.map(item => (
+    <a
+      href={item.href}
+      data-mobile-destination={item.id}
+      aria-label={item.id === 'whatsapp' ? 'WhatsApp (se abre en una pestaña nueva)' : item.name || item.label}
+      aria-current={item.active ? 'page' : undefined}
+      target={item.id === 'whatsapp' ? '_blank' : undefined}
+      rel={item.id === 'whatsapp' ? 'noopener noreferrer' : undefined}
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        {item.icon.map(([Tag, attributes]) => <Tag {...attributes} />)}
+      </svg>
+      <span>{item.label}</span>
+      {item.id === 'whatsapp' && <span class="sr-only"> (se abre en una pestaña nueva)</span>}
+    </a>
+  ))}
+</nav>
+
+<style>
+  .mobile-sticky-cta {
+    display: none;
+  }
+
+  @media (max-width: 1023px) {
+    .mobile-sticky-cta {
+      position: fixed;
+      inset: auto max(16px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+      z-index: 60;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      max-width: 460px;
+      margin-inline: auto;
+      padding: 4px;
+      border: 1px solid #ded8d0;
+      border-radius: 24px;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      box-shadow: 0 4px 20px rgb(35 28 22 / 8%);
+    }
+
+    @supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+      .mobile-sticky-cta {
+        background: rgb(248 247 244 / 94%);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+      }
+    }
+
+    .mobile-sticky-cta a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      min-width: 0;
+      min-height: 56px;
+      padding: 6px 2px;
+      font-size: 10px;
+      line-height: 1.4;
+      color: #59534e;
+    }
+
+    .mobile-sticky-cta svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .mobile-sticky-cta a[aria-current] {
+      color: #965e4e;
+      font-weight: 700;
+    }
+
+    .mobile-sticky-cta a[aria-current] svg {
+      stroke-width: 2.25;
+    }
+
+    .mobile-sticky-cta a:focus-visible {
+      outline: 2px solid var(--color-ink);
+      outline-offset: -4px;
+    }
+
+    /* La barra no compite con el teclado ni con el campo que se está editando. */
+    :global(body:has(input:not([type='hidden']):not([type='checkbox']):not([type='radio']):focus) .mobile-sticky-cta),
+    :global(body:has(textarea:focus) .mobile-sticky-cta) {
+      display: none;
+    }
+
+    :global(body:has(.mobile-menu[open]) .mobile-sticky-cta) {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.mobile-sticky-cta');
+  if (nav && location.pathname === '/') {
+    const sync = () => {
+      const products = location.hash === '#productos';
+      const home = nav.querySelector('[data-mobile-destination="home"]');
+      const product = nav.querySelector('[data-mobile-destination="products"]');
+      if (products) {
+        home?.removeAttribute('aria-current');
+        product?.setAttribute('aria-current', 'location');
+      } else {
+        home?.setAttribute('aria-current', 'page');
+        product?.removeAttribute('aria-current');
+      }
+    };
+    window.addEventListener('hashchange', sync);
+    sync();
+  }
+</script>

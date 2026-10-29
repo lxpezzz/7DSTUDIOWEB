@@ -1,6 +1,7 @@
 ---
-import { site, navigation } from "../../data/site";
+import { site, getNavigation } from "../../data/site";
 import logo from "../../images/branding/logo-7dstudio.webp";
+const navigation = getNavigation(Astro.url.pathname);
 ---
 
 <footer class="footer container">

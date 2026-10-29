@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { site } from '../data/site';
+import MobileStickyCta from '../components/layout/MobileStickyCta.astro';
 import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 interface Props {
   title?: string;
@@ -59,5 +60,6 @@ const schema = {
     FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance -->
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <slot />
+    <MobileStickyCta />
   </body>
 </html>

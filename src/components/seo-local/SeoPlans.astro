@@ -19,8 +19,14 @@ helpHref.searchParams.set('text', 'Hola, no sé qué plan de SEO local elegir pa
     <h2 id="plans-title">Elige cómo mejorar tu presencia en Google.</h2>
     <p>Dos planes para negocios con diferentes necesidades. Te ayudamos a encontrar el más adecuado.</p>
   </div>
+  <div class="plans__quick-compare" aria-label="Diferencias principales entre planes">
+    {plans.map(plan => <div>
+      <a href={`#${plan.id}`}>{plan.name} · {currency.format(plan.price)}{plan.period} {plan.taxLabel} <span aria-hidden="true">↓</span></a>
+      <p>{plan.id === 'seo-estandar' ? 'Perfil local en Google y puesta a punto inicial de tu web.' : 'Todo Estándar, más trabajo mensual en una página de tu web y seguimiento ampliado.'}</p>
+    </div>)}
+  </div>
   <div class="plans__grid">
-    {plans.map(plan => <article class:list={['plan', { 'plan--featured': plan.featured }]} data-plan={plan.id} aria-labelledby={`${plan.id}-title`}>
+    {plans.map(plan => <article id={plan.id} class:list={['plan', { 'plan--featured': plan.featured }]} data-plan={plan.id} aria-labelledby={`${plan.id}-title`}>
       <div class="plan__intro">
         {plan.badge && <p class="plan__badge">{plan.badge}</p>}
         <h3 id={`${plan.id}-title`}>{plan.name}</h3>
@@ -118,6 +124,32 @@ helpHref.searchParams.set('text', 'Hola, no sé qué plan de SEO local elegir pa
 </section>
 
 <style>
+  .plans__quick-compare {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+    padding-block: 16px;
+    border-block: 1px solid var(--color-line);
+  }
+  .plans__quick-compare a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: #47563e;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .plans__quick-compare p {
+    margin: 6px 0 0;
+    color: #535d49;
+    font-size: 13px;
+    line-height: 1.6;
+  }
   .plans {
     padding-block: 96px 64px;
   }

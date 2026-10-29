@@ -1,0 +1,375 @@
+---
+import { LayoutGrid, Star, MessageCircle } from "lucide";
+
+const modules = [
+  { title: "Servicios", icon: LayoutGrid },
+  { title: "Confianza", icon: Star },
+  { title: "Contacto", icon: MessageCircle },
+];
+---
+
+<figure class="hero-mockup" aria-labelledby="hero-mockup-caption">
+  <!-- Ilustración conceptual, no navegación ni controles interactivos. -->
+  <div class="hero-mockup__browser" aria-hidden="true">
+    <div class="hero-mockup__bar">
+      <span class="hero-mockup__dots"><i></i><i></i><i></i></span>
+      <span>Tu negocio</span>
+      <span>↗</span>
+    </div>
+    <div class="hero-mockup__page">
+      <div class="hero-mockup__header">
+        <span class="hero-mockup__brand"><i></i>Tu negocio</span>
+        <span class="hero-mockup__nav"
+          ><span>Servicios</span><span>Sobre nosotros</span><span>Contacto</span
+          ></span
+        >
+      </div>
+      <div class="hero-mockup__main">
+        <div class="hero-mockup__copy">
+          <strong>Lo que haces.<br />Claro desde el principio.</strong>
+          <p>Tu negocio, tus servicios y toda la información importante.</p>
+          <span class="hero-mockup__cta">Contactar <span>↗</span></span>
+        </div>
+        <div class="hero-mockup__structure">
+          <svg
+            class="hero-mockup__storefront"
+            width="180"
+            height="220"
+            viewBox="0 0 180 220"
+            fill="none"
+            aria-hidden="true"
+          >
+            <rect
+              x="22"
+              y="30"
+              width="136"
+              height="170"
+              rx="3"
+              fill="#E9DFD1"
+              stroke="#B88470"></rect>
+            <rect
+              x="38"
+              y="46"
+              width="104"
+              height="28"
+              rx="2"
+              fill="#F7F3EF"
+              stroke="#B88470"></rect>
+            <text
+              x="90"
+              y="63"
+              text-anchor="middle"
+              fill="#965E4E"
+              font-size="9"
+              font-weight="600"
+              letter-spacing="1">TU NEGOCIO</text
+            >
+            <path
+              d="M22 83h136l6 12H16l6-12Z"
+              fill="#B88470"
+              stroke="#965E4E"
+              stroke-linejoin="round"></path>
+            <rect
+              x="34"
+              y="107"
+              width="27"
+              height="63"
+              rx="1"
+              fill="#F7F3EF"
+              stroke="#965E4E"></rect>
+            <rect
+              x="70"
+              y="107"
+              width="40"
+              height="93"
+              rx="1"
+              fill="#F7F3EF"
+              stroke="#965E4E"></rect>
+            <rect
+              x="119"
+              y="107"
+              width="27"
+              height="63"
+              rx="1"
+              fill="#F7F3EF"
+              stroke="#965E4E"></rect>
+            <path
+              d="M39 128l16-16m-16 28 16-16m20 18 29-29m20 15 16-16m-16 28 16-16"
+              stroke="#E9DFD1"
+              stroke-width="2"></path>
+            <path
+              d="M34 150h27m58 0h27M104 151v12"
+              stroke="#965E4E"
+              stroke-linecap="round"></path>
+            <path d="M66 201h48v5H66z" fill="#D7C5B6"></path>
+            <path
+              d="M145 181v-26m0 16c-10 0-14-7-14-12 10 0 14 6 14 12Zm0-8c0-10 7-15 13-15 0 10-6 15-13 15Z"
+              fill="#B4BAA8"
+              stroke="#7E8975"
+              stroke-linejoin="round"></path>
+            <path
+              d="M136 180h18l-3 20h-12l-3-20Z"
+              fill="#B88470"
+              stroke="#965E4E"
+              stroke-linejoin="round"></path>
+            <path d="M13 206h154" stroke="#B88470" stroke-linecap="round"
+            ></path>
+          </svg>
+        </div>
+      </div>
+      <div class="hero-mockup__modules">
+        {
+          modules.map((module) => (
+            <div class="hero-mockup__module">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                {module.icon.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+              <strong>{module.title}</strong>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <figcaption id="hero-mockup-caption">
+    Una forma clara de presentar tu negocio online.
+  </figcaption>
+</figure>
+
+<style>
+  .hero-mockup {
+    min-width: 0;
+    margin: 0;
+    padding: clamp(16px, 2.2vw, 32px);
+    border: 1px solid var(--web-border);
+    border-radius: 20px;
+    background: var(--web-beige);
+  }
+
+  .hero-mockup__browser {
+    overflow: hidden;
+    border: 1px solid #cdbbad;
+    border-radius: 10px;
+    background: #fff;
+  }
+
+  .hero-mockup__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--web-border);
+    background: var(--web-surface);
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .hero-mockup__dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .hero-mockup__dots i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #b49b8c;
+  }
+
+  .hero-mockup__page {
+    padding: clamp(16px, 1.7vw, 24px);
+  }
+
+  .hero-mockup__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--web-border);
+  }
+
+  .hero-mockup__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .hero-mockup__brand i {
+    width: 10px;
+    height: 14px;
+    border: 2px solid var(--web-accent);
+    border-radius: 5px 5px 2px 2px;
+  }
+
+  .hero-mockup__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .hero-mockup__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 20px;
+    padding-block: 32px;
+  }
+
+  .hero-mockup__copy > strong {
+    display: block;
+    font-size: clamp(22px, 2vw, 29px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+  }
+
+  .hero-mockup__copy p {
+    margin: 12px 0 0;
+    color: var(--web-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .hero-mockup__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    background: var(--web-accent);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .hero-mockup__structure {
+    display: grid;
+    place-items: center;
+    padding: 8px;
+    border-radius: 10px;
+    background: var(--web-surface);
+  }
+
+  .hero-mockup__storefront {
+    display: block;
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+  }
+
+  .hero-mockup__modules {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--web-border);
+  }
+
+  .hero-mockup__module {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 10px;
+    border: 1px solid var(--web-border);
+    border-radius: 6px;
+    background: var(--web-surface);
+  }
+
+  .hero-mockup__module svg {
+    flex-shrink: 0;
+    color: var(--web-accent);
+  }
+
+  .hero-mockup__module strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .hero-mockup figcaption {
+    margin-top: 14px;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 600px) and (max-width: 959px) {
+    .hero-mockup {
+      max-width: 740px;
+    }
+
+    .hero-mockup__main {
+      gap: 32px;
+    }
+
+    .hero-mockup__copy > strong {
+      font-size: 30px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .hero-mockup__main {
+      gap: 12px;
+      padding-block: 24px;
+    }
+
+    .hero-mockup__structure {
+      padding: 4px;
+    }
+
+    .hero-mockup__modules {
+      gap: 6px;
+    }
+
+    .hero-mockup__module {
+      padding: 10px 6px;
+    }
+  }
+
+  @media (max-width: 374px) {
+    .hero-mockup__main {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .hero-mockup__structure {
+      justify-self: center;
+      width: 128px;
+      max-width: 100%;
+    }
+
+    .hero-mockup__module {
+      padding-inline: 4px;
+    }
+
+    .hero-mockup__module strong {
+      font-size: 12px;
+    }
+  }
+</style>

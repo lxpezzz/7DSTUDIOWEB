@@ -23,6 +23,7 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
       action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp}
       method={configured ? 'POST' : 'GET'} data-configured={String(configured)} data-privacy-ready={String(privacyReady)}>
       <h3 id="seo-form-title" tabindex="-1">Cuéntanos un poco más</h3>
+      {(!configured || !privacyReady) && <p class="seo-contact__availability">El formulario aún no admite envíos. Puedes hablar con nosotros por WhatsApp, sin rellenar estos campos.</p>}
       <p class="seo-contact__selection" data-selected-plan aria-live="polite">Consulta de SEO local. No necesitas elegir un plan.</p>
       {configured && <>
         <input type="hidden" name="access_key" value={site.web3formsKey} />
@@ -76,6 +77,12 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
 </section>
 
 <style>
+  .seo-contact__availability {
+    margin: 16px 0 0;
+    color: #535d49;
+    font-size: 13px;
+    line-height: 1.6;
+  }
   .seo-contact {
     padding-block: 40px 64px;
     scroll-margin-top: calc(var(--header-height) + 24px);
@@ -279,10 +286,10 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
   }
   @media (max-width: 767px) {
     .seo-contact__panel {
-      padding: 24px 18px;
+      padding: 24px 12px;
     }
     .seo-contact__form {
-      padding: 20px;
+      padding: 18px 14px;
     }
     .seo-contact__fields {
       grid-template-columns: minmax(0, 1fr);

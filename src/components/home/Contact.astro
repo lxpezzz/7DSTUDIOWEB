@@ -33,6 +33,7 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
       <div class="contact__heading">
         <h3 id="contact-form-title">Cuéntanos tu proyecto</h3>
         <p>Empecemos por lo básico.</p>
+        {(!configured || !privacyReady) && <p>El formulario aún no admite envíos. Puedes escribirnos por WhatsApp sin rellenarlo.</p>}
       </div>
       <form class="contact__form" aria-labelledby="contact-form-title"
         action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp}
@@ -166,7 +167,7 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
   @media (max-width: 767px) {
     .contact { padding-block: 56px; }
     .contact__panels { grid-template-columns: minmax(0, 1fr); }
-    .contact__identity, .contact__form-panel { padding: 28px 24px; }
+    .contact__identity, .contact__form-panel { padding: 28px 18px; }
     .contact__identity { gap: 28px; }
     .contact__eyebrow { margin-bottom: 24px; }
     h2 { max-width: 12ch; font-size: 38px; }

@@ -14,7 +14,7 @@ export const services: readonly Service[] = [
     id: 'diseno-web', title: 'Diseño web', scene: 'web',
     description: 'Webs profesionales que transmiten confianza y facilitan el contacto.',
     tags: ['Landing pages', 'Webs corporativas', 'Rediseños'],
-    route: '/diseno-web/', published: false,
+    route: '/diseno-web/', published: true,
   },
   {
     id: 'seo-local', title: 'SEO local', scene: 'local',

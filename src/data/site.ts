@@ -16,8 +16,22 @@ export const site = {
 export const navigation = [
   { label: 'Páginas web', href: '/diseno-web/' },
   { label: 'Seo Local', href: '/seo-local/' },
-  { label: 'Productos', href: '/#estudio' },
-  { label: 'Preguntas frecuentes', href: '/#contacto' },
-  { label: 'Quienes somos', href: '/#contacto' },
+  { label: 'Productos', href: '/#productos' },
+  { label: 'Preguntas frecuentes', href: '/diseno-web/#preguntas-web' },
+  { label: 'Cómo trabajamos', href: '/#como-trabajamos' },
   { label: 'Contacto', href: '/#contacto' },
 ];
+
+export function getNavigation(pathname: string) {
+  const seo = pathname.startsWith('/seo-local');
+  const web = pathname.startsWith('/diseno-web');
+  return navigation.map(item => {
+    if (item.label === 'Contacto') {
+      return { ...item, href: seo ? '/seo-local/#contacto-seo' : web ? '/diseno-web/#contacto-web' : '/#contacto' };
+    }
+    if (item.label === 'Preguntas frecuentes' && seo) {
+      return { ...item, href: '/seo-local/#preguntas-seo' };
+    }
+    return item;
+  });
+}

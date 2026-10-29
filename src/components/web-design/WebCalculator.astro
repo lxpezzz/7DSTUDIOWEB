@@ -1,0 +1,569 @@
+---
+import {
+  webPricing,
+  calculateWebQuote,
+  formatWebPrice,
+} from "../../data/webPricing";
+import { site } from "../../data/site";
+const initial = calculateWebQuote({
+  typeId: webPricing.defaultType,
+  extraIds: [],
+  additionalPages: 0,
+});
+---
+
+<section
+  id="presupuesto"
+  class="web-estimate web-section"
+  aria-labelledby="web-estimate-title"
+>
+  <div class="container">
+    <div class="web-heading">
+      <p class="web-eyebrow">TU WEB, A TU MEDIDA</p>
+      <h2 id="web-estimate-title">Calcula cuánto podría costar tu web.</h2>
+      <p>
+        Elige lo que necesitas y descubre un precio orientativo al instante. Sin
+        compromiso.
+      </p>
+    </div>
+    {
+      webPricing.reviewRequired && (
+        <p class="web-estimate__review">{webPricing.conditions.review}</p>
+      )
+    }
+    <div class="calculator" data-web-calculator>
+      <div class="calculator__options">
+        <fieldset class="calculator__fieldset" data-options disabled>
+          <legend>01. ¿Qué tipo de web necesitas?</legend>
+          <div class="calculator__types">
+            {
+              webPricing.types.map((type) => (
+                <label class="calculator__type">
+                  <input
+                    type="radio"
+                    name="web-type"
+                    value={type.id}
+                    checked={type.id === webPricing.defaultType}
+                  />
+                  <span>
+                    <strong>{type.name}</strong>
+                    <span class="calculator__description">
+                      {type.description}
+                    </span>
+                    <span class="calculator__type-price">
+                      {type.baseCents === null
+                        ? "Presupuesto personalizado"
+                        : `${formatWebPrice(type.baseCents)} + IVA`}
+                    </span>
+                    {type.includedPages && (
+                      <span class="calculator__pages">
+                        {type.includedPages}{" "}
+                        {type.includedPages === 1
+                          ? "página incluida"
+                          : "páginas incluidas"}
+                      </span>
+                    )}
+                    {type.provisional && (
+                      <span class="calculator__provisional">
+                        Precio y alcance provisionales
+                      </span>
+                    )}
+                  </span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+        <div class="calculator__included">
+          <p data-included-title>Incluido en el precio base</p>
+          <ul data-included>
+            {initial.type.included.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <fieldset class="calculator__fieldset" data-options disabled>
+          <legend>02. Añade solo lo que necesitas</legend>
+          <p class="calculator__hint" id="web-extras-hint">
+            Los extras se suman una sola vez. Páginas adicionales y blog están
+            disponibles con la web corporativa.
+          </p>
+          <div class="calculator__extras">
+            {
+              webPricing.extras.map((extra) => (
+                <div class="calculator__extra" data-extra-id={extra.id}>
+                  {extra.quantity ? (
+                    <>
+                      <label for="web-extra-pages">
+                        <strong>{extra.name}</strong>
+                        <span>{extra.description}</span>
+                      </label>
+                      <input
+                        id="web-extra-pages"
+                        type="number"
+                        name="additional-pages"
+                        min="0"
+                        max={webPricing.maxAdditionalPages}
+                        step="1"
+                        value="0"
+                        disabled
+                        aria-describedby="web-extras-hint"
+                      />
+                    </>
+                  ) : (
+                    <label>
+                      <input
+                        type="checkbox"
+                        name="web-extra"
+                        value={extra.id}
+                        disabled={
+                          !(extra.compatibleWith as readonly string[]).includes(
+                            "one-page",
+                          )
+                        }
+                        aria-describedby="web-extras-hint"
+                      />
+                      <span>
+                        <strong>{extra.name}</strong>
+                        <span>{extra.description}</span>
+                      </span>
+                    </label>
+                  )}
+                  <span class="calculator__extra-price">
+                    + {formatWebPrice(extra.unitCents)}
+                    {extra.quantity ? " / página" : ""}
+                    {extra.provisional && <small>Provisional</small>}
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+          <p
+            class="calculator__change"
+            data-compatibility
+            role="status"
+            aria-live="polite"
+          >
+          </p>
+        </fieldset>
+      </div>
+      <aside class="calculator__summary" aria-labelledby="web-summary-title">
+        <p class="web-eyebrow">SIN COMPROMISO</p>
+        <h3 id="web-summary-title">Tu presupuesto orientativo</h3>
+        <p class="calculator__selected" data-selected-type>
+          {initial.type.name}
+        </p>
+        <dl class="calculator__lines" data-quote-lines>
+          <div>
+            <dt>Precio base</dt><dd>
+              {formatWebPrice(initial.type.baseCents!)}
+            </dd>
+          </div>
+        </dl>
+        <div class="calculator__total" aria-live="polite" aria-atomic="true">
+          <span>Total orientativo</span>
+          <output data-quote-total>{formatWebPrice(initial.totalCents!)}</output
+          >
+          <small data-quote-tax>IVA no incluido</small>
+        </div>
+        <p class="calculator__custom" data-custom-message hidden>
+          Cuéntanos tu proyecto y te prepararemos un presupuesto a medida.
+        </p>
+        <p class="calculator__warning" data-provisional hidden>
+          Incluye tarifas provisionales pendientes de confirmación.
+        </p>
+        <a
+          class="button calculator__request"
+          href="#contacto-web"
+          data-request-quote
+          >Solicitar este presupuesto <span aria-hidden="true">↗</span></a
+        >
+        <noscript
+          ><p class="calculator__hint">
+            Activa JavaScript para calcular las opciones. También puedes
+            contarnos lo que necesitas en el formulario.
+          </p></noscript
+        >
+        <p class="calculator__footnote">{webPricing.conditions.estimate}</p>
+      </aside>
+    </div>
+    <div class="web-estimate__conditions">
+      <p>{webPricing.conditions.notIncluded}</p>
+      <p>{webPricing.conditions.scope}</p>
+    </div>
+    <div class="web-estimate__help">
+      <div>
+        <h3>¿No sabes qué web necesitas?</h3><p>
+          Hablemos 10 minutos. Nos cuentas tu idea y te ayudamos a encontrar la
+          opción más adecuada.
+        </p>
+      </div>
+      <a href={site.whatsapp} target="_blank" rel="noopener noreferrer"
+        >Resolver mis dudas por WhatsApp <span aria-hidden="true">↗</span><span
+          class="sr-only"
+        >
+          (se abre en una pestaña nueva)</span
+        ></a
+      >
+    </div>
+  </div>
+</section>
+
+<style>
+  .web-estimate {
+    background: var(--web-surface);
+    border-block: 1px solid var(--web-border);
+  }
+  .web-estimate__review {
+    margin: -12px 0 28px;
+    padding-left: 12px;
+    border-left: 3px solid #b88470;
+    color: var(--web-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .calculator {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 36px;
+  }
+  .calculator__options {
+    min-width: 0;
+  }
+  .calculator__fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .calculator__fieldset legend {
+    margin-bottom: 18px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .calculator__types {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .calculator__type {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--web-border);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .calculator__type:has(input:checked) {
+    border-color: var(--web-accent);
+    background: var(--web-beige);
+  }
+  .calculator__type:has(input:focus-visible) {
+    outline: 2px solid var(--web-accent);
+    outline-offset: 3px;
+  }
+  .calculator input[type="radio"],
+  .calculator input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0;
+    accent-color: var(--web-accent);
+  }
+  .calculator__type strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .calculator__description {
+    display: block;
+    margin-top: 8px;
+    color: var(--web-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .calculator__type-price {
+    display: block;
+    margin-top: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .calculator__pages,
+  .calculator__provisional {
+    display: block;
+    margin-top: 4px;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .calculator__provisional {
+    color: var(--web-accent-text);
+  }
+  .calculator__included {
+    margin-block: 20px 32px;
+    padding: 16px 0;
+    border-block: 1px solid var(--web-border);
+  }
+  .calculator__included p {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .calculator__included ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--web-muted);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+  .calculator__hint {
+    margin: 0 0 14px;
+    color: var(--web-muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .calculator__extras {
+    display: grid;
+    gap: 10px;
+  }
+  .calculator__extra {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+    padding: 16px;
+    border: 1px solid var(--web-border);
+    border-radius: 8px;
+    background: #fff;
+  }
+  .calculator__extra > label {
+    display: flex;
+    align-items: start;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+  }
+  .calculator__extra[data-extra-id="pages"] > label {
+    display: block;
+  }
+  .calculator__extra strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .calculator__extra label span span,
+  .calculator__extra > label > span:not(:has(strong)) {
+    display: block;
+    margin-top: 4px;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .calculator__extra:has(input:disabled) {
+    background: #eeebe7;
+  }
+  .calculator__extra:has(input:checked) {
+    border-color: var(--web-accent);
+  }
+  .calculator input[type="number"] {
+    width: 66px;
+    min-height: 44px;
+    padding: 8px;
+    border: 1px solid var(--web-border);
+    border-radius: 5px;
+    background: #fff;
+    color: var(--web-ink);
+    font: inherit;
+  }
+  .calculator__extra-price {
+    flex-shrink: 0;
+    color: var(--web-accent);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .calculator__extra-price small {
+    display: block;
+    color: var(--web-muted);
+    font-size: 11px;
+  }
+  .calculator__change {
+    margin: 12px 0 0;
+    color: var(--web-accent);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .calculator__change:empty {
+    display: none;
+  }
+  .calculator__summary {
+    position: sticky;
+    top: calc(var(--header-height) + 24px);
+    padding: 28px;
+    border: 1px solid #c8aa9d;
+    border-top: 3px solid #b88470;
+    border-radius: 12px;
+    background: #fff;
+  }
+  .calculator__summary h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+  .calculator__selected {
+    margin: 18px 0 12px;
+    color: var(--web-accent);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .calculator__lines {
+    margin: 0;
+    font-size: 13px;
+  }
+  /* El desglose se reconstruye en el navegador, sin atributos de scope de Astro. */
+  .calculator__lines > :global(div) {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 8px;
+  }
+  .calculator__lines :global(dd) {
+    flex-shrink: 0;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+  .calculator__total {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--web-border);
+  }
+  .calculator__total > span,
+  .calculator__total small {
+    display: block;
+    color: var(--web-muted);
+    font-size: 13px;
+  }
+  .calculator__total output {
+    display: block;
+    margin-block: 8px;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+  .calculator__custom {
+    margin: 18px 0 0;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .calculator__warning {
+    margin: 14px 0 0;
+    color: var(--web-accent);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .calculator__request {
+    width: 100%;
+    margin-top: 24px;
+    gap: 16px;
+  }
+  .calculator__footnote {
+    margin: 16px 0 0;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .web-estimate__conditions {
+    max-width: 95ch;
+    margin-top: 24px;
+    color: var(--web-muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .web-estimate__conditions p {
+    margin: 8px 0 0;
+  }
+  .web-estimate__help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--web-border);
+  }
+  .web-estimate__help h3 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 500;
+  }
+  .web-estimate__help p {
+    max-width: 60ch;
+    margin: 10px 0 0;
+    color: var(--web-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .web-estimate__help a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--web-accent);
+    font-size: 14px;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (max-width: 1023px) {
+    .calculator {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .calculator__summary {
+      position: static;
+    }
+    .web-estimate__help {
+      align-items: start;
+      flex-direction: column;
+      gap: 14px;
+    }
+  }
+  @media (max-width: 599px) {
+    .calculator__types {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .calculator__extra {
+      flex-wrap: wrap;
+    }
+    .calculator__extra > label {
+      flex-basis: calc(100% - 82px);
+    }
+    .calculator__extra-price {
+      margin-left: 28px;
+    }
+    .calculator__extra[data-extra-id="pages"] .calculator__extra-price {
+      margin-left: 0;
+    }
+    .calculator__summary {
+      padding: 22px;
+    }
+  }
+</style>
+
+<script>
+  import { initWebCalculator } from "../../scripts/web-calculator";
+  const calculator = document.querySelector<HTMLElement>(
+    "[data-web-calculator]",
+  );
+  if (calculator) initWebCalculator(calculator);
+</script>

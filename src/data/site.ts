@@ -14,7 +14,7 @@ export const site = {
 };
 
 export const navigation = [
-  { label: 'Páginas web', href: '/#servicios' },
+  { label: 'Páginas web', href: '/diseno-web/' },
   { label: 'Seo Local', href: '/seo-local/' },
   { label: 'Productos', href: '/#estudio' },
   { label: 'Preguntas frecuentes', href: '/#contacto' },

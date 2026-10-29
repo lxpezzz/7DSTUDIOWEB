@@ -1,0 +1,69 @@
+---
+import { projects, getDemoUrl } from '../../data/projects';
+const items = projects.filter(project => project.type === 'client' || project.type === 'demo');
+const hasBothCategories = items.some(item => item.type === 'client') && items.some(item => item.type === 'demo');
+---
+
+<section id="proyectos" class="web-projects web-section container" aria-labelledby="web-projects-title">
+  <div class="web-heading">
+    <p class="web-eyebrow">NUESTROS TRABAJOS</p>
+    <h2 id="web-projects-title">Cada negocio es diferente.<br />Su web también debería serlo.</h2>
+    <p>Explora algunas de las páginas que hemos diseñado y descubre diferentes formas de presentar un negocio online.</p>
+  </div>
+  {hasBothCategories && <div class="web-projects__filters" role="group" aria-label="Filtrar proyectos" hidden>
+    <button type="button" data-filter="all" aria-pressed="true" aria-controls="web-projects-grid">Todos</button>
+    <button type="button" data-filter="client" aria-pressed="false" aria-controls="web-projects-grid">Clientes</button>
+    <button type="button" data-filter="demo" aria-pressed="false" aria-controls="web-projects-grid">Demos</button>
+  </div>}
+  <p class="web-projects__status sr-only" role="status" aria-live="polite"></p>
+  <div id="web-projects-grid" class="web-projects__grid">
+    {items.map(project => {
+      const href = getDemoUrl(project.demoUrl);
+      const Card = href ? 'a' : 'article';
+      return <Card class="web-project" data-project={project.id} data-category={project.type} href={href} target={href ? '_blank' : undefined} rel={href ? 'noopener noreferrer' : undefined}>
+        <div class="web-project__image">
+          <img src={project.image.src} width={project.image.width} height={project.image.height} alt={`Captura de ${project.title.trim()}: ${project.sector.toLowerCase()}`} loading="lazy" decoding="async" />
+        </div>
+        <div class="web-project__meta"><span>{project.sector}</span><span class="web-project__badge">{project.type === 'client' ? 'Proyecto de cliente' : 'Demo de diseño'}</span></div>
+        <div class="web-project__bottom"><h3>{project.title.trim()}</h3>{href ? <span class="web-project__link">Ver proyecto <span aria-hidden="true">↗</span><span class="sr-only"> (se abre en una pestaña nueva)</span></span> : <span class="web-project__pending">Vista previa · enlace público pendiente</span>}</div>
+      </Card>;
+    })}
+  </div>
+</section>
+
+<style>
+  .web-projects__filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .web-projects__filters button { min-height: 44px; padding: 10px 18px; border: 1px solid var(--web-border); border-radius: 6px; background: transparent; color: var(--web-ink); font: inherit; font-size: 14px; }
+  .web-projects__filters button[aria-pressed='true'] { border-color: var(--web-accent); background: var(--web-beige); }
+  .web-projects__filters button:hover { border-color: var(--web-accent); }
+  .web-projects__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 28px; }
+  .web-project { min-width: 0; }
+  .web-project__image { overflow: hidden; aspect-ratio: 16 / 10; padding: 18px; border: 1px solid var(--web-border); border-radius: 14px; background: var(--web-beige); }
+  .web-project__image img { width: 100%; height: 100%; object-fit: contain; border: 1px solid #d9d1c6; border-radius: 5px; background: #fff; }
+  .web-project__meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-top: 18px; color: var(--web-muted); font-size: 12px; }
+  .web-project__badge { padding: 4px 8px; border: 1px solid var(--web-border); border-radius: 4px; color: var(--web-accent); }
+  .web-project__bottom { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 10px; }
+  .web-project h3 { margin: 0; font-size: 21px; font-weight: 500; letter-spacing: -0.025em; }
+  .web-project__link { color: var(--web-accent); font-size: 14px; text-decoration: underline; text-underline-offset: 4px; }
+  .web-project__pending { color: var(--web-muted); font-size: 12px; line-height: 1.5; }
+  a.web-project:hover .web-project__link { color: var(--web-ink); }
+  @media (max-width: 767px) { .web-projects__grid { grid-template-columns: minmax(0, 1fr); gap: 32px; } .web-project__image { padding: 12px; } }
+</style>
+
+<script>
+  const catalogue = document.querySelector<HTMLElement>('.web-projects');
+  if (catalogue) {
+    const filters = catalogue.querySelector<HTMLElement>('.web-projects__filters');
+    const buttons = [...catalogue.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const projects = [...catalogue.querySelectorAll<HTMLElement>('[data-project]')];
+    const status = catalogue.querySelector<HTMLElement>('[role="status"]');
+    if (filters) filters.hidden = false;
+    buttons.forEach(button => button.addEventListener('click', () => {
+      const category = button.dataset.filter;
+      buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      projects.forEach(project => project.hidden = category !== 'all' && project.dataset.category !== category);
+      const count = projects.filter(project => !project.hidden).length;
+      if (status) status.textContent = `${count} ${count === 1 ? 'proyecto visible' : 'proyectos visibles'}`;
+    }));
+  }
+</script>

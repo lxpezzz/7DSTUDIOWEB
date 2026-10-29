@@ -1,0 +1,331 @@
+---
+import { site } from '../../data/site';
+
+const configured = Boolean(site.web3formsKey);
+const privacyReady = Boolean(site.privacyPolicyUrl);
+const whatsappHref = new URL(site.whatsapp);
+whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?');
+---
+
+<section id="contacto-seo" class="seo-contact container" aria-labelledby="seo-contact-title">
+  <div class="seo-contact__panel">
+    <div class="seo-contact__copy">
+      <p class="seo-contact__eyebrow">HABLEMOS DE TU NEGOCIO</p>
+      <h2 id="seo-contact-title">¿Sabes cómo aparece tu negocio en Google?</h2>
+      <p class="seo-contact__description">Cuéntanos qué negocio tienes y te ayudamos a encontrar la mejor manera de mejorar su presencia local.</p>
+      <a class="seo-contact__whatsapp" href={whatsappHref.href} target="_blank" rel="noopener noreferrer">
+        ¿Prefieres WhatsApp? Hablemos directamente <span aria-hidden="true">↗</span>
+        <span class="sr-only"> (se abre en una pestaña nueva)</span>
+      </a>
+    </div>
+
+    <form id="seo-contact-form" class="seo-contact__form contact__form" aria-labelledby="seo-form-title"
+      action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp}
+      method={configured ? 'POST' : 'GET'} data-configured={String(configured)} data-privacy-ready={String(privacyReady)}>
+      <h3 id="seo-form-title" tabindex="-1">Cuéntanos un poco más</h3>
+      <p class="seo-contact__selection" data-selected-plan aria-live="polite">Consulta de SEO local. No necesitas elegir un plan.</p>
+      {configured && <>
+        <input type="hidden" name="access_key" value={site.web3formsKey} />
+        <input type="hidden" name="subject" value="Consulta SEO Local · 7D Studio" />
+        <input type="hidden" name="from_name" value="7D Studio" />
+      </>}
+      <input type="hidden" name="source" value="Página SEO Local · /seo-local/" />
+      <input type="hidden" name="service" value="SEO local" />
+      <input type="hidden" name="plan" value="" />
+      <div class="seo-contact__trap" aria-hidden="true">
+        <label for="seo-website">Deja este campo vacío</label>
+        <input id="seo-website" type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+      </div>
+      <div class="seo-contact__fields">
+        <div class="seo-contact__field">
+          <label for="seo-name">Nombre <span class="sr-only">(obligatorio)</span></label>
+          <input id="seo-name" name="name" autocomplete="name" required maxlength="100" />
+        </div>
+        <div class="seo-contact__field">
+          <label for="seo-email">Correo electrónico <span class="sr-only">(obligatorio)</span></label>
+          <input id="seo-email" type="email" name="email" autocomplete="email" required maxlength="254" />
+        </div>
+        <div class="seo-contact__field seo-contact__field--wide">
+          <label for="seo-business">Nombre del negocio <span class="seo-contact__optional">(opcional)</span></label>
+          <input id="seo-business" name="business" autocomplete="organization" maxlength="150" />
+        </div>
+        <div class="seo-contact__field seo-contact__field--wide">
+          <label for="seo-message">Mensaje <span class="sr-only">(obligatorio)</span></label>
+          <textarea id="seo-message" name="message" required minlength="10" maxlength="4000" rows="3"></textarea>
+        </div>
+      </div>
+      <label class="seo-contact__privacy">
+        <input type="checkbox" name="privacy" value="accepted" required disabled={!privacyReady} aria-describedby={!privacyReady ? 'seo-contact-notice' : undefined} />
+        <span>He leído y acepto {privacyReady ? <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a> : 'la política de privacidad'}.</span>
+      </label>
+      <p class="seo-contact__notice" id="seo-contact-notice">
+        {!privacyReady
+          ? 'El formulario estará disponible cuando publiquemos la política de privacidad. Mientras tanto, puedes escribirnos por WhatsApp.'
+          : configured
+            ? 'Usaremos tus datos para responder a tu consulta. El envío se procesa a través de Web3Forms.'
+            : 'El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente.'}
+      </p>
+      <button class="contact__submit" type="submit" disabled={!privacyReady || !configured} aria-describedby="seo-contact-notice">
+        Enviar consulta <span aria-hidden="true">↗</span>
+      </button>
+      <p class="contact__feedback" role="status" aria-live="polite" tabindex="-1"></p>
+      <a class="contact__continue" href={site.whatsapp} hidden>Abrir mi mensaje en WhatsApp ↗</a>
+      <noscript><p class="seo-contact__notice">{configured && privacyReady ? 'Puedes enviar este formulario sin JavaScript.' : 'Utiliza el enlace directo a WhatsApp para contarnos tu negocio.'}</p></noscript>
+    </form>
+  </div>
+</section>
+
+<style>
+  .seo-contact {
+    padding-block: 40px 64px;
+    scroll-margin-top: calc(var(--header-height) + 24px);
+  }
+  .seo-contact__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(24px, 3vw, 40px);
+    padding: clamp(24px, 3vw, 40px);
+    border: 1px solid #cbd2c1;
+    border-radius: 18px;
+    background: #e7e9e0;
+  }
+  .seo-contact__copy {
+    min-width: 0;
+  }
+  .seo-contact__eyebrow {
+    margin: 0 0 18px;
+    color: #535d49;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  h2 {
+    max-width: 22ch;
+    margin: 0;
+    font-size: clamp(30px, 3vw, 42px);
+    font-weight: 450;
+    line-height: 1.13;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+  .seo-contact__description {
+    max-width: 42ch;
+    margin: 22px 0 0;
+    color: #535d49;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .seo-contact__whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin-top: 24px;
+    color: #47563e;
+    font-size: 14px;
+    line-height: 1.6;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .seo-contact__form {
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid #cbd2c1;
+    border-radius: 14px;
+    background: #fff;
+  }
+  h3 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+  .seo-contact__selection {
+    margin: 8px 0 20px;
+    color: #535d49;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .seo-contact__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .seo-contact__field {
+    min-width: 0;
+  }
+  .seo-contact__field--wide {
+    grid-column: 1 / -1;
+  }
+  .seo-contact__field label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .seo-contact__optional {
+    color: #626158;
+    font-weight: 400;
+  }
+  .seo-contact__field input,
+  .seo-contact__field textarea {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #cbd2c1;
+    border-radius: 7px;
+    background: #fff;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .seo-contact__field textarea {
+    min-height: 104px;
+    resize: vertical;
+  }
+  .seo-contact__privacy {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-height: 44px;
+    margin-top: 16px;
+    padding-block: 6px;
+    color: #535d49;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .seo-contact__privacy input {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin: 1px 0 0;
+    accent-color: #47563e;
+  }
+  .seo-contact__privacy a,
+  .contact__continue {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .seo-contact__notice {
+    margin: 6px 0 16px;
+    color: #626158;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .contact__submit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    min-height: 50px;
+    padding: 13px 16px;
+    border: 1px solid var(--color-ink);
+    border-radius: 7px;
+    background: var(--color-ink);
+    color: #fff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .contact__submit:hover:not(:disabled) {
+    background: #302c29;
+  }
+  .contact__submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .contact__submit[aria-busy='true'] {
+    cursor: wait;
+  }
+  .contact__feedback {
+    margin: 12px 0 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .contact__feedback:empty {
+    display: none;
+  }
+  .contact__continue {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+  .seo-contact a:focus-visible,
+  .seo-contact input:focus-visible,
+  .seo-contact textarea:focus-visible,
+  .seo-contact button:focus-visible,
+  h3:focus-visible {
+    outline: 2px solid #47563e;
+    outline-offset: 4px;
+  }
+  .seo-contact__trap {
+    display: none;
+  }
+  @media (max-width: 959px) {
+    .seo-contact__panel {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+  }
+  @media (max-width: 767px) {
+    .seo-contact__panel {
+      padding: 24px 18px;
+    }
+    .seo-contact__form {
+      padding: 20px;
+    }
+    .seo-contact__fields {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { initContactForm } from '../../scripts/contact-form';
+
+  const form = document.querySelector<HTMLFormElement>('#seo-contact-form');
+  if (form && !form.dataset.seoInitialized) {
+    form.dataset.seoInitialized = 'true';
+    initContactForm(form);
+
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-seo-plan]')];
+    const planInput = form.querySelector<HTMLInputElement>('[name="plan"]')!;
+    const serviceInput = form.querySelector<HTMLInputElement>('[name="service"]')!;
+    const selection = form.querySelector<HTMLElement>('[data-selected-plan]')!;
+
+    function showSelectedPlan(name: string) {
+      planInput.value = name;
+      serviceInput.value = name ? `SEO local · ${name}` : 'SEO local';
+      selection.textContent = name ? `Plan seleccionado: ${name}` : 'Consulta de SEO local. No necesitas elegir un plan.';
+    }
+
+    function syncPlanFromUrl() {
+      const id = new URL(window.location.href).searchParams.get('plan');
+      const link = links.find(link => link.dataset.seoPlan === id);
+      showSelectedPlan(link?.dataset.seoPlanName || '');
+    }
+
+    syncPlanFromUrl();
+    window.addEventListener('popstate', syncPlanFromUrl);
+    form.addEventListener('reset', () => queueMicrotask(() => showSelectedPlan('')));
+
+    links.forEach(link => link.addEventListener('click', event => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      window.history.pushState(null, '', link.href);
+      syncPlanFromUrl();
+      document.querySelector('#contacto-seo')?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      form.querySelector<HTMLElement>('#seo-form-title')?.focus({ preventScroll: true });
+    }));
+  }
+</script>

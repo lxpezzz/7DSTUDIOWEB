@@ -1,0 +1,88 @@
+---
+import { site } from '../../data/site';
+import { products } from '../../data/products';
+const configured = site.formsConfigured;
+const privacyReady = site.privacyReady;
+---
+<section class="products-section container" id="contacto-productos" aria-labelledby="product-contact-title">
+  <div class="product-contact">
+    <div class="product-contact__intro">
+      <h2 id="product-contact-title">Tu negocio.<br />Tu próximo punto de conexión.</h2>
+      <p>Cuéntanos qué te interesa y dónde lo utilizarías. Te ayudamos a concretar el producto, el diseño y la configuración.</p>
+      <a class="products-link" data-product-whatsapp href={site.whatsapp} target="_blank" rel="noopener noreferrer">¿Prefieres WhatsApp? Hablemos ↗<span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+      <p class="product-contact__note">Consulta sin compra online. Acordamos contigo los detalles antes de preparar el pedido.</p>
+    </div>
+    <form id="product-contact-form" action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp} method={configured ? 'POST' : 'GET'} data-configured={String(configured)} data-privacy-ready={String(privacyReady)} aria-labelledby="product-form-title">
+      <h3 id="product-form-title">Consulta tu producto</h3>
+      {(!configured || !privacyReady) && <p class="product-form__notice">El formulario aún no admite envíos. Puedes consultar tu producto por WhatsApp sin rellenar estos campos.</p>}
+      {configured && <><input type="hidden" name="access_key" value={site.web3formsKey} /><input type="hidden" name="subject" value="Consulta Productos QR + NFC · 7D Studio" /><input type="hidden" name="from_name" value="7D Studio" /></>}
+      <input type="hidden" name="source" value="Página Productos · /productos/" />
+      <input type="hidden" name="service" value="Productos QR + NFC" />
+      <div hidden aria-hidden="true"><label for="product-bot">Deja este campo vacío</label><input id="product-bot" name="botcheck" tabindex="-1" autocomplete="off" /></div>
+      <div class="product-form__fields">
+        <div><label for="product-name">Nombre <span class="sr-only">(obligatorio)</span></label><input id="product-name" name="name" autocomplete="name" required maxlength="100" /></div>
+        <div><label for="product-email">Correo electrónico <span class="sr-only">(obligatorio)</span></label><input id="product-email" type="email" name="email" autocomplete="email" spellcheck="false" required maxlength="254" /></div>
+        <div class="product-form__wide"><label for="product-business">Empresa <span>(opcional)</span></label><input id="product-business" name="business" autocomplete="organization" maxlength="150" /></div>
+        <div class="product-form__wide"><label for="product-interest">Producto de interés</label><select id="product-interest" name="product" required aria-describedby="product-selection-status"><option value="">Selecciona un producto…</option>{products.map(product => <option value={product.id}>{product.name}</option>)}<option value="asesoramiento">No lo tengo claro: necesito orientación</option></select><p id="product-selection-status" role="status" aria-live="polite"></p></div>
+        <div class="product-form__wide"><label for="product-quantity">Cantidad aproximada <span>(opcional)</span></label><input id="product-quantity" name="quantity" type="number" inputmode="numeric" min="1" max="1000000" step="1" /><p class="product-form__help">Puedes dejarlo en blanco si todavía no lo sabes.</p></div>
+        <div class="product-form__wide"><label for="product-message">¿Qué quieres compartir? <span class="sr-only">(obligatorio)</span></label><textarea id="product-message" name="message" rows="4" required minlength="10" maxlength="4000" aria-describedby="product-message-help"></textarea><p class="product-form__help" id="product-message-help">Cuéntanos el uso que tienes en mente y qué información quieres mostrar.</p></div>
+      </div>
+      <label class="product-form__privacy"><input type="checkbox" name="privacy" value="accepted" required disabled={!privacyReady} /><span>He leído y acepto <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a>.</span></label>
+      <p class="product-form__notice" id="product-form-notice">{!privacyReady ? 'El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp.' : configured ? 'Usaremos tus datos para responder a tu consulta. El envío se procesa a través de Web3Forms.' : 'El envío por email aún no está disponible. Puedes escribirnos directamente por WhatsApp.'}</p>
+      <button class="contact__submit products-button" type="submit" disabled={!configured || !privacyReady} aria-describedby="product-form-notice">Solicitar presupuesto <span aria-hidden="true">↗</span></button>
+      <p class="contact__feedback" role="status" aria-live="polite" tabindex="-1"></p>
+      <a class="contact__continue products-link" href={site.whatsapp} hidden>Abrir mi mensaje en WhatsApp ↗</a>
+      <noscript><p class="product-form__notice">Selecciona el producto en el desplegable o indícanos cuál te interesa por WhatsApp.</p></noscript>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { initContactForm } from '../../scripts/contact-form';
+  import { products } from '../../data/products';
+  import { site } from '../../data/site';
+  const form = document.querySelector<HTMLFormElement>('#product-contact-form');
+  if (form) {
+    if (form.dataset.configured === 'true' && form.dataset.privacyReady === 'true') initContactForm(form);
+    else form.addEventListener('submit', event => event.preventDefault());
+    const select = form.querySelector<HTMLSelectElement>('[name="product"]')!;
+    const quantity = form.querySelector<HTMLInputElement>('[name="quantity"]')!;
+    const status = form.querySelector<HTMLElement>('#product-selection-status')!;
+    const update = () => {
+      const product = products.find(product => product.id === select.value);
+      const text = `Hola, me interesan los productos QR + NFC de 7D Studio.${product ? `\nProducto: ${product.name}.` : ''}${quantity.validity.valid && quantity.value ? `\nCantidad aproximada: ${quantity.value}.` : ''}`;
+      document.querySelectorAll<HTMLAnchorElement>('[data-product-whatsapp], [data-mobile-destination="whatsapp"]').forEach(link => link.href = `${site.whatsapp}?text=${encodeURIComponent(text)}`);
+      status.textContent = product ? `Producto seleccionado: ${product.name}.` : '';
+    };
+    const syncUrl = () => {
+      const id = new URL(location.href).searchParams.get('producto');
+      select.value = products.some(product => product.id === id) || id === 'asesoramiento' ? id! : '';
+      update();
+    };
+    document.querySelectorAll<HTMLAnchorElement>('[data-product-select]').forEach(link => link.addEventListener('click', event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      history.pushState(null, '', link.href);
+      syncUrl();
+      // Focus the native select without opening the mobile keyboard.
+      select.focus({ preventScroll: true });
+      select.scrollIntoView({ block: 'center', behavior: 'instant' });
+    }));
+    select.addEventListener('change', () => {
+      const url = new URL(location.href);
+      if (select.value) url.searchParams.set('producto', select.value);
+      else url.searchParams.delete('producto');
+      history.replaceState(null, '', url);
+      update();
+    });
+    quantity.addEventListener('input', update);
+    window.addEventListener('popstate', syncUrl);
+    form.addEventListener('reset', () => queueMicrotask(() => {
+      const url = new URL(location.href);
+      url.searchParams.delete('producto');
+      history.replaceState(null, '', url);
+      update();
+    }));
+    syncUrl();
+  }
+</script>

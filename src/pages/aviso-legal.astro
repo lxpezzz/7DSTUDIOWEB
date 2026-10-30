@@ -1,0 +1,53 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import LegalIdentity from '../components/legal/LegalIdentity.astro';
+import { legalSources } from '../data/legal';
+const sections = [
+  { id: 'titular', title: 'Identificación del titular' },
+  { id: 'actividad', title: 'Actividad y finalidad' },
+  { id: 'uso', title: 'Utilización de la web' },
+  { id: 'propiedad', title: 'Propiedad intelectual' },
+  { id: 'enlaces', title: 'Enlaces externos' },
+  { id: 'responsabilidad', title: 'Responsabilidad' },
+  { id: 'legislacion', title: 'Legislación aplicable' },
+];
+---
+<LegalLayout title="Aviso legal" description="Identificación del titular, finalidad y condiciones de uso de 7dstudio.es. Borrador pendiente de completar con los datos legales del titular." sections={sections}>
+  <section id="titular">
+    <h2>1. Identificación del titular</h2>
+    <p>En cumplimiento del artículo 10 de la <a href={legalSources.lssi}>Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE)</a>, deben constar los siguientes datos del titular de esta web:</p>
+    <LegalIdentity />
+    <p><strong>Pendiente antes de publicar:</strong> completar identidad fiscal, domicilio y correo; confirmar inscripción registral, autorizaciones o colegiación solo si resultan aplicables. El nombre comercial 7D Studio no sustituye la identificación de la persona o entidad titular.</p>
+  </section>
+  <section id="actividad">
+    <h2>2. Actividad y finalidad de la web</h2>
+    <p>7D Studio presenta servicios de diseño web y SEO Local, así como un catálogo de productos físicos QR/NFC. La web permite consultar información y solicitar presupuestos por los canales disponibles.</p>
+    <p>No hay carrito, checkout ni pagos online. Los productos se muestran como catálogo y actualmente no se ofrecen envíos. El presupuesto y la contratación se concretan posteriormente. La calculadora de diseño web proporciona importes orientativos sujetos a confirmación.</p>
+    <p>Las condiciones de una eventual contratación se explican en las <a href="/condiciones-de-contratacion/">condiciones de contratación</a> y se concretan en la propuesta correspondiente.</p>
+  </section>
+  <section id="uso">
+    <h2>3. Condiciones generales de utilización</h2>
+    <p>Puedes consultar la información sin crear una cuenta. El uso de esta web debe respetar la legislación vigente y los derechos de otras personas. No está permitido introducir código malicioso, intentar acceder sin autorización a sistemas o utilizar los canales de contacto para enviar contenido ilícito o suplantar identidades.</p>
+    <p>Al contactar, proporciona información pertinente y exacta. Evita incluir datos sensibles, contraseñas o información de terceros que no tengas autorización para comunicar. Navegar por la web no equivale a contratar un servicio ni a aceptar tratamientos de datos que requieran un consentimiento específico.</p>
+  </section>
+  <section id="propiedad">
+    <h2>4. Propiedad intelectual e industrial</h2>
+    <p>Los textos, diseños, signos distintivos y elementos propios de la web están protegidos por la normativa de propiedad intelectual e industrial que corresponda. Los recursos, marcas y capturas de proyectos de terceros conservan la titularidad y las licencias de sus respectivos propietarios.</p>
+    <p>La consulta de la web no concede una licencia para explotar comercialmente esos contenidos. Los usos que requieran autorización deben solicitarse al titular, sin perjuicio de los usos permitidos legalmente. Los derechos sobre los trabajos contratados se establecerán en el presupuesto o contrato, sin atribuir recursos de terceros al cliente de forma automática.</p>
+  </section>
+  <section id="enlaces">
+    <h2>5. Enlaces externos</h2>
+    <p>Se incluyen enlaces a proyectos, documentación y WhatsApp. Estos enlaces llevan a servicios externos con sus propias condiciones y políticas. No se incrusta un chat de WhatsApp: el servicio externo se abre cuando eliges acceder a él.</p>
+    <p>Si detectas un enlace que pueda vulnerar derechos, comunícalo a través de <a href="/contacto/">Contacto</a> para poder revisarlo. La responsabilidad sobre enlaces se determinará conforme a la normativa aplicable, sin una exclusión general de las obligaciones del titular.</p>
+  </section>
+  <section id="responsabilidad">
+    <h2>6. Responsabilidad y disponibilidad</h2>
+    <p>La información debe mantenerse actualizada y los errores comunicados deben revisarse. Puede haber interrupciones técnicas, tareas de mantenimiento o errores que afecten al acceso. Esto no implica una exclusión de responsabilidad por incumplimientos imputables al titular ni de los derechos imperativos de consumidores y usuarios.</p>
+    <p>Las explicaciones comerciales y demostraciones no constituyen garantías de posiciones en Google, ventas o resultados concretos. El alcance y los compromisos exigibles serán los acordados válidamente y los que establezca la ley.</p>
+  </section>
+  <section id="legislacion">
+    <h2>7. Legislación aplicable</h2>
+    <p>Se aplicará la legislación española en lo que corresponda, sin perjuicio de las normas imperativas de protección de consumidores y de las reglas de derecho internacional privado aplicables. La competencia judicial se determinará conforme a la ley, sin imponer al consumidor un fuero distinto del que le corresponda.</p>
+    <p>El tratamiento de datos y el uso de tecnologías de almacenamiento se describen en la <a href="/politica-de-privacidad/">política de privacidad</a> y la <a href="/politica-de-cookies/">política de cookies</a>.</p>
+  </section>
+</LegalLayout>

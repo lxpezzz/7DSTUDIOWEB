@@ -2,23 +2,47 @@
 import { Image } from 'astro:assets';
 import { site } from '../../data/site';
 import symbol from '../../images/finalcta/simbolometal-7d.webp';
+import { legal, pendingValue } from '../../data/legal';
 
-const configured = Boolean(site.web3formsKey);
-const privacyReady = Boolean(site.privacyPolicyUrl);
+interface Props {
+  variant?: 'default' | 'pearl';
+  title?: string;
+  description?: string;
+  mode?: 'project' | 'contact';
+}
+
+const {
+  variant = 'default',
+  title = 'Algo bueno empieza aquí.',
+  description = 'Cuéntanos qué tienes en mente. Encontraremos la mejor forma de llevarlo a cabo.',
+  mode = 'project',
+} = Astro.props;
+const configured = site.formsConfigured;
+const privacyReady = site.privacyReady;
 const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
+const contactServices = [
+  { id: 'web', label: 'Diseño Web' },
+  { id: 'seo-local', label: 'SEO Local' },
+  { id: 'productos', label: 'Productos QR/NFC' },
+  { id: 'otro', label: 'Otro' },
+];
 ---
 
-<section id="contacto" class="contact section" aria-labelledby="contact-title">
+<section id="contacto" class:list={['contact section', { 'contact--pearl': variant === 'pearl', 'contact--direct': mode === 'contact' }]} aria-labelledby="contact-title">
   <div class="contact__panels container">
     <div class="contact__identity">
       <div class="contact__intro">
         <p class="contact__eyebrow"><span aria-hidden="true"></span>HABLEMOS DE TU IDEA</p>
-        <h2 id="contact-title">Algo bueno empieza aquí.</h2>
-        <p class="contact__description">Cuéntanos qué tienes en mente. Encontraremos la mejor forma de llevarlo a cabo.</p>
+        <h2 id="contact-title">{title}</h2>
+        <p class="contact__description">{description}</p>
       </div>
-      <div class="contact__symbol" aria-hidden="true">
+      {mode === 'contact' && <dl class="contact__details">
+        <div><dt>Teléfono</dt><dd><a href={site.phoneHref}>{site.phone}</a></dd></div>
+        <div><dt>Correo electrónico</dt><dd>{legal.email ? <a href={`mailto:${legal.email}`}>{legal.email}</a> : '… (pendiente de confirmar)'}</dd></div>
+      </dl>}
+      {variant !== 'pearl' && <div class="contact__symbol" aria-hidden="true">
         <Image src={symbol} alt="" widths={[240, 400, 600]} sizes="(max-width: 767px) 200px, 280px" format="webp" loading="lazy" decoding="async" />
-      </div>
+      </div>}
       <div class="contact__talk">
         <p>¿PREFIERES HABLAR?</p>
         <a class="contact__whatsapp" href={site.whatsapp} target="_blank" rel="noopener noreferrer">
@@ -31,11 +55,11 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
 
     <div class="contact__form-panel">
       <div class="contact__heading">
-        <h3 id="contact-form-title">Cuéntanos tu proyecto</h3>
+        <h3 id="contact-form-title">{mode === 'contact' ? 'Envíanos tu consulta' : 'Cuéntanos tu proyecto'}</h3>
         <p>Empecemos por lo básico.</p>
         {(!configured || !privacyReady) && <p>El formulario aún no admite envíos. Puedes escribirnos por WhatsApp sin rellenarlo.</p>}
       </div>
-      <form class="contact__form" aria-labelledby="contact-form-title"
+      <form class="contact__form" data-contact-page={mode === 'contact' ? '' : undefined} aria-labelledby="contact-form-title"
         action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp}
         method={configured ? 'POST' : 'GET'} data-configured={String(configured)} data-privacy-ready={String(privacyReady)}>
         {configured && <>
@@ -48,7 +72,8 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
           <input id="website" type="text" name="botcheck" tabindex="-1" autocomplete="off" />
         </div>
 
-        <fieldset class="contact__services">
+        <input type="hidden" name="source" value={Astro.url.pathname} />
+        {mode !== 'contact' && <fieldset class="contact__services">
           <legend>¿En qué podemos ayudarte?</legend>
           <div class="contact__chips">
             {services.map(service => <label class="contact__chip">
@@ -56,7 +81,7 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
               <span>{service}</span>
             </label>)}
           </div>
-        </fieldset>
+        </fieldset>}
 
         <div class="contact__fields">
           <div class="contact__field">
@@ -65,31 +90,49 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
           </div>
           <div class="contact__field">
             <label for="email">Correo electrónico <span class="sr-only">(obligatorio)</span></label>
-            <input id="email" type="email" name="email" autocomplete="email" required maxlength="254" placeholder="tu@empresa.es" />
+            <input id="email" type="email" name="email" autocomplete="email" spellcheck="false" required maxlength="254" placeholder="tu@empresa.es" />
           </div>
+          {mode === 'contact' && <>
+            <div class="contact__field contact__field--message">
+              <label for="contact-phone">Teléfono <span>(opcional)</span></label>
+              <input id="contact-phone" name="phone" type="tel" autocomplete="tel" maxlength="30" />
+            </div>
+            <div class="contact__field contact__field--message">
+              <label for="contact-service">Servicio de interés</label>
+              <select id="contact-service" name="service" required aria-describedby="contact-service-status">
+                <option value="">Selecciona un servicio…</option>
+                {contactServices.map(service => <option value={service.id}>{service.label}</option>)}
+              </select>
+              <p class="contact__selection" id="contact-service-status" role="status" aria-live="polite"></p>
+            </div>
+          </>}
           <div class="contact__field contact__field--message">
             <label for="message">Cuéntanos un poco más <span class="sr-only">(obligatorio)</span></label>
-            <textarea id="message" name="message" required minlength="10" maxlength="4000" rows="4" placeholder="Tu idea, tu negocio, lo que necesitas..."></textarea>
+            <textarea id="message" name="message" required minlength="10" maxlength="4000" rows="4" placeholder="Tu idea, tu negocio, lo que necesitas…"></textarea>
           </div>
         </div>
 
         <label class="contact__privacy">
           <input type="checkbox" name="privacy" value="accepted" required disabled={!privacyReady} aria-describedby={!privacyReady ? 'contact-notice' : undefined} />
-          <span>He leído y acepto {privacyReady ? <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a> : 'la política de privacidad'}.</span>
+          <span>He leído y acepto <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a>.</span>
         </label>
         <p class="contact__notice" id="contact-notice">
           {!privacyReady
-            ? 'El formulario estará disponible cuando publiquemos la política de privacidad. Mientras tanto, puedes escribirnos por WhatsApp.'
+            ? 'El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp.'
             : configured
               ? 'Usaremos tus datos únicamente para responder a tu consulta. El envío se procesa a través de Web3Forms.'
               : 'El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente.'}
         </p>
         <button class="contact__submit" type="submit" disabled={!privacyReady || !configured} aria-describedby="contact-notice">
-          Enviar mi proyecto
+          {mode === 'contact' ? 'Enviar consulta' : 'Enviar mi proyecto'}
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
         </button>
         <p class="contact__feedback" role="status" aria-live="polite" tabindex="-1"></p>
         <a class="contact__continue" href={site.whatsapp} hidden>Abrir mi mensaje en WhatsApp ↗</a>
+        {mode === 'contact' && <div class="contact__data-info">
+          <p><strong>Información básica de protección de datos.</strong> Responsable: {pendingValue(legal.entityName)} (datos pendientes). Finalidad: atender tu consulta y, si lo solicitas, preparar un presupuesto. Base: medidas precontractuales o consentimiento para otras consultas. Sin finalidad publicitaria.</p>
+          <p>Envío por Web3Forms previsto, todavía no activado. Derechos: acceso, rectificación, supresión y los demás descritos en la <a href={site.privacyPolicyUrl}>política completa de privacidad</a>. El consentimiento no está marcado por defecto.</p>
+        </div>}
         <noscript><p class="contact__notice">{configured && privacyReady ? 'Puedes enviar este formulario sin JavaScript.' : 'Utiliza el enlace directo a WhatsApp para contarnos tu proyecto.'}</p></noscript>
       </form>
     </div>
@@ -97,7 +140,7 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
 </section>
 
 <style>
-  .contact { padding-block: 96px; }
+  .contact { padding-block: 96px; scroll-margin-top: calc(var(--header-height) + 24px); }
   .contact__panels { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); border: 1px solid #dad5ce; border-radius: 20px; overflow: clip; }
   .contact__identity { display: flex; flex-direction: column; align-items: stretch; gap: 36px; min-width: 0; padding: clamp(28px, 3.2vw, 48px); background: #1b1b1b; color: #f8f6f3; }
   .contact__eyebrow { display: flex; align-items: center; gap: 10px; margin: 0 0 28px; font-size: 11px; font-weight: 500; letter-spacing: .08em; line-height: 1.5; }
@@ -151,6 +194,35 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
   .contact__trap { display: none; }
   .contact ::selection { background: #1b1b1b; color: #f8f6f3; }
   .contact__identity ::selection { background: #f8f6f3; color: #1b1b1b; }
+  .contact__details { margin: 0; }
+  .contact__details > div + div { margin-top: 20px; }
+  .contact__details dt { font-size: 12px; font-weight: 550; }
+  .contact__details dd { margin: 7px 0 0; font-size: 14px; line-height: 1.7; overflow-wrap: anywhere; }
+  .contact__details a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 4px; }
+  .contact__field select { display: block; width: 100%; min-height: 48px; padding: 12px; border: 1px solid #dad5ce; border-radius: 9px; background: #fff; color: #191919; font: inherit; font-size: 16px; }
+  .contact__field select:focus-visible { outline: 2px solid #191919; outline-offset: 3px; }
+  .contact__selection { margin: 8px 0 0; font-size: 12px; color: #5d5b58; line-height: 1.6; }
+  .contact__selection:empty { display: none; }
+  .contact__data-info { margin-top: 20px; padding-top: 18px; border-top: 1px solid #d4d3d0; color: #5d5b58; font-size: 12px; line-height: 1.8; }
+  .contact__data-info p { margin: 0; }
+  .contact__data-info p + p { margin-top: 12px; }
+  .contact__data-info a { text-decoration: underline; text-underline-offset: 4px; }
+  .contact--pearl { padding-block: 0 24px; }
+  .contact--pearl .contact__panels { border-color: #d4d3d0; background: #e9e8e5; }
+  .contact--pearl .contact__identity { justify-content: center; background: #e9e8e5; color: #191919; }
+  .contact--pearl h2 { max-width: 16ch; }
+  .contact--pearl .contact__description,
+  .contact--pearl .contact__talk > p,
+  .contact--pearl .contact__heading > p,
+  .contact--pearl .contact__notice { color: #5d5b58; }
+  .contact--pearl .contact__eyebrow > span { background: #777572; }
+  .contact--pearl .contact__talk { border-color: #c9c7c3; }
+  .contact--pearl .contact__form-panel { background: #efeeec; }
+  .contact--pearl .contact__chip input:checked + span { border-color: #777572; background: #deddda; }
+  .contact--pearl .contact__submit svg { color: currentColor; }
+  .contact--pearl .contact__identity a:focus-visible { outline-color: #191919; }
+  .contact--pearl .contact__identity ::selection { background: #191919; color: #fff; }
+  .contact--direct .contact__identity { justify-content: flex-start; }
   @media (hover: hover) and (pointer: fine) {
     .contact__chip:hover > span { border-color: #83786e; }
     .contact__submit:hover:not(:disabled) { background: #302c29; }
@@ -166,6 +238,7 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
   }
   @media (max-width: 767px) {
     .contact { padding-block: 56px; }
+    .contact--pearl { padding-block: 0 8px; }
     .contact__panels { grid-template-columns: minmax(0, 1fr); }
     .contact__identity, .contact__form-panel { padding: 28px 18px; }
     .contact__identity { gap: 28px; }
@@ -182,4 +255,28 @@ const services = ['Diseño web', 'SEO local', 'Productos QR/NFC', 'Otra idea'];
   import { initContactForm } from '../../scripts/contact-form';
   const form = document.querySelector<HTMLFormElement>('.contact__form');
   if (form) initContactForm(form);
+  if (form?.hasAttribute('data-contact-page')) {
+    const select = form.querySelector<HTMLSelectElement>('[name="service"]')!;
+    const status = form.querySelector<HTMLElement>('#contact-service-status')!;
+    const sync = () => {
+      const value = new URL(location.href).searchParams.get('servicio') || '';
+      select.value = [...select.options].some(option => option.value === value) ? value : '';
+      status.textContent = select.value ? `Servicio seleccionado: ${select.selectedOptions[0].text}.` : '';
+    };
+    select.addEventListener('change', () => {
+      const url = new URL(location.href);
+      if (select.value) url.searchParams.set('servicio', select.value);
+      else url.searchParams.delete('servicio');
+      history.replaceState(null, '', url);
+      status.textContent = select.value ? `Servicio seleccionado: ${select.selectedOptions[0].text}.` : '';
+    });
+    window.addEventListener('popstate', sync);
+    form.addEventListener('reset', () => queueMicrotask(() => {
+      const url = new URL(location.href);
+      url.searchParams.delete('servicio');
+      history.replaceState(null, '', url);
+      sync();
+    }));
+    sync();
+  }
 </script>

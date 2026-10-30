@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import Contact from '../components/home/Contact.astro';
+---
+<BaseLayout title="Contacto | Hablemos de tu proyecto · 7D Studio" description="Consulta tu proyecto de diseño web, SEO Local o productos QR/NFC con 7D Studio. Contacto por teléfono, WhatsApp y formulario pendiente de activación.">
+  <Header />
+  <main id="contenido" class="contact-page">
+    <section class="contact-hero container" aria-labelledby="contact-page-title">
+      <nav class="contact-breadcrumb" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">Contacto</span></nav>
+      <p class="contact-hero__label">CONTACTO / 7D STUDIO</p>
+      <h1 id="contact-page-title">Hablemos de tu proyecto.</h1>
+      <p class="contact-hero__description">¿Necesitas una página web, mejorar tu presencia en Google o información sobre nuestros productos? Cuéntanos qué tienes en mente.</p>
+    </section>
+    <Contact mode="contact" variant="pearl" title="Cuéntanos qué necesitas." description="Explícanos qué negocio tienes y qué te gustaría resolver. Te ayudamos a concretar el siguiente paso, sin necesidad de tenerlo todo decidido." />
+  </main>
+  <Footer />
+</BaseLayout>
+<style>
+  .contact-page {
+    padding-top: var(--header-height);
+    padding-bottom: 56px;
+    background: #f7f5f3;
+  }
+  .contact-hero { padding-block: 28px 48px; }
+  .contact-breadcrumb { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 38px; color: #655f58; font-size: 12px; line-height: 1.7; }
+  .contact-breadcrumb a:hover { text-decoration: underline; }
+  .contact-hero__label { margin: 0 0 20px; color: #655f58; font-size: 12px; line-height: 1.6; letter-spacing: .08em; }
+  h1 { margin: 0; max-width: 20ch; font-size: clamp(40px, 5vw, 68px); font-weight: 480; line-height: 1.1; letter-spacing: -.04em; text-wrap: balance; }
+  .contact-hero__description { max-width: 65ch; margin: 24px 0 0; color: #655f58; font-size: 17px; line-height: 1.8; }
+  @media (max-width: 599px) { .contact-hero { padding-block: 22px 34px; } .contact-breadcrumb { margin-bottom: 28px; } .contact-hero__label { font-size: 11px; } .contact-hero__description { font-size: 15px; } .contact-page { padding-bottom: 32px; } }
+</style>

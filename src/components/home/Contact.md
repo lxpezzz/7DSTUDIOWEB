@@ -8,11 +8,12 @@ Reutiliza `src/images/finalcta/simbolometal-7d.webp`, recurso original transpare
 
 ## Configuración y privacidad
 
-- `PUBLIC_WEB3FORMS_KEY`: misma clave pública que utilizaba el formulario anterior; se mantienen endpoint, asunto, remitente y honeypot `botcheck`.
-- `PUBLIC_PRIVACY_POLICY_URL`: URL real de la política publicada y revisada. Configurar ambas variables en el entorno y volver a compilar.
-- Actualmente no hay página legal ni URL configurada. Por decisión expresa del usuario, la casilla y el envío permanecen deshabilitados; se explica el motivo y se ofrece WhatsApp directo. No hay enlace legal ficticio.
-- Con política disponible pero sin Web3Forms, se conserva el comportamiento anterior: preparar el mensaje para revisión y envío manual por WhatsApp. Se indica que no se ha enviado automáticamente.
-- Con ambas configuraciones, se envía mediante Web3Forms. Sin JS también se conserva el POST nativo cuando ambas están disponibles.
+- `PUBLIC_WEB3FORMS_KEY`: clave pública del proveedor, todavía sin configurar. Se mantienen endpoint y honeypot `botcheck`.
+- La ruta de privacidad es `/politica-de-privacidad/`. Que exista el borrador no habilita formularios.
+- `src/data/legal.ts` centraliza datos pendientes y conserva `reviewed: false` y `formsEnabled: false`. Por decisión expresa del usuario, casilla y envío permanecen deshabilitados; WhatsApp es un enlace directo independiente.
+- `site.privacyReady` exige identidad completa y revisión; `site.formsConfigured` exige además autorización de activación y clave. Solo deben modificarse tras completar datos, revisar proveedores y textos y obtener autorización del titular. Es necesario volver a compilar.
+- El helper bloquea también envíos programáticos cuando faltan esos requisitos. Los estados de éxito y error se comprueban mediante respuestas simuladas, no enviando datos reales. Sin JS, el POST nativo solo se configura cuando se cumplen los requisitos.
+- `mode="contact"` reutiliza la sección en `/contacto/`, con teléfono opcional y selector. Admite `?servicio=web`, `seo-local`, `productos` u `otro`, sin guardar datos personales en la URL.
 
 ## Formulario
 
@@ -25,5 +26,5 @@ El estado de envío bloquea dobles solicitudes, marca `aria-busy` y restablece e
 `node scripts/verify-contact.mjs <QA node_modules> <URL>` registra capturas e informe en `.impeccable/review/contact/`:
 
 - 360, 390, 768, 1024, 1440 y 1920px: sin overflow, proporciones y altura de paneles correctas, símbolo visible, un formulario, teclado y sin infracciones axe detectadas.
-- Fixture exclusivamente en navegador, con clave ficticia y solicitudes interceptadas: payload del servicio/consentimiento, validación de email, honeypot, bloqueo de duplicados, éxito, error HTTP, error de red y fallback a WhatsApp.
+- Fixture exclusivamente en navegador, con solicitudes interceptadas: payload del servicio/consentimiento, validación de email, honeypot, bloqueo de duplicados, éxito, error HTTP y error de red. WhatsApp se ofrece mediante un enlace independiente; ya no se convierte un formulario desconfigurado en una solicitud de envío.
 - No equivale a entrega real de correo. Queda pendiente configurar la política y Web3Forms y verificar recepción autorizada. Pruebas ejecutadas en Chromium, no en dispositivos físicos ni otros motores.

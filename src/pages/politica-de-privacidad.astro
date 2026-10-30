@@ -1,0 +1,87 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import LegalIdentity from '../components/legal/LegalIdentity.astro';
+import { legal, legalSources, pendingValue } from '../data/legal';
+import { site } from '../data/site';
+const sections = [
+  { id: 'responsable', title: 'Responsable y estado actual' },
+  { id: 'datos', title: 'Datos tratados' },
+  { id: 'finalidades', title: 'Finalidades y bases jurídicas' },
+  { id: 'conservacion', title: 'Conservación' },
+  { id: 'proveedores', title: 'Destinatarios y proveedores' },
+  { id: 'transferencias', title: 'Transferencias internacionales' },
+  { id: 'derechos', title: 'Tus derechos' },
+  { id: 'seguridad', title: 'Seguridad' },
+  { id: 'cambios', title: 'Cambios y referencias' },
+];
+---
+<LegalLayout title="Política de privacidad" description="Información sobre datos de contacto, consultas y presupuestos en 7D Studio. Formularios desactivados y borrador pendiente de revisión jurídica." sections={sections}>
+  <section id="responsable">
+    <h2>1. Responsable y estado actual</h2>
+    <LegalIdentity />
+    <p><strong>Los formularios están desactivados.</strong> Todavía no se ha configurado Web3Forms ni aprobado la información legal. Escribir en los campos no envía la consulta. Puedes utilizar el teléfono o abrir WhatsApp por tu propia iniciativa.</p>
+    <p>Antes de habilitar los envíos deben completarse los datos del responsable, los proveedores y los extremos señalados con «…». Esta política distingue la implementación actual del tratamiento previsto cuando se activen los formularios.</p>
+    <p>Delegado de protección de datos: … (confirmar si es exigible o se ha designado; no se presupone su existencia).</p>
+  </section>
+  <section id="datos">
+    <h2>2. Qué datos se recogen</h2>
+    <h3>Consultas y solicitudes</h3>
+    <p>Al contactar por teléfono o WhatsApp se reciben los datos que decidas comunicar y los necesarios para mantener la conversación. No es necesario facilitar datos sensibles para solicitar información comercial.</p>
+    <p>Cuando se habiliten los formularios, sus campos recogerán nombre, correo, mensaje y servicio de interés. Según el formulario, podrán añadirse teléfono o empresa opcionales, producto, cantidad aproximada, plan SEO o resumen de la calculadora. También se transmitirá la aceptación de privacidad y la página de origen indicada en el formulario.</p>
+    <h3>Calculadora y selecciones</h3>
+    <p>La calculadora funciona en el navegador y no pide nombre ni correo para calcular. El resumen solo se añade a la consulta si eliges solicitar ese presupuesto, o al enlace de WhatsApp para que lo revises y lo envíes allí. Los importes calculados no se envían automáticamente a un servidor de 7D Studio.</p>
+    <p>Algunas selecciones de producto, plan o servicio se reflejan en la URL. El código no almacena estos valores en cookies, localStorage ni sessionStorage. El navegador puede conservar historial o autocompletado por sus propias funciones.</p>
+    <h3>Datos técnicos</h3>
+    <p>No se ha integrado Google Analytics ni seguimiento publicitario en esta versión. El alojamiento puede recibir información necesaria para servir las páginas, como IP y peticiones HTTP. Proveedor, registros realmente conservados y su configuración: … (pendiente de verificar en producción).</p>
+  </section>
+  <section id="finalidades">
+    <h2>3. Finalidades y bases jurídicas</h2>
+    <ul>
+      <li><strong>Preparar un presupuesto solicitado y gestionar una contratación:</strong> medidas precontractuales a petición de la persona interesada y ejecución del contrato, artículo 6.1.b del RGPD.</li>
+      <li><strong>Responder otras consultas voluntarias no precontractuales:</strong> consentimiento para atender esa consulta, artículo 6.1.a del RGPD. Puede retirarse sin afectar a la licitud del tratamiento anterior.</li>
+      <li><strong>Atender obligaciones de facturación, contabilidad o reclamaciones cuando exista contratación:</strong> cumplimiento de las obligaciones legales aplicables, artículo 6.1.c del RGPD; la defensa de reclamaciones podrá basarse en el interés legítimo correspondiente cuando proceda.</li>
+      <li><strong>Operación y seguridad técnica:</strong> concretar los registros necesarios, el interés legítimo y su ponderación antes de publicar la versión definitiva: … . No se presume una recopilación adicional no verificada.</li>
+    </ul>
+    <p>La casilla de privacidad informa sobre el tratamiento de la consulta; no autoriza publicidad ni equivale a contratar. No hay una finalidad de envío de boletines o campañas en esta web. No se han implementado decisiones automatizadas con efectos jurídicos ni perfiles comerciales.</p>
+    <p>Los campos obligatorios se limitan a los necesarios para tramitar la consulta por formulario. Si no los facilitas, no se podrá enviar por ese canal; puedes optar por teléfono o WhatsApp. No envíes categorías especiales de datos ni documentos de identidad por los campos de mensaje.</p>
+  </section>
+  <section id="conservacion">
+    <h2>4. Conservación</h2>
+    <p>Las consultas se conservarán durante el tiempo necesario para atenderlas y realizar las gestiones solicitadas. Si hay contratación, la documentación se conservará durante los plazos legales que correspondan y, en su caso, debidamente bloqueada para atender responsabilidades. No se establece aquí un plazo comercial arbitrario.</p>
+    <p>Calendario concreto por tipo de dato y proveedor: {pendingValue(legal.retentionSchedule)} (pendiente de definir y revisar).</p>
+    <p>La documentación consultada de Web3Forms indica una conservación máxima de envíos de tres años, con condiciones dependientes del plan y de la eliminación solicitada. No es un plazo elegido por 7D Studio: deberá comprobarse y adecuarse antes de activar el servicio.</p>
+  </section>
+  <section id="proveedores">
+    <h2>5. Destinatarios y encargados</h2>
+    <p>El acceso a las consultas debe limitarse a quienes necesiten atenderlas. Cuando proceda, podrán comunicarse datos a administraciones u órganos competentes para cumplir obligaciones legales.</p>
+    <ul>
+      <li><strong>Alojamiento de esta web:</strong> {pendingValue(legal.hostingProvider)}. Ubicación y contrato de tratamiento: {pendingValue(legal.hostingLocation)}.</li>
+      <li><strong>Correo para recibir consultas:</strong> {pendingValue(legal.emailProvider)}. Pendiente de identificar proveedor, ubicación y condiciones.</li>
+      <li><strong>Web3Forms, previsto pero no activado:</strong> su documentación identifica a Web3Creative como encargado de los datos de los envíos. El servicio recibiría, filtraría y reenviaría el formulario y sus metadatos técnicos. Deben revisarse y aceptar las condiciones del <a href={legalSources.web3formsDpa}>acuerdo de tratamiento</a> antes de usarlo.</li>
+      <li><strong>WhatsApp:</strong> es un enlace externo, no un chat incrustado. Al abrirlo y utilizarlo se aplica también la información de privacidad del servicio. Deben revisarse las condiciones de la cuenta utilizada por 7D Studio: … .</li>
+    </ul>
+    <p>Web3Forms declara infraestructura y subencargados para alojamiento, correo y filtrado antispam en su documentación. Esto no significa que sus herramientas internas de analítica o su panel se ejecuten en esta web. No se han añadido aquí integraciones con Google Sheets, Telegram, Discord ni herramientas de publicidad.</p>
+  </section>
+  <section id="transferencias">
+    <h2>6. Posibles transferencias internacionales</h2>
+    <p>Web3Creative declara operar desde India y utilizar infraestructura en distintas regiones. Su acuerdo menciona cláusulas contractuales tipo para determinadas transferencias internacionales. Como Web3Forms no está activo, esta descripción no acredita una transferencia actual de los formularios.</p>
+    <p>Antes de activarlo deben verificarse países, subencargados, mecanismo aplicable y evaluación de las transferencias; no basta con atribuir al proveedor un cumplimiento genérico del RGPD. Lo mismo debe comprobarse para alojamiento, correo y la cuenta de WhatsApp. Transferencias y garantías finalmente aplicables, y medio para obtener una copia: … .</p>
+    <p>Puedes consultar la <a href={legalSources.web3formsPrivacy}>política de privacidad de Web3Forms</a> y su <a href={legalSources.web3formsDpa}>acuerdo de tratamiento</a>. No se afirma que todos los datos permanezcan en España o en la Unión Europea.</p>
+  </section>
+  <section id="derechos">
+    <h2>7. Derechos y cómo ejercerlos</h2>
+    <p>Puedes solicitar acceso, rectificación, supresión, limitación, oposición y portabilidad en los supuestos previstos legalmente. Cuando el tratamiento se base en consentimiento, puedes retirarlo en cualquier momento. Retirarlo no afecta a los tratamientos anteriores lícitos ni impide conservar datos cuando otra base jurídica lo exija.</p>
+    <p>Canal escrito para ejercer derechos: {pendingValue(legal.email)}. Dirección postal del responsable: {pendingValue(legal.address)}. Deben completarse antes de publicar. Mientras tanto, puedes llamar al <a href={site.phoneHref}>{site.phone}</a> para pedir un canal adecuado; no envíes documentación de identidad sin que sea necesaria para verificar tu solicitud.</p>
+    <p>Las solicitudes deben atenderse normalmente en un mes desde su recepción, con las posibles ampliaciones y condiciones previstas en el RGPD. Puedes reclamar ante la <a href={legalSources.aepd}>Agencia Española de Protección de Datos</a>, sin que sea obligatorio acudir primero a 7D Studio.</p>
+  </section>
+  <section id="seguridad">
+    <h2>8. Seguridad y confidencialidad</h2>
+    <p>El tratamiento debe contar con medidas proporcionadas al riesgo: accesos limitados, confidencialidad, actualizaciones y protección de comunicaciones. No se afirma disponer de certificaciones ni de seguridad absoluta.</p>
+    <p>Los envíos siguen desactivados para evitar recopilar datos mediante una configuración incompleta. Las medidas efectivas del alojamiento, correo y proveedores deben documentarse y revisarse antes de habilitarlos: … .</p>
+  </section>
+  <section id="cambios">
+    <h2>9. Cambios y referencias</h2>
+    <p>La fecha del encabezado corresponde a este borrador. Si se incorporan proveedores, nuevos tratamientos o tecnologías de seguimiento, deberá actualizarse la información antes de su puesta en marcha y recabarse consentimiento cuando corresponda.</p>
+    <p>Referencias: <a href={legalSources.gdpr}>RGPD</a>, <a href={legalSources.lopdgdd}>LOPDGDD</a> y <a href="/politica-de-cookies/">política de cookies de esta web</a>.</p>
+  </section>
+</LegalLayout>

@@ -1,0 +1,9 @@
+---
+import { Nfc, QrCode, Smartphone, ArrowUpRight, Contact, Globe, MessageCircle, Star, Share2, CalendarDays, BookOpen, Check } from 'lucide';
+const icons = { nfc: Nfc, qr: QrCode, phone: Smartphone, arrow: ArrowUpRight, contact: Contact, web: Globe, whatsapp: MessageCircle, reviews: Star, social: Share2, bookings: CalendarDays, catalog: BookOpen, check: Check };
+interface Props { name: keyof typeof icons; size?: number }
+const { name, size = 24 } = Astro.props;
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  {icons[name].map(([Tag, attributes]) => <Tag {...attributes} />)}
+</svg>

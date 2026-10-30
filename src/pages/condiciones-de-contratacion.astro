@@ -1,0 +1,106 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import LegalIdentity from '../components/legal/LegalIdentity.astro';
+import { legal, legalSources, pendingValue } from '../data/legal';
+import { site } from '../data/site';
+const sections = [
+  { id: 'prestador', title: '1. Prestador' },
+  { id: 'oferta', title: '2. Servicios y productos' },
+  { id: 'presupuestos', title: '3. Solicitudes de presupuesto' },
+  { id: 'calculadora', title: '4. Calculadora orientativa' },
+  { id: 'formalizacion', title: '5. Formalización' },
+  { id: 'alcance', title: '6. Alcance' },
+  { id: 'precios', title: '7. Precios y pagos' },
+  { id: 'plazos', title: '8. Plazos y entrega' },
+  { id: 'revisiones', title: '9. Revisiones y ampliaciones' },
+  { id: 'recurrentes', title: '10. Servicios recurrentes' },
+  { id: 'licencias', title: '11. Propiedad y licencias' },
+  { id: 'cancelaciones', title: '12. Cancelación y desistimiento' },
+  { id: 'garantias', title: '13. Garantías' },
+  { id: 'reclamaciones', title: '14. Atención y reclamaciones' },
+  { id: 'legislacion', title: '15. Legislación' },
+];
+---
+<LegalLayout title="Condiciones de contratación" description="Cómo se solicitan y concretan los servicios y productos de 7D Studio. Sin checkout, pagos online ni envíos. Borrador para revisión jurídica." sections={sections}>
+  <section id="prestador">
+    <h2>1. Identificación del prestador</h2>
+    <LegalIdentity />
+    <p>Este documento explica el funcionamiento comercial previsto. Debe completarse y revisarse antes de utilizarse como condiciones definitivas de contratación. Un presupuesto no puede sustituir los derechos imperativos del cliente.</p>
+  </section>
+  <section id="oferta">
+    <h2>2. Servicios y productos ofrecidos</h2>
+    <p>La actividad incluye diseño web, SEO Local y productos físicos QR/NFC personalizados. Hay trabajos por proyecto y servicios mensuales. Las páginas de servicios explican las opciones disponibles, pero el alcance concreto se acuerda para cada contratación.</p>
+    <p>Los productos se presentan como catálogo. <strong>No existe carrito, checkout ni pago online; actualmente no se ofrecen envíos.</strong> No se presupone disponibilidad, materiales, cantidades mínimas ni prestaciones no confirmadas.</p>
+  </section>
+  <section id="presupuestos">
+    <h2>3. Solicitud de información y presupuestos</h2>
+    <p>Puedes solicitar información por <a href="/contacto/">los canales de contacto</a>, teléfono o WhatsApp. Los formularios siguen desactivados mientras se completa su configuración. Una consulta no supone un pedido, una reserva ni una obligación de pago.</p>
+    <p>La propuesta deberá identificar el servicio o producto, sus características, alcance, precio e impuestos, plazos, forma de pago y condiciones aplicables. No se fija un periodo de validez del presupuesto sin confirmarlo previamente: … .</p>
+  </section>
+  <section id="calculadora">
+    <h2>4. Carácter orientativo de la calculadora web</h2>
+    <p>La <a href="/diseno-web/#presupuesto">calculadora de Diseño Web</a> aplica los importes y opciones publicados para ofrecer una estimación. No realiza un cobro ni formaliza un contrato. El presupuesto definitivo se confirma tras conocer el contenido, las funcionalidades y las necesidades del proyecto.</p>
+    <p>El cálculo distingue IVA y conceptos no incluidos. Dominio, alojamiento, mantenimiento y servicios SEO mensuales se valoran por separado, según se indica junto a la calculadora.</p>
+  </section>
+  <section id="formalizacion">
+    <h2>5. Aceptación y formalización</h2>
+    <p>La contratación se concreta posteriormente, tras facilitar la información necesaria y alcanzar un acuerdo sobre el presupuesto y sus condiciones. El medio de aceptación y la confirmación en soporte duradero deben quedar definidos: … . Un clic en un enlace de consulta o el uso de la calculadora no implica esa aceptación.</p>
+    <p>Cuando se contrate a distancia con consumidores, deben cumplirse las obligaciones de información previa, confirmación e indicación del derecho de desistimiento y sus excepciones que resulten aplicables.</p>
+  </section>
+  <section id="alcance">
+    <h2>6. Alcance del servicio contratado</h2>
+    <p>El presupuesto aceptado definirá entregables, contenidos, funcionalidades, responsabilidades y exclusiones. Los accesos o materiales que deba aportar el cliente se concretarán según el servicio. Cualquier tratamiento de datos por cuenta del cliente que lo requiera deberá documentarse mediante el acuerdo correspondiente.</p>
+    <p>En SEO Local no se garantizan posiciones, ventas ni resultados determinados. En QR/NFC se confirmarán el formato, la personalización, el destino y su compatibilidad. No se prometen cambios gratuitos o ilimitados del enlace.</p>
+  </section>
+  <section id="precios">
+    <h2>7. Precios, impuestos y formas de pago</h2>
+    <p>Los precios y su periodicidad se concretan en el presupuesto. Las tarifas publicadas indican el tratamiento del IVA; el presupuesto debe informar claramente del total, impuestos y cualquier coste adicional antes de la aceptación. Si se dirige a consumidores, debe facilitarse el precio final exigible conforme a la normativa.</p>
+    <p>Formas de pago, vencimientos y eventuales anticipos: {pendingValue(legal.paymentTerms)}. No se establece un método de pago ni un porcentaje de anticipo no confirmado. No se aceptan pagos desde esta web.</p>
+  </section>
+  <section id="plazos">
+    <h2>8. Plazos y condiciones de entrega</h2>
+    <p>La planificación se acuerda en función del alcance, los materiales y los accesos necesarios. No hay una promesa general de entrega en siete días. Las dependencias y los cambios que puedan afectar al calendario deben comunicarse y concretarse con el cliente.</p>
+    <p>Plazos, procedimiento de entrega o puesta en marcha y, para productos físicos, modalidad disponible sin envío: {pendingValue(legal.deliveryTerms)}. Deben acordarse antes de contratar. No se presume una recogida en oficina ni una dirección de entrega.</p>
+  </section>
+  <section id="revisiones">
+    <h2>9. Revisiones, modificaciones y trabajos adicionales</h2>
+    <p>Las revisiones incluidas, su alcance y el procedimiento de validación deben indicarse en la propuesta: {pendingValue(legal.revisionTerms)}. Si una modificación amplía lo contratado, debe informarse de su efecto en precio y plazo y obtenerse el acuerdo correspondiente antes de ejecutarla.</p>
+    <p>No se imponen cargos automáticos por solicitar cambios ni se promete mantenimiento o revisión ilimitados.</p>
+  </section>
+  <section id="recurrentes">
+    <h2>10. Dominio, hosting, mantenimiento y servicios recurrentes</h2>
+    <p>Diseño y desarrollo web se presupuestan como proyecto. Dominio, hosting y mantenimiento se valoran por separado. Los planes de SEO Local son servicios mensuales con el alcance publicado y el que se acuerde en la contratación.</p>
+    <p>Proveedor y titularidad del dominio, renovaciones, periodicidad de facturación y procedimiento de baja: … . No se establece una permanencia ni renovación automática no acordada. Una recomendación de trabajar el SEO durante varios meses no equivale por sí sola a una obligación contractual de permanencia.</p>
+  </section>
+  <section id="licencias">
+    <h2>11. Propiedad intelectual y licencias</h2>
+    <p>La propuesta deberá precisar los derechos de uso o cesión de los trabajos propios, su alcance y las condiciones de entrega. No se atribuye automáticamente al cliente la propiedad de herramientas, tipografías, fotografías, software u otros recursos de terceros.</p>
+    <p>Esos recursos mantienen sus licencias. El cliente debe disponer de los derechos necesarios sobre los materiales que aporte. Las licencias, restricciones y posibles costes externos deben identificarse antes de contratar: … .</p>
+  </section>
+  <section id="cancelaciones">
+    <h2>12. Cancelaciones, resolución y desistimiento</h2>
+    <p>Condiciones de cancelación y resolución acordadas: {pendingValue(legal.cancellationTerms)}. Deben ser claras y proporcionadas, respetando la ley. No se establecen penalizaciones ni anticipos no reembolsables de forma automática.</p>
+    <h3>Contratación a distancia con consumidores</h3>
+    <p>Cuando sea aplicable, el consumidor dispone de <strong>14 días naturales para desistir</strong>, con carácter general desde la celebración del contrato de servicios o desde la posesión material de los bienes, según el caso. La falta de información sobre este derecho puede ampliar el plazo conforme al artículo 105 del texto refundido de la Ley de consumidores.</p>
+    <p>El desistimiento puede comunicarse mediante una declaración inequívoca por un canal escrito del prestador. Antes de formalizar contratos a los que se aplique, deben facilitarse las instrucciones, el formulario modelo y los datos de contacto completos: … . Los reembolsos que procedan se realizarán dentro de los plazos y condiciones legales; en bienes puede ser posible retenerlos hasta recibir los bienes o la prueba de devolución en los términos de la ley.</p>
+    <p>Si el consumidor solicita expresamente que un servicio comience durante ese plazo y luego desiste, solo podrá exigirse la parte proporcional cuando se cumplan los requisitos legales de información y solicitud expresa. El derecho no se pierde por empezar el trabajo: para servicios de pago completamente ejecutados se exigen el consentimiento previo expreso y el conocimiento de la pérdida del derecho al completarse.</p>
+    <p>Los bienes confeccionados conforme a especificaciones del consumidor o claramente personalizados pueden estar exceptuados del desistimiento, conforme al artículo 103.c. No se aplica esta excepción a todo producto por llamarlo «personalizado», ni elimina las garantías por falta de conformidad. Si un suministro digital encaja en otra excepción, deberá verificarse su aplicación y obtener las declaraciones exigidas, sin renuncias automáticas.</p>
+    <p>Referencia: <a href={legalSources.consumers}>normativa de consumidores y usuarios, artículos 97 a 108</a>. Estas reglas no convierten la web en una tienda ni crean un servicio de envío.</p>
+  </section>
+  <section id="garantias">
+    <h2>13. Garantías y productos físicos</h2>
+    <p>Los productos deben ajustarse a lo contratado y a los requisitos de conformidad legalmente aplicables. En ventas de bienes a consumidores, la normativa establece, con carácter general, responsabilidad por faltas de conformidad que se manifiesten en tres años desde la entrega, con las reglas específicas que correspondan.</p>
+    <p>La personalización no elimina la garantía. Cuando proceda, se aplicarán las medidas legales de puesta en conformidad, reducción del precio o resolución, sin imponer costes o restricciones contrarios a la ley. Los servicios y suministros digitales se analizarán según su naturaleza y la normativa aplicable, sin extender automáticamente un régimen a todos los contratos.</p>
+    <p>Procedimiento operativo para comunicar y tramitar incidencias: … . Debe completarse antes de vender, sin reducir los derechos obligatorios del cliente.</p>
+  </section>
+  <section id="reclamaciones">
+    <h2>14. Atención al cliente y reclamaciones</h2>
+    <p>Puedes contactar por teléfono en el <a href={site.phoneHref}>{site.phone}</a>, mediante <a href={site.whatsapp}>WhatsApp</a> o consultar <a href="/contacto/">Contacto</a>. Correo y domicilio para comunicaciones escritas: {pendingValue(legal.email)} / {pendingValue(legal.address)}.</p>
+    <p>Deben completarse el canal escrito de reclamaciones y la información sobre los mecanismos extrajudiciales aplicables o la eventual adhesión a un sistema, si existe: … . No se declara una adhesión ni una mediación inexistente.</p>
+  </section>
+  <section id="legislacion">
+    <h2>15. Legislación aplicable</h2>
+    <p>Se aplicará la legislación española en lo que corresponda, junto con las normas imperativas de consumidores y las reglas de conflicto aplicables. La jurisdicción se determinará por ley; no se impone al consumidor una renuncia a su fuero.</p>
+    <p>Este borrador debe revisarse para distinguir contratos con empresas y con consumidores, servicios, suministros digitales y bienes físicos. Ninguna condición particular puede excluir los derechos irrenunciables del cliente.</p>
+  </section>
+</LegalLayout>

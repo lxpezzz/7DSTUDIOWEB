@@ -1,0 +1,47 @@
+---
+import LegalLayout from '../layouts/LegalLayout.astro';
+import { legal, legalSources, pendingValue } from '../data/legal';
+const sections = [
+  { id: 'que-son', title: 'Qué son las cookies' },
+  { id: 'inventario', title: 'Tecnologías de esta versión' },
+  { id: 'terceros', title: 'Servicios externos' },
+  { id: 'preferencias', title: 'Consentimiento y preferencias' },
+  { id: 'verificacion', title: 'Revisión antes de publicar' },
+];
+---
+<LegalLayout title="Política de cookies" description="Información sobre cookies y almacenamiento en la versión actual de 7dstudio.es. Sin analítica integrada; revisión de producción pendiente." sections={sections}>
+  <section id="que-son">
+    <h2>1. Qué son las cookies</h2>
+    <p>Las cookies son pequeños archivos que un sitio puede guardar o leer en tu dispositivo. Pueden servir para funciones técnicas o para analizar la navegación. Otras tecnologías, como localStorage y sessionStorage, también pueden guardar información y deben evaluarse según su finalidad.</p>
+    <p>El artículo 22.2 de la <a href={legalSources.lssi}>LSSI-CE</a> regula el almacenamiento o acceso a información en el dispositivo. Las tecnologías no exentas requieren información y consentimiento previo. La excepción técnica se limita a lo necesario para la comunicación o para prestar un servicio solicitado, no a cualquier tecnología denominada «técnica».</p>
+  </section>
+  <section id="inventario">
+    <h2>2. Inventario de la versión revisada</h2>
+    <p><strong>El código de esta versión no instala cookies de analítica o publicidad y no integra Google Analytics, Google Tag Manager ni scripts de seguimiento de Google.</strong> No hay un gestor de consentimiento previo porque no se han integrado tecnologías no exentas que lo requieran.</p>
+    <ul>
+      <li><strong>Cookies propias añadidas por la aplicación:</strong> ninguna identificada. No hay nombres, proveedores ni duraciones que declarar para cookies inexistentes.</li>
+      <li><strong>localStorage, sessionStorage e IndexedDB:</strong> no utilizados por el código del sitio para guardar preferencias, formularios o seguimiento.</li>
+      <li><strong>Calculadora:</strong> mantiene su configuración en memoria mientras se usa la página. No crea una cookie de presupuesto.</li>
+      <li><strong>Selección de servicio, producto o plan:</strong> puede reflejarse en la URL y en el historial del navegador; no es una cookie ni identifica por sí sola al visitante.</li>
+      <li><strong>Tipografía y recursos gráficos:</strong> se sirven desde los archivos del propio sitio; no se carga Google Fonts desde sus servidores.</li>
+    </ul>
+    <p>Este inventario describe la aplicación revisada. La infraestructura de producción puede incorporar otras tecnologías de seguridad o entrega: proveedor {pendingValue(legal.hostingProvider)}, tecnologías y duraciones … . Deben verificarse antes de publicar; no se atribuyen cookies concretas ni se inventan sus periodos de vida.</p>
+  </section>
+  <section id="terceros">
+    <h2>3. Servicios externos</h2>
+    <p>Los accesos a WhatsApp y a webs de proyectos son enlaces, no contenidos de terceros incrustados. Si decides abrirlos, las tecnologías de esos servicios se regirán por sus propias políticas. Un enlace externo no supone que sus cookies se instalen desde 7dstudio.es.</p>
+    <p>Web3Forms está previsto para el envío de formularios, pero permanece desactivado. No se carga un widget de captcha ni un script suyo al navegar. Sus condiciones y las tecnologías del endpoint deberán verificarse antes de habilitar envíos; no se trasladan a este sitio las cookies que el proveedor use en su propia web o panel.</p>
+    <p>El tratamiento de datos de esos canales se explica en la <a href="/politica-de-privacidad/">política de privacidad</a>.</p>
+  </section>
+  <section id="preferencias">
+    <h2>4. Aceptar, rechazar y retirar el consentimiento</h2>
+    <p>Actualmente no hay categorías opcionales activas, por lo que no se muestra un banner ni un botón de configuración sin función. No se interpreta tu navegación como consentimiento para futuras tecnologías.</p>
+    <p>Si se incorporan cookies no exentas, tendrán que permanecer bloqueadas hasta tu elección. Aceptar y rechazar deberán ofrecerse con la misma visibilidad y facilidad, con opciones por finalidad y un enlace permanente «Configurar cookies» para cambiar o retirar el consentimiento. Esos controles deberán existir antes de cargar las tecnologías, no solo describirse en esta política.</p>
+    <p>Puedes revisar o borrar los datos de sitios desde las opciones de privacidad de tu navegador, incluso los que conserve al acceder a servicios externos. Esa gestión no sustituye el consentimiento que deba recabar cada sitio.</p>
+  </section>
+  <section id="verificacion">
+    <h2>5. Comprobaciones pendientes y cambios</h2>
+    <p>Antes de la publicación definitiva deben comprobarse las respuestas del alojamiento de producción, posibles cabeceras Set-Cookie, servicios de seguridad y cambios de proveedores. Inventario final de producción, finalidades y duraciones verificadas: … .</p>
+    <p>La política debe actualizarse cuando cambie la implementación. Referencias oficiales: <a href={legalSources.aepd}>AEPD</a> y su <a href={legalSources.cookies}>Guía sobre el uso de las cookies (PDF)</a>.</p>
+  </section>
+</LegalLayout>

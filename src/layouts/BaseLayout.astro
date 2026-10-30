@@ -2,13 +2,15 @@
 import '../styles/global.css';
 import { site } from '../data/site';
 import MobileStickyCta from '../components/layout/MobileStickyCta.astro';
+import WhatsAppWidget from '../components/layout/WhatsAppWidget.astro';
 import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 interface Props {
   title?: string;
   description?: string;
   structuredData?: Record<string, unknown>[];
+  noindex?: boolean;
 }
-const { title = site.title, description = site.description, structuredData = [] } = Astro.props;
+const { title = site.title, description = site.description, structuredData = [], noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const schema = {
   '@context': 'https://schema.org',
@@ -33,6 +35,7 @@ const schema = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preload" href={manropeFont} as="font" type="font/woff2" crossorigin />
@@ -52,14 +55,10 @@ const schema = {
     {structuredData.map(data => <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />)}
   </head>
   <body>
-    <!-- THESIS: Una escena fotográfica editorial se convierte, al entrar en el portátil, en la sección HTML real de Servicios.
-    OWN-WORLD: Papel #F8F7F4, tinta #171717, Geist, filetes finos, azul puntual, retícula editorial asimétrica.
-    STORY: Entender los tres servicios, conocer el proceso y comenzar una conversación sin fricción.
-    FIRST VIEWPORT: Fotografía a sangre, navegación superior, titular y CTA a la izquierda sin invadir el portátil; scroll conduce a su pantalla.
-    FORM: Dirección cinematográfica fijada por el brief, conservando Geist y paleta editorial; prevalece sobre el seed 1c1b8177. Perspectiva HTML y GSAP, móvil estático.
-    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance -->
+
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <slot />
     <MobileStickyCta />
+    <WhatsAppWidget />
   </body>
 </html>

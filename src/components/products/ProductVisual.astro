@@ -1,0 +1,55 @@
+---
+import ProductIcon from './ProductIcon.astro';
+import type { Product } from '../../data/products';
+interface Props { format: Product['format'] }
+const { format } = Astro.props;
+const upright = format === 'stand' || format === 'reviews';
+---
+<div class:list={['product-visual', `product-visual--${format}`]} aria-hidden="true">
+  <div class:list={['product-object', { 'product-object--upright': upright }]}>
+    <div class="product-object__brand">7D<span>STUDIO</span></div>
+    {format === 'chip' ? <div class="product-object__coil"><ProductIcon name="nfc" size={40} /></div> : (
+      <>
+        <span class="product-object__symbol"><ProductIcon name={format === 'card' ? 'nfc' : 'qr'} size={upright ? 58 : 44} /></span>
+        <span class="product-object__line"></span>
+        <span class="product-object__line product-object__line--short"></span>
+        {format !== 'qr-card' && <span class="product-object__nfc"><ProductIcon name="nfc" size={18} /></span>}
+      </>
+    )}
+  </div>
+  {upright && <div class="product-object__base"></div>}
+</div>
+
+<style>
+  .product-visual { display: grid; place-items: center; position: relative; height: 248px; background: #eae1e8; overflow: hidden; color: #554555; }
+  .product-object { position: relative; width: 226px; height: 136px; padding: 18px; border: 1px solid #c5b6c2; border-radius: 9px; background: #f7f5f3; transform: rotate(-9deg); box-shadow: 0 14px 22px rgb(85 69 85 / 12%); }
+  .product-object__brand { display: flex; align-items: baseline; gap: 6px; font-size: 26px; font-weight: 650; letter-spacing: -.04em; }
+  .product-object__brand span { font-size: 8px; letter-spacing: .1em; }
+  .product-object__symbol { position: absolute; right: 18px; bottom: 23px; }
+  .product-object__line { display: block; width: 64px; height: 3px; margin-top: 16px; background: #826d80; }
+  .product-object__line--short { width: 40px; margin-top: 7px; opacity: .5; }
+  .product-object__nfc { position: absolute; top: 18px; right: 18px; }
+  .product-object--upright { width: 146px; height: 184px; transform: rotate(6deg); border-radius: 7px 7px 2px 2px; z-index: 1; }
+  .product-object--upright .product-object__symbol { right: 44px; bottom: 48px; }
+  .product-object--upright .product-object__line { position: absolute; bottom: 25px; left: 40px; }
+  .product-object--upright .product-object__line--short { display: none; }
+  .product-object--upright .product-object__nfc { top: auto; bottom: 19px; right: 17px; }
+  .product-object__base { position: absolute; width: 180px; height: 16px; bottom: 25px; border-radius: 50%; background: #c5b6c2; transform: rotate(6deg); }
+  .product-visual--card .product-object { background: #554555; color: #f7f5f3; border-color: #554555; }
+  .product-visual--card .product-object__line { background: #eae1e8; }
+  .product-visual--chip { background: #eee9ec; }
+  .product-visual--chip .product-object { width: 134px; height: 134px; border-radius: 50%; display: grid; place-items: center; padding: 15px; }
+  .product-visual--chip .product-object__brand { display: none; }
+  .product-object__coil { display: grid; place-items: center; width: 100%; height: 100%; border: 3px double #826d80; border-radius: 50%; outline: 1px solid #c5b6c2; outline-offset: -10px; }
+  .product-visual--qr-card { background: #eee9ec; }
+  .product-visual--qr-card .product-object { transform: rotate(7deg); }
+  .product-visual--sticker .product-object { width: 140px; height: 140px; transform: rotate(-7deg); border-radius: 28px; }
+  .product-visual--sticker .product-object__brand { font-size: 20px; }
+  .product-visual--sticker .product-object__symbol { right: 47px; bottom: 22px; }
+  .product-visual--sticker .product-object__line { display: none; }
+  .product-visual--sticker .product-object__nfc { top: auto; bottom: 19px; right: 16px; }
+  .product-visual--reviews { background: #eee9ec; }
+  .product-visual--reviews .product-object { transform: rotate(-5deg); background: #554555; color: #f7f5f3; border-color: #554555; }
+  .product-visual--reviews .product-object__line { background: #eae1e8; }
+  @media (max-width: 599px) { .product-visual { height: 224px; } }
+</style>

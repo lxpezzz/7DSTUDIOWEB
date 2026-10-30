@@ -7,7 +7,7 @@ const items = [
   { id: 'home', label: 'Inicio', href: '/', icon: House, active: pathname === '/' },
   { id: 'web', label: 'Web', href: '/diseno-web/', icon: PanelsTopLeft, active: pathname.startsWith('/diseno-web'), name: 'Páginas web' },
   { id: 'seo', label: 'SEO local', href: '/seo-local/', icon: MapPin, active: pathname.startsWith('/seo-local') },
-  { id: 'products', label: 'Productos', href: '/#productos', icon: Package, active: false },
+  { id: 'products', label: 'Productos', href: '/productos/', icon: Package, active: pathname.startsWith('/productos') },
   { id: 'whatsapp', label: 'WhatsApp', href: site.whatsapp, icon: MessageCircle, active: false },
 ];
 ---

@@ -1,0 +1,91 @@
+---
+import { MessageCircle } from 'lucide';
+import { site } from '../../data/site';
+---
+
+<a
+  class="whatsapp-widget"
+  href={site.whatsapp}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Hablar con 7D Studio por WhatsApp (se abre en una pestaña nueva)"
+  data-web-quote-whatsapp
+  data-product-whatsapp
+>
+  <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    {MessageCircle.map(([Tag, attributes]) => <Tag {...attributes} />)}
+  </svg>
+  <span>WhatsApp</span>
+</a>
+<!-- Espacio al final para que el botón no tape el contenido del footer. -->
+<div class="whatsapp-widget-clearance" aria-hidden="true"></div>
+
+<style>
+  .whatsapp-widget {
+    position: fixed;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    z-index: 45;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 56px;
+    min-height: 56px;
+    padding: 14px 20px;
+    border-radius: 28px;
+    background: #216e45;
+    color: #fff;
+    box-shadow: 0 4px 18px rgb(25 25 25 / 14%);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    touch-action: manipulation;
+  }
+
+  .whatsapp-widget:hover {
+    background: #185335;
+  }
+
+  .whatsapp-widget:focus-visible {
+    outline: 3px solid #191919;
+    outline-offset: 4px;
+  }
+
+  .whatsapp-widget-clearance {
+    height: 84px;
+  }
+
+  :global(body:has(.mobile-menu[open]) .whatsapp-widget) {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  @media (max-width: 1023px) {
+    .whatsapp-widget {
+      display: none;
+      right: max(16px, env(safe-area-inset-right));
+      bottom: calc(98px + env(safe-area-inset-bottom));
+      width: 52px;
+      min-width: 52px;
+      height: 52px;
+      min-height: 52px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    .whatsapp-widget span {
+      display: none;
+    }
+
+    .whatsapp-widget-clearance {
+      height: 0;
+    }
+
+    :global(body:has(input:not([type='hidden']):not([type='checkbox']):not([type='radio']):focus) .whatsapp-widget),
+    :global(body:has(textarea:focus) .whatsapp-widget),
+    :global(body:has(select:focus) .whatsapp-widget) {
+      display: none;
+    }
+  }
+</style>

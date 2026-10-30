@@ -1,0 +1,62 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import { legal } from '../data/legal';
+interface Props {
+  title: string;
+  description: string;
+  sections: readonly { id: string; title: string }[];
+}
+const { title, description, sections } = Astro.props;
+const updated = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${legal.updatedAt}T00:00:00Z`));
+---
+<BaseLayout title={`${title} | 7D Studio`} description={description} noindex={!legal.reviewed}>
+  <Header />
+  <main id="contenido" class="legal-page container">
+    <nav class="legal-breadcrumb" aria-label="Ruta de navegación"><a href="/">Inicio</a><span aria-hidden="true">/</span><span aria-current="page">{title}</span></nav>
+    <header class="legal-heading">
+      <h1>{title}</h1>
+      <p>Última actualización del borrador: <time datetime={legal.updatedAt}>{updated}</time>.</p>
+      {!legal.reviewed && <p class="legal-draft"><strong>Borrador pendiente de completar y de revisión jurídica.</strong> Los campos «…» no son datos reales. Este texto no debe publicarse como versión definitiva ni constituye una certificación de cumplimiento.</p>}
+    </header>
+    <div class="legal-layout">
+      <nav class="legal-index" aria-label="Índice de apartados">
+        <p>En esta página</p>
+        <ol>{sections.map(section => <li><a href={`#${section.id}`}>{section.title}</a></li>)}</ol>
+      </nav>
+      <article class="legal-content" aria-label={title}><slot /></article>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
+<style>
+  .legal-page { padding-top: calc(var(--header-height) + 28px); padding-bottom: 64px; }
+  .legal-breadcrumb { display: flex; flex-wrap: wrap; gap: 12px; color: var(--color-muted); font-size: 12px; line-height: 1.7; }
+  .legal-breadcrumb a:hover { text-decoration: underline; }
+  .legal-heading { padding-block: 40px; border-bottom: 1px solid var(--color-line); }
+  h1 { margin: 0; max-width: 24ch; font-size: clamp(36px, 4.3vw, 60px); line-height: 1.12; font-weight: 480; letter-spacing: -.035em; text-wrap: balance; }
+  .legal-heading > p { max-width: 76ch; margin: 20px 0 0; color: #625d58; font-size: 14px; line-height: 1.8; }
+  .legal-heading .legal-draft { padding: 16px 20px; background: #e9e8e5; border-radius: 5px; }
+  .legal-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 2fr); align-items: start; gap: 64px; padding-top: 40px; }
+  .legal-index { min-width: 0; }
+  .legal-index > p { margin: 0 0 16px; font-size: 13px; font-weight: 600; }
+  .legal-index ol { margin: 0; padding: 0; list-style: none; }
+  .legal-index a { display: flex; align-items: center; min-height: 44px; padding-block: 8px; color: #625d58; font-size: 13px; line-height: 1.6; }
+  .legal-index a:hover { color: #191919; text-decoration: underline; text-underline-offset: 4px; }
+  .legal-content { min-width: 0; max-width: 74ch; color: #504c48; font-size: 16px; line-height: 1.85; overflow-wrap: anywhere; }
+  .legal-content :global(section) { scroll-margin-top: calc(var(--header-height) + 28px); }
+  .legal-content :global(section + section) { margin-top: 40px; }
+  .legal-content :global(h2) { margin: 0 0 20px; color: #191919; font-size: clamp(25px, 2.2vw, 30px); line-height: 1.3; font-weight: 550; letter-spacing: -.025em; text-wrap: balance; }
+  .legal-content :global(h3) { margin: 24px 0 12px; color: #191919; font-size: 20px; line-height: 1.4; font-weight: 550; }
+  .legal-content :global(p) { margin: 0 0 18px; }
+  .legal-content :global(ul), .legal-content :global(ol) { margin: 18px 0; padding-left: 22px; list-style: revert; }
+  .legal-content :global(li + li) { margin-top: 10px; }
+  .legal-content :global(strong) { color: #191919; font-weight: 650; }
+  .legal-content :global(a) { color: #554555; text-decoration: underline; text-underline-offset: 4px; }
+  .legal-content :global(a:hover) { color: #191919; }
+  .legal-page :global(a:focus-visible) { outline: 2px solid #554555; outline-offset: 4px; }
+  @media (min-width: 1024px) and (min-height: 800px) { .legal-index { position: sticky; top: calc(var(--header-height) + 24px); max-height: calc(100dvh - var(--header-height) - 60px); overflow-y: auto; } }
+  @media (max-width: 1023px) { .legal-layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } .legal-index ol { display: flex; flex-wrap: wrap; gap: 4px 24px; } .legal-index { padding-bottom: 24px; border-bottom: 1px solid var(--color-line); } }
+  @media (max-width: 599px) { .legal-page { padding-top: calc(var(--header-height) + 22px); padding-bottom: 40px; } .legal-heading { padding-block: 28px; } .legal-content { font-size: 15px; } .legal-layout { padding-top: 28px; } }
+</style>

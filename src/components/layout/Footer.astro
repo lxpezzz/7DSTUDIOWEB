@@ -118,7 +118,18 @@ const navigation = getNavigation(Astro.url.pathname);
   .footer__bottom nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 8px 20px;
+    max-width: 680px;
+  }
+  .footer__bottom nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    line-height: 1.6;
+  }
+  .footer__bottom nav a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   @media (max-width: 767px) {
     .footer {
@@ -142,7 +153,7 @@ const navigation = getNavigation(Astro.url.pathname);
       min-height: 44px;
     }
     .footer__bottom {
-      font-size: 9px;
+      font-size: 12px;
       gap: 16px;
     }
   }

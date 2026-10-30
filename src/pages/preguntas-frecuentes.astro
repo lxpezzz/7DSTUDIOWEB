@@ -1,0 +1,483 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Contact from "../components/home/Contact.astro";
+import { Plus, Minus } from "lucide";
+import { faqCategories } from "../data/faqs";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqCategories.flatMap((category) =>
+      category.questions.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    ),
+  },
+];
+
+function emphasize(text: string, phrases: readonly string[]) {
+  const pattern = phrases
+    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+  return text
+    .split(new RegExp(`(${pattern})`, "g"))
+    .filter(Boolean)
+    .map((part) => ({
+      text: part,
+      tag: phrases.includes(part) ? ("strong" as const) : ("span" as const),
+    }));
+}
+---
+
+<BaseLayout
+  title="Preguntas frecuentes sobre web, SEO Local y QR/NFC | 7D Studio"
+  description="Resuelve tus dudas sobre diseño web, SEO Local, productos QR/NFC, precios y contratación. Respuestas claras para elegir lo que necesita tu negocio."
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="faq-page">
+    <section class="faq-hero container" aria-labelledby="faq-title">
+      <nav class="faq-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Preguntas frecuentes</span>
+      </nav>
+      <p class="faq-hero__label">PREGUNTAS FRECUENTES / 7D STUDIO</p>
+      <h1 id="faq-title">Preguntas frecuentes.</h1>
+      <p class="faq-hero__description">
+        Todo lo que necesitas saber sobre nuestras páginas web, el SEO Local y
+        los productos QR/NFC. Sin complicaciones ni tecnicismos.
+      </p>
+    </section>
+
+    <div class="faq-layout container">
+      <nav class="faq-index" aria-label="Categorías de preguntas frecuentes">
+        <p class="faq-index__label">¿Sobre qué tienes dudas?</p>
+        <ol>
+          {
+            faqCategories.map((category, index) => (
+              <li>
+                <a href={`#${category.id}`}>
+                  <span class="faq-index__number" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  {category.title}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="faq-groups">
+        {
+          faqCategories.map((category, index) => (
+            <section
+              class="faq-category"
+              id={category.id}
+              aria-labelledby={`${category.id}-title`}
+            >
+              <div class="faq-category__heading">
+                <span class="faq-category__number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h2 id={`${category.id}-title`}>{category.title}</h2>
+              </div>
+              {category.questions.map((faq) => (
+                <details class="faq-item">
+                  <summary>
+                    <span>{faq.question}</span>
+                    <svg
+                      class="faq-item__plus"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      {Plus.map(([Tag, attributes]) => (
+                        <Tag {...attributes} />
+                      ))}
+                    </svg>
+                    <svg
+                      class="faq-item__minus"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      {Minus.map(([Tag, attributes]) => (
+                        <Tag {...attributes} />
+                      ))}
+                    </svg>
+                  </summary>
+                  <div class="faq-item__answer">
+                    <p>
+                      {emphasize(faq.answer, faq.highlight).map(
+                        ({ text, tag: Tag }) => (
+                          <Tag>{text}</Tag>
+                        ),
+                      )}
+                    </p>
+                    {faq.link && (
+                      <a class="faq-text-link" href={faq.link.href}>
+                        {faq.link.label}
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </section>
+          ))
+        }
+      </div>
+    </div>
+
+    <Contact
+      variant="pearl"
+      title="¿No encuentras lo que buscas?"
+      description="Cuéntanos qué necesitas y te ayudamos a resolver tus dudas."
+    />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .faq-page {
+    --faq-dark: #554555;
+    --faq-muted: #665c64;
+    --faq-line: #ded7dc;
+    padding-top: var(--header-height);
+    padding-bottom: 72px;
+    background: #f7f5f3;
+    color: #191919;
+  }
+
+  :where(h1, h2, p, ol) {
+    margin: 0;
+  }
+
+  .faq-page :is(h1, h2) {
+    text-wrap: balance;
+  }
+
+  .faq-page :is(a, summary):focus-visible {
+    outline: 2px solid var(--faq-dark);
+    outline-offset: 4px;
+  }
+
+  .faq-page ::selection {
+    color: white;
+    background: var(--faq-dark);
+  }
+
+  .faq-hero {
+    padding-block: 28px 56px;
+    border-bottom: 1px solid var(--faq-line);
+  }
+
+  .faq-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 38px;
+    color: var(--faq-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .faq-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .faq-hero__label {
+    color: var(--faq-dark);
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    font-weight: 550;
+  }
+
+  .faq-hero h1 {
+    margin-top: 20px;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 480;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+
+  .faq-hero__description {
+    max-width: 65ch;
+    margin-top: 24px;
+    color: var(--faq-muted);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .faq-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 2fr);
+    align-items: start;
+    gap: clamp(40px, 6vw, 100px);
+    padding-block: 56px 64px;
+  }
+
+  .faq-index {
+    min-width: 0;
+  }
+
+  .faq-index__label {
+    margin-bottom: 18px;
+    color: var(--faq-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .faq-index ol {
+    list-style: none;
+    padding: 0;
+  }
+
+  .faq-index a {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    min-height: 48px;
+    padding-block: 12px;
+    color: var(--faq-dark);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.6;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 5px;
+  }
+
+  .faq-index a:hover {
+    color: #191919;
+    text-decoration-color: currentColor;
+  }
+
+  .faq-index__number,
+  .faq-category__number {
+    color: var(--faq-muted);
+    font-size: 12px;
+    font-weight: 450;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .faq-groups {
+    min-width: 0;
+  }
+
+  .faq-category {
+    scroll-margin-top: calc(var(--header-height) + 28px);
+  }
+
+  .faq-category + .faq-category {
+    margin-top: 52px;
+  }
+
+  .faq-category__heading {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--faq-line);
+  }
+
+  .faq-category h2 {
+    font-size: clamp(26px, 2.4vw, 32px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  .faq-category:target h2 {
+    color: var(--faq-dark);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--faq-line);
+  }
+
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    min-height: 76px;
+    padding-block: 23px;
+    list-style: none;
+    font-size: 17px;
+    font-weight: 550;
+    line-height: 1.6;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary:hover,
+  .faq-item[open] summary {
+    color: var(--faq-dark);
+  }
+
+  .faq-item summary svg {
+    color: var(--faq-dark);
+  }
+
+  .faq-item__minus,
+  .faq-item[open] .faq-item__plus {
+    display: none;
+  }
+
+  .faq-item[open] .faq-item__minus {
+    display: block;
+  }
+
+  .faq-item__answer {
+    max-width: 69ch;
+    padding: 0 44px 26px 0;
+    color: var(--faq-muted);
+    font-size: 15px;
+    line-height: 1.85;
+    overflow-wrap: break-word;
+  }
+
+  .faq-item__answer :global(strong) {
+    color: #191919;
+    font-weight: 650;
+  }
+
+  .faq-text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    color: var(--faq-dark);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.6;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-color: #b9aab6;
+  }
+
+  .faq-text-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .faq-item__answer .faq-text-link {
+    margin-top: 12px;
+  }
+
+  @media (min-width: 1024px) and (min-height: 700px) {
+    .faq-index {
+      position: sticky;
+      top: calc(var(--header-height) + 28px);
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .faq-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+      padding-top: 32px;
+    }
+
+    .faq-index ol {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+    }
+
+    .faq-index a {
+      gap: 8px;
+      padding: 10px 13px;
+      border: 1px solid var(--faq-line);
+      border-radius: 5px;
+      font-size: 13px;
+      background: #f7f5f3;
+    }
+
+    .faq-index a:hover {
+      background: #eae1e8;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .faq-page {
+      padding-bottom: 48px;
+    }
+
+    .faq-hero {
+      padding-block: 22px 36px;
+    }
+
+    .faq-breadcrumb {
+      margin-bottom: 28px;
+      font-size: 11px;
+    }
+
+    .faq-hero__label {
+      font-size: 10px;
+    }
+
+    .faq-hero h1 {
+      margin-top: 16px;
+      font-size: clamp(38px, 10vw, 52px);
+    }
+
+    .faq-hero__description {
+      margin-top: 20px;
+      font-size: 15px;
+    }
+
+    .faq-layout {
+      padding-bottom: 44px;
+    }
+
+    .faq-index ol {
+      gap: 8px;
+    }
+
+    .faq-index a {
+      padding-inline: 10px;
+      font-size: 12px;
+    }
+
+    .faq-category + .faq-category {
+      margin-top: 38px;
+    }
+
+    .faq-item summary {
+      gap: 18px;
+      padding-block: 20px;
+      min-height: 72px;
+      font-size: 16px;
+    }
+
+    .faq-item__answer {
+      padding-right: 0;
+      font-size: 15px;
+    }
+  }
+</style>

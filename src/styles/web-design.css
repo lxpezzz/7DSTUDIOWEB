@@ -267,6 +267,15 @@
 .web-page .web-faq__indicator::after { transform: rotate(90deg); }
 .web-page .web-faq details[open] .web-faq__indicator::after { display: none; }
 .web-page .web-faq details > p { margin: 0 0 24px; padding-right: 28px; color: var(--web-muted); font-size: 15px; line-height: 1.8; }
+.web-page .web-faq strong {
+  font-weight: 650;
+}
+.web-page .web-faq details > p strong {
+  color: var(--web-ink);
+}
+.web-page .web-faq details[open] summary {
+  color: var(--web-accent-text);
+}
 @media (max-width: 1023px) { .web-page .web-benefits__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; } .web-page .web-faq { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
 @media (max-width: 959px) { .web-page .web-hero__layout { grid-template-columns: minmax(0, 1fr); gap: 32px; } .web-page .web-hero h1 { max-width: 21ch; font-size: clamp(38px, 6.5vw, 56px); } }
 @media (max-width: 767px) { .web-page .web-section { padding-block: 64px; } .web-page .web-hero { padding-top: calc(var(--header-height) + 20px); padding-bottom: 64px; } .web-page .web-comparison, .web-page .web-process ol { grid-template-columns: minmax(0, 1fr); } .web-page .web-situation { padding: 20px; } }

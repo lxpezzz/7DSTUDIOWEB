@@ -1,0 +1,667 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import AboutProjects from '../components/about/AboutProjects.astro';
+import { AlignLeft, PanelsTopLeft, MousePointer2, ArrowUpRight, ArrowDown } from 'lucide';
+import { site } from '../data/site';
+import symbol from '../images/branding/simbolo-7dstudio.webp';
+
+const principles = [
+  { title: 'Claridad.', text: 'Que se entienda lo que haces y cómo dar el siguiente paso.', icon: AlignLeft },
+  { title: 'Diseño.', text: 'Una presencia cuidada, coherente con lo que ofrece tu negocio.', icon: PanelsTopLeft },
+  { title: 'Utilidad.', text: 'Cada elemento tiene una función. Lo importante es que te sirva.', icon: MousePointer2 },
+];
+
+const services = [
+  { title: 'Diseño Web', href: '/diseno-web/', purpose: 'Presenta lo que haces.', description: 'Páginas claras y adaptadas a móvil para explicar tus servicios y facilitar el contacto.' },
+  { title: 'SEO Local', href: '/seo-local/', purpose: 'Cuida cómo te encuentran.', description: 'Trabajamos tu presencia en Google para que tus clientes encuentren información útil y actualizada sobre tu negocio.' },
+  { title: 'Productos QR/NFC', href: '/productos/', purpose: 'Acerca tu información.', description: 'Productos físicos personalizados que conectan tu espacio con tu contacto, tu web o la información que quieras compartir.' },
+];
+
+const steps = [
+  { title: 'Entendemos', text: 'Conocemos tu negocio, tus objetivos y lo que necesitas resolver.' },
+  { title: 'Proponemos', text: 'Definimos una solución adecuada y explicamos claramente su alcance.' },
+  { title: 'Desarrollamos', text: 'Convertimos la propuesta en una solución funcional y cuidada.' },
+  { title: 'Revisamos', text: 'Comprobamos los detalles antes de la entrega o puesta en marcha.' },
+];
+
+const structuredData = [{
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'Quiénes somos · 7D Studio',
+  url: `${site.url}/quienes-somos/`,
+  description: 'Soluciones digitales claras, bien diseñadas y útiles para negocios: diseño web, SEO Local y productos QR/NFC.',
+  about: { '@type': 'Organization', name: site.name, url: site.url },
+}];
+---
+
+<BaseLayout
+  title="Quiénes somos | Diseño web y soluciones digitales · 7D Studio"
+  description="Conoce 7D Studio: diseño web, SEO Local y productos QR/NFC para negocios. Nuestra filosofía, cómo trabajamos y proyectos de clientes y demostraciones."
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="about-page">
+    <section class="about-hero container" aria-labelledby="about-title">
+      <nav class="about-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Quiénes somos</span>
+      </nav>
+      <div class="about-hero__layout">
+        <div>
+          <p class="about-eyebrow">QUIÉNES SOMOS / 7D STUDIO</p>
+          <h1 id="about-title">Lo digital debería hacerte las cosas más fáciles.</h1>
+          <p class="about-hero__description">En 7D Studio creamos soluciones digitales para que los negocios puedan presentar mejor lo que hacen, ganar visibilidad y conectar con sus clientes.</p>
+          <div class="about-hero__actions">
+            <a class="about-link" href="#nuestro-trabajo">Ver proyectos <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+            <a class="about-link" href="#como-trabajamos">Nuestra forma de trabajar <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowDown.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+          </div>
+        </div>
+        <div class="about-hero__signature" aria-hidden="true">
+          <img src={symbol.src} width={symbol.width} height={symbol.height} alt="" decoding="async" />
+          <span>7D Studio</span>
+          <p>Claridad. Diseño. Utilidad.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-philosophy about-section container" aria-labelledby="philosophy-title">
+      <div class="about-philosophy__intro">
+        <h2 id="philosophy-title">La tecnología tiene que ser útil. No complicada.</h2>
+        <div class="about-copy">
+          <p>Una página web debe explicar bien lo que ofreces. Tu presencia en Google debe ayudar a que te encuentren. Y las herramientas digitales deben facilitar el contacto con tus clientes.</p>
+          <p>En 7D Studio partimos de esa idea: crear soluciones claras, bien diseñadas y adaptadas a las necesidades de cada negocio.</p>
+        </div>
+      </div>
+      <div class="about-principles">
+        {principles.map(principle => (
+          <article>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              {principle.icon.map(([Tag, attributes]) => <Tag {...attributes} />)}
+            </svg>
+            <h3>{principle.title}</h3>
+            <p>{principle.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-services about-section" aria-labelledby="services-title">
+      <div class="container about-services__layout">
+        <div>
+          <h2 id="services-title">Diferentes soluciones.<br />Un mismo objetivo.</h2>
+          <p class="about-services__intro">Que tu presencia digital acompañe a tu negocio: al presentarlo, al encontrarlo y al contactar contigo.</p>
+        </div>
+        <ul class="about-services__list">
+          {services.map(service => (
+            <li>
+              <p class="about-services__purpose">{service.purpose}</p>
+              <h3><a href={service.href}>{service.title}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a></h3>
+              <p class="about-services__description">{service.description}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section id="como-trabajamos" class="about-process about-section container" aria-labelledby="process-title">
+      <h2 id="process-title">Cada proyecto empieza por entender lo que necesitas.</h2>
+      <ol>
+        {steps.map((step, index) => (
+          <li>
+            <span class="about-process__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="nuestro-trabajo" class="about-work about-section container" aria-labelledby="work-title">
+      <div class="about-work__heading">
+        <div>
+          <h2 id="work-title">Nuestro trabajo habla por nosotros.</h2>
+          <p>Una selección de webs de clientes y demostraciones de diseño, identificadas para que sepas qué estás viendo.</p>
+        </div>
+        <a class="about-link" href="/diseno-web/#proyectos">Ver proyectos <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+      </div>
+      <AboutProjects />
+    </section>
+
+    <section class="about-contact container" aria-labelledby="about-contact-title">
+      <div class="about-contact__panel">
+        <div>
+          <h2 id="about-contact-title">¿Tienes un proyecto en mente?</h2>
+          <p>Cuéntanos qué necesitas y vemos cómo podemos ayudarte.</p>
+        </div>
+        <div class="about-contact__actions">
+          <a class="button" href="/contacto/">Hablemos de tu proyecto <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+          <a class="about-link" href={site.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .about-page {
+    --about-muted: #655f58;
+    --about-accent: #65554a;
+    --about-line: #d9d3ca;
+    padding-top: var(--header-height);
+    padding-bottom: 72px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  :where(h1, h2, h3, p, ul, ol) {
+    margin: 0;
+  }
+
+  .about-page :is(h1, h2, h3) {
+    text-wrap: balance;
+  }
+
+  .about-page :is(a, button):focus-visible {
+    outline: 2px solid var(--about-accent);
+    outline-offset: 5px;
+  }
+
+  .about-page ::selection {
+    background: var(--about-accent);
+    color: #fff;
+  }
+
+  .about-page section {
+    scroll-margin-top: calc(var(--header-height) + 24px);
+  }
+
+  .about-page h2 {
+    font-size: clamp(32px, 3.3vw, 46px);
+    font-weight: 480;
+    line-height: 1.15;
+    letter-spacing: -.035em;
+  }
+
+  .about-page h3 {
+    font-size: 23px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: -.025em;
+  }
+
+  .about-hero {
+    padding-block: 28px 70px;
+    border-bottom: 1px solid var(--about-line);
+  }
+
+  .about-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    color: var(--about-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .about-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .about-hero__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 64px;
+    margin-top: 48px;
+  }
+
+  .about-eyebrow {
+    margin-bottom: 22px;
+    color: var(--about-accent);
+    font-size: 12px;
+    line-height: 1.6;
+    font-weight: 550;
+    letter-spacing: .08em;
+  }
+
+  h1 {
+    max-width: 19ch;
+    font-size: clamp(42px, 4.8vw, 70px);
+    font-weight: 480;
+    line-height: 1.07;
+    letter-spacing: -.04em;
+  }
+
+  .about-hero__description {
+    max-width: 56ch;
+    margin-top: 28px;
+    color: var(--about-muted);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+
+  .about-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    margin-top: 28px;
+  }
+
+  .about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 44px;
+    color: var(--about-accent);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.6;
+    text-decoration: underline;
+    text-decoration-color: #b5a89a;
+    text-underline-offset: 5px;
+  }
+
+  .about-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+
+  .about-hero__signature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    color: var(--about-muted);
+    text-align: center;
+  }
+
+  .about-hero__signature img {
+    width: min(75%, 230px);
+    height: auto;
+  }
+
+  .about-hero__signature > span {
+    margin-top: 18px;
+    color: var(--color-ink);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -.04em;
+  }
+
+  .about-hero__signature p {
+    margin-top: 14px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .about-section {
+    padding-block: 76px;
+  }
+
+  .about-philosophy__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 80px;
+  }
+
+  .about-philosophy h2 {
+    max-width: 21ch;
+  }
+
+  .about-copy p {
+    max-width: 60ch;
+    color: var(--about-muted);
+    font-size: 16px;
+    line-height: 1.85;
+  }
+
+  .about-copy p + p {
+    margin-top: 20px;
+  }
+
+  .about-principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+    margin-top: 48px;
+  }
+
+  .about-principles article {
+    padding-top: 24px;
+    border-top: 1px solid var(--about-line);
+  }
+
+  .about-principles svg {
+    margin-bottom: 22px;
+    color: var(--about-accent);
+  }
+
+  .about-principles p {
+    max-width: 34ch;
+    margin-top: 12px;
+    color: var(--about-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .about-services {
+    background: #e9e5df;
+  }
+
+  .about-services__layout {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 88px;
+    align-items: start;
+  }
+
+  .about-services__intro {
+    max-width: 38ch;
+    margin-top: 24px;
+    color: var(--about-muted);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .about-services__list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .about-services__list li {
+    position: relative;
+    padding: 0 0 32px 30px;
+    border-left: 1px solid #bdb3a6;
+  }
+
+  .about-services__list li::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: -4px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--about-accent);
+  }
+
+  .about-services__list li:last-child {
+    padding-bottom: 0;
+    border-left-color: transparent;
+  }
+
+  .about-services__purpose {
+    margin-bottom: 9px;
+    color: var(--about-accent);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .about-services h3 a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 44px;
+  }
+
+  .about-services h3 a:hover {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .about-services__description {
+    max-width: 52ch;
+    margin-top: 10px;
+    color: var(--about-muted);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .about-process h2 {
+    max-width: 26ch;
+  }
+
+  .about-process ol {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 30px;
+    padding: 0;
+    margin-top: 40px;
+    list-style: none;
+  }
+
+  .about-process li {
+    padding-top: 20px;
+    border-top: 1px solid var(--about-line);
+  }
+
+  .about-process__number {
+    display: block;
+    margin-bottom: 20px;
+    color: var(--about-accent);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .about-process h3 {
+    font-size: 20px;
+  }
+
+  .about-process p {
+    margin-top: 12px;
+    color: var(--about-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .about-work {
+    border-top: 1px solid var(--about-line);
+  }
+
+  .about-work__heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 28px;
+    margin-bottom: 36px;
+  }
+
+  .about-work__heading h2 {
+    max-width: 20ch;
+  }
+
+  .about-work__heading p {
+    max-width: 58ch;
+    margin-top: 20px;
+    color: var(--about-muted);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .about-work__heading > a {
+    flex-shrink: 0;
+  }
+
+  .about-contact__panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding: 40px;
+    border-radius: 12px;
+    background: #e9e5df;
+  }
+
+  .about-contact h2 {
+    font-size: clamp(30px, 3vw, 40px);
+  }
+
+  .about-contact p {
+    margin-top: 18px;
+    color: var(--about-muted);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .about-contact__actions {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+  }
+
+  @media (max-width: 1023px) {
+    .about-hero__layout {
+      gap: 28px;
+    }
+
+    .about-philosophy__intro,
+    .about-services__layout {
+      gap: 40px;
+    }
+
+    .about-principles {
+      gap: 28px;
+    }
+
+    .about-process ol {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .about-contact__panel {
+      align-items: start;
+      flex-direction: column;
+      gap: 26px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .about-hero__layout,
+    .about-philosophy__intro,
+    .about-services__layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .about-hero__signature {
+      display: none;
+    }
+
+    .about-hero__layout {
+      margin-top: 32px;
+    }
+
+    .about-principles {
+      gap: 22px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .about-page {
+      padding-bottom: 48px;
+    }
+
+    .about-hero {
+      padding-block: 22px 44px;
+    }
+
+    .about-eyebrow {
+      font-size: 11px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 10vw, 54px);
+    }
+
+    .about-hero__description {
+      margin-top: 22px;
+      font-size: 15px;
+    }
+
+    .about-hero__actions {
+      gap: 8px 20px;
+      margin-top: 22px;
+    }
+
+    .about-section {
+      padding-block: 48px;
+    }
+
+    .about-philosophy__intro {
+      gap: 24px;
+    }
+
+    .about-principles {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+      margin-top: 32px;
+    }
+
+    .about-principles article {
+      display: grid;
+      grid-template-columns: 32px minmax(0, 1fr);
+      column-gap: 18px;
+      padding-top: 20px;
+    }
+
+    .about-principles svg {
+      grid-row: span 2;
+      margin-bottom: 0;
+    }
+
+    .about-principles p {
+      margin-top: 8px;
+    }
+
+    .about-services__layout {
+      gap: 32px;
+    }
+
+    .about-process ol {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 28px;
+    }
+
+    .about-process li {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      column-gap: 14px;
+      padding-top: 18px;
+    }
+
+    .about-process__number {
+      grid-row: span 2;
+      padding-top: 3px;
+      margin-bottom: 0;
+    }
+
+    .about-process p {
+      margin-top: 8px;
+    }
+
+    .about-work__heading {
+      align-items: start;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .about-contact__panel {
+      padding: 28px 22px;
+    }
+
+    .about-contact .button {
+      gap: 18px;
+      padding-inline: 16px;
+      font-size: 13px;
+    }
+  }
+</style>

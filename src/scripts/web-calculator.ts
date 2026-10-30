@@ -22,7 +22,7 @@ export function initWebCalculator(root: HTMLElement) {
     const details = form?.querySelector<HTMLElement>('[data-budget-details]');
     const wrapper = form?.querySelector<HTMLElement>('[data-budget-selection]');
     if (input) input.value = summary;
-    if (preview) preview.textContent = current.totalCents === null ? `${current.type.name} · presupuesto personalizado` : `${current.type.name} · ${formatWebPrice(current.totalCents)} + IVA${current.provisional ? ' · provisional' : ''}`;
+    if (preview) preview.textContent = current.totalCents === null ? `${current.type.name} · presupuesto personalizado` : `${current.type.name} · ${formatWebPrice(current.totalCents)} + IVA`;
     if (details) details.textContent = summary;
     if (wrapper) wrapper.hidden = false;
     whatsappLinks.forEach((link, index) => {
@@ -73,7 +73,6 @@ export function initWebCalculator(root: HTMLElement) {
     root.querySelector<HTMLElement>('[data-compact-tax]')!.hidden = current.totalCents === null;
     root.querySelector<HTMLElement>('[data-quote-tax]')!.hidden = current.totalCents === null;
     root.querySelector<HTMLElement>('[data-custom-message]')!.hidden = current.totalCents !== null;
-    root.querySelector<HTMLElement>('[data-provisional]')!.hidden = !current.provisional || current.totalCents === null;
     if (quoteApplied) syncContact();
   }
 

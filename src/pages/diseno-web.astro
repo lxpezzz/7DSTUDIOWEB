@@ -105,43 +105,66 @@ const faqs = [
     question: "¿Qué necesito para tener una página web?",
     answer:
       "Empezamos con información sobre tu negocio, tus servicios y las imágenes o materiales que tengas. Definimos contigo qué falta y qué alcance necesita el proyecto.",
+    questionStrong: ['Qué necesito', 'página web'],
+    answerStrong: ['información sobre tu negocio', 'imágenes o materiales', 'qué alcance necesita el proyecto'],
   },
   {
     question: "¿Cuánto cuesta crear una web para mi negocio?",
-    answer: `La referencia para una web de una página es de ${formatWebPrice(webPricing.types[0].baseCents!)} + IVA. La calculadora permite explorar otras opciones; las tarifas de corporativa y extras son provisionales. Confirmamos el presupuesto después de revisar lo que necesitas.`,
+    answer: `La referencia para una web de una página es de ${formatWebPrice(webPricing.types[0].baseCents!)} + IVA. Si necesitas varias páginas o funcionalidades adicionales, puedes calcular un precio orientativo con nuestra calculadora. Después revisaremos contigo los detalles para confirmar el presupuesto.`,
+    questionStrong: ['Cuánto cuesta'],
+    answerStrong: [`${formatWebPrice(webPricing.types[0].baseCents!)} + IVA`, 'precio orientativo con nuestra calculadora', 'confirmar el presupuesto'],
   },
   {
     question: "¿Tengo que pagar todos los meses?",
     answer:
-      "El desarrollo de la web se presupuesta como proyecto. Dominio, hosting, mantenimiento y servicios SEO mensuales se valoran por separado; no están incluidos automáticamente. Te explicamos los conceptos antes de contratar.",
+      "El diseño y desarrollo de la web se paga como un proyecto. El dominio y el alojamiento pueden tener costes periódicos, mientras que el mantenimiento y los servicios de SEO se contratan por separado. Te explicaremos todos los costes antes de empezar.",
+    questionStrong: ['pagar todos los meses'],
+    answerStrong: ['se paga como un proyecto', 'dominio y el alojamiento', 'se contratan por separado'],
   },
   {
     question:
       "¿Qué diferencia hay entre una web de una página y una web corporativa?",
     answer:
       "La primera reúne la información en una única página. Una corporativa reparte servicios, empresa y contacto en varias páginas. La elección depende del contenido que necesites presentar.",
+    questionStrong: ['web de una página', 'web corporativa'],
+    answerStrong: ['una única página', 'varias páginas', 'contenido que necesites presentar'],
   },
   {
     question: "¿Mi web funcionará en el móvil?",
     answer:
       "Sí. Adaptamos el diseño a móvil, tablet y ordenador, y revisamos la navegación y las formas de contacto en diferentes tamaños de pantalla.",
+    questionStrong: ['funcionará en el móvil'],
+    answerStrong: ['Sí.', 'móvil, tablet y ordenador', 'navegación y las formas de contacto'],
   },
   {
     question: "¿Podré solicitar cambios después?",
     answer:
-      "Sí. Podemos valorar cambios o ampliaciones cuando los necesites. Su alcance y presupuesto se acuerdan contigo; no implican mantenimiento ni modificaciones ilimitadas.",
+      "Por supuesto. Si más adelante necesitas actualizar información, añadir servicios o ampliar tu web, podemos ayudarte. Te indicaremos el presupuesto antes de realizar cualquier modificación.",
+    questionStrong: ['solicitar cambios después'],
+    answerStrong: ['actualizar información, añadir servicios o ampliar tu web', 'presupuesto antes de realizar cualquier modificación'],
   },
   {
     question: "¿Mi página aparecerá en Google?",
     answer:
       "Preparamos la web para que los buscadores puedan entenderla. La indexación y el posicionamiento dependen de varios factores: no garantizamos posiciones. Si necesitas seguimiento, podemos valorar el servicio de SEO local.",
+    questionStrong: ['aparecerá en Google'],
+    answerStrong: ['los buscadores puedan entenderla', 'no garantizamos posiciones', 'SEO local'],
   },
   {
     question: "¿Qué ocurre si no sé qué tipo de web necesito?",
     answer:
       "No necesitas llegar con todo decidido. Cuéntanos qué hace tu negocio y qué te gustaría conseguir; te ayudamos a elegir una opción adecuada antes de cerrar el presupuesto.",
+    questionStrong: ['no sé qué tipo de web necesito'],
+    answerStrong: ['No necesitas llegar con todo decidido.', 'te ayudamos a elegir una opción adecuada'],
   },
 ];
+function emphasizeFaqText(text: string, phrases: readonly string[]) {
+  const pattern = phrases.map(phrase => phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return text.split(new RegExp(`(${pattern})`, 'g')).filter(Boolean).map(part => ({
+    text: part,
+    tag: phrases.includes(part) ? 'strong' as const : 'span' as const,
+  }));
+}
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -169,7 +192,8 @@ const structuredData = [
     <section class="web-hero container" aria-labelledby="web-title">
       <nav class="web-breadcrumb" aria-label="Ruta de navegación">
         <a href="/">Inicio</a><span aria-hidden="true">/</span><span
-          aria-current="page">Diseño web</span>
+          aria-current="page">Diseño web</span
+        >
       </nav>
       <div class="web-hero__layout">
         <div class="web-hero__copy">
@@ -384,29 +408,80 @@ const structuredData = [
                 <span class="web-process__number" aria-hidden="true">
                   0{index + 1}
                 </span>
-                <svg class="web-process__illustration" width="180" height="100" viewBox="0 0 180 100" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-                  {index === 0 ? <>
-                    <path d="M26 12h82a8 8 0 0 1 8 8v32a8 8 0 0 1-8 8H48L30 72V60h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z" fill="var(--web-surface)" />
-                    <path d="M78 40h76a8 8 0 0 1 8 8v28a8 8 0 0 1-8 8h-7v10l-16-10H78a8 8 0 0 1-8-8V48a8 8 0 0 1 8-8Z" fill="var(--web-beige)" />
-                    <path d="M34 28h56M34 38h24M86 56h58M86 66h40" />
-                  </> : <>
-                    <rect x="18" y="8" width="144" height="84" rx="7" fill="var(--web-surface)" />
-                    <path d="M18 25h144" />
-                    <g fill="currentColor" stroke="none">
-                      <circle cx="29" cy="17" r="1.5" />
-                      <circle cx="36" cy="17" r="1.5" />
-                      <circle cx="43" cy="17" r="1.5" />
-                    </g>
-                    {index === 1 ? <>
-                      <rect x="30" y="37" width="38" height="42" rx="3" fill="var(--web-beige)" />
-                      <rect x="80" y="37" width="70" height="17" rx="3" fill="var(--web-beige)" />
-                      <path d="M80 65h70M80 75h46" />
-                      <path d="M40 48h18M40 57h12" />
-                    </> : <>
-                      <circle cx="90" cy="58" r="23" fill="var(--web-beige)" />
-                      <path d="m79 58 7 7 15-15" stroke-width="2" />
-                    </>}
-                  </>}
+                <svg
+                  class="web-process__illustration"
+                  width="180"
+                  height="100"
+                  viewBox="0 0 180 100"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  focusable="false"
+                >
+                  {index === 0 ? (
+                    <>
+                      <path
+                        d="M26 12h82a8 8 0 0 1 8 8v32a8 8 0 0 1-8 8H48L30 72V60h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"
+                        fill="var(--web-surface)"
+                      />
+                      <path
+                        d="M78 40h76a8 8 0 0 1 8 8v28a8 8 0 0 1-8 8h-7v10l-16-10H78a8 8 0 0 1-8-8V48a8 8 0 0 1 8-8Z"
+                        fill="var(--web-beige)"
+                      />
+                      <path d="M34 28h56M34 38h24M86 56h58M86 66h40" />
+                    </>
+                  ) : (
+                    <>
+                      <rect
+                        x="18"
+                        y="8"
+                        width="144"
+                        height="84"
+                        rx="7"
+                        fill="var(--web-surface)"
+                      />
+                      <path d="M18 25h144" />
+                      <g fill="currentColor" stroke="none">
+                        <circle cx="29" cy="17" r="1.5" />
+                        <circle cx="36" cy="17" r="1.5" />
+                        <circle cx="43" cy="17" r="1.5" />
+                      </g>
+                      {index === 1 ? (
+                        <>
+                          <rect
+                            x="30"
+                            y="37"
+                            width="38"
+                            height="42"
+                            rx="3"
+                            fill="var(--web-beige)"
+                          />
+                          <rect
+                            x="80"
+                            y="37"
+                            width="70"
+                            height="17"
+                            rx="3"
+                            fill="var(--web-beige)"
+                          />
+                          <path d="M80 65h70M80 75h46" />
+                          <path d="M40 48h18M40 57h12" />
+                        </>
+                      ) : (
+                        <>
+                          <circle
+                            cx="90"
+                            cy="58"
+                            r="23"
+                            fill="var(--web-beige)"
+                          />
+                          <path d="m79 58 7 7 15-15" stroke-width="2" />
+                        </>
+                      )}
+                    </>
+                  )}
                 </svg>
               </div>
               <h3>{step.title}</h3>
@@ -432,7 +507,8 @@ const structuredData = [
           href="/seo-local/"
           >¿También quieres mejorar tu presencia local? <span aria-hidden="true"
             >↗</span
-          ></a>
+          ></a
+        >
       </div>
       <div>
         {
@@ -441,11 +517,11 @@ const structuredData = [
               <>
                 <summary>
                   <>
-                    <span>{faq.question}</span>
+                     <span>{emphasizeFaqText(faq.question, faq.questionStrong).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</span>
                     <span class="web-faq__indicator" aria-hidden="true" />
                   </>
                 </summary>
-                <p>{faq.answer}</p>
+                 <p>{emphasizeFaqText(faq.answer, faq.answerStrong).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</p>
               </>
             </details>
           ))

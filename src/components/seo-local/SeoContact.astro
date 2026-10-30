@@ -1,8 +1,8 @@
 ---
 import { site } from '../../data/site';
 
-const configured = Boolean(site.web3formsKey);
-const privacyReady = Boolean(site.privacyPolicyUrl);
+const configured = site.formsConfigured;
+const privacyReady = site.privacyReady;
 const whatsappHref = new URL(site.whatsapp);
 whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?');
 ---
@@ -57,11 +57,11 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
       </div>
       <label class="seo-contact__privacy">
         <input type="checkbox" name="privacy" value="accepted" required disabled={!privacyReady} aria-describedby={!privacyReady ? 'seo-contact-notice' : undefined} />
-        <span>He leído y acepto {privacyReady ? <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a> : 'la política de privacidad'}.</span>
+        <span>He leído y acepto <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a>.</span>
       </label>
       <p class="seo-contact__notice" id="seo-contact-notice">
         {!privacyReady
-          ? 'El formulario estará disponible cuando publiquemos la política de privacidad. Mientras tanto, puedes escribirnos por WhatsApp.'
+            ? 'El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp.'
           : configured
             ? 'Usaremos tus datos para responder a tu consulta. El envío se procesa a través de Web3Forms.'
             : 'El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente.'}

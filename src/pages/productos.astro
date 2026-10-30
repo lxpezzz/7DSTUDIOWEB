@@ -1,0 +1,80 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import ProductVisual from '../components/products/ProductVisual.astro';
+import ProductIcon from '../components/products/ProductIcon.astro';
+import ProductContact from '../components/products/ProductContact.astro';
+import { products, productFaqs, productFaqEmphasis } from '../data/products';
+import { site } from '../data/site';
+import '../styles/products.css';
+function emphasizeFaqText(text: string, phrases: readonly string[]) {
+  const pattern = phrases.map(phrase => phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return text.split(new RegExp(`(${pattern})`, 'g')).filter(Boolean).map(part => ({
+    text: part,
+    tag: phrases.includes(part) ? 'strong' as const : 'span' as const,
+  }));
+}
+const uses = [
+  { name: 'Contacto', icon: 'contact', text: 'Tus datos, más a mano.' },
+  { name: 'Web', icon: 'web', text: 'Una puerta a tu negocio.' },
+  { name: 'WhatsApp', icon: 'whatsapp', text: 'El inicio de una conversación.' },
+  { name: 'Reseñas', icon: 'reviews', text: 'Facilita que compartan su opinión.' },
+  { name: 'Redes sociales', icon: 'social', text: 'Tu comunidad, a un paso.' },
+  { name: 'Reservas', icon: 'bookings', text: 'Acceso a tu herramienta de citas.' },
+  { name: 'Catálogos', icon: 'catalog', text: 'Tu oferta, lista para consultar.' },
+] as const;
+const steps = [
+  { title: 'Eliges el producto.', text: 'Una tarjeta para llevar contigo, un expositor en el mostrador o un formato para tu espacio. Si tienes dudas, te orientamos.' },
+  { title: 'Nos dices qué quieres compartir.', text: 'Tu contacto, tu web, una página de reservas o el enlace que necesites. Revisamos cómo encaja con el uso que tienes en mente.' },
+  { title: 'Preparamos lo acordado.', text: 'Concretamos diseño, configuración y presupuesto contigo antes de preparar el producto para tu negocio.' },
+];
+const structuredData = [
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Inicio', item: site.url }, { '@type': 'ListItem', position: 2, name: 'Productos QR y NFC', item: `${site.url}/productos/` }] },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: productFaqs.map(faq => ({ '@type': 'Question', name: faq.question, acceptedAnswer: { '@type': 'Answer', text: faq.answer } })) },
+];
+---
+<BaseLayout title="Productos QR y NFC personalizados para negocios | 7D Studio" description="Tarjetas NFC, expositores QR, pegatinas y placas para reseñas. Soluciones personalizadas para conectar tu negocio con tus clientes. Consulta tu producto." structuredData={structuredData}>
+  <Header />
+  <main id="contenido" class="products-page">
+    <div class="container products-breadcrumb"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Productos QR y NFC</span></div>
+    <section class="products-hero container" aria-labelledby="products-title">
+      <div class="products-hero__copy">
+        <p class="products-eyebrow">PRODUCTOS QR + NFC / 7D STUDIO</p>
+        <h1 id="products-title">Productos que conectan tu negocio con tus clientes.</h1>
+        <p class="products-intro">Tarjetas, expositores y soluciones QR/NFC personalizadas para compartir información, facilitar el contacto y mejorar la experiencia de tus clientes.</p>
+        <div class="products-actions"><a class="products-button" href="#catalogo-productos">Explorar productos <ProductIcon name="arrow" size={19} /></a><a class="products-link" href="#contacto-productos">Consultar un producto <ProductIcon name="arrow" size={18} /></a></div>
+      </div>
+      <figure class="products-hero__scene">
+        <div class="products-hero__scene-heading"><span>Del mundo físico.<br /><strong>A tu mundo digital.</strong></span><ProductIcon name="nfc" size={32} /></div>
+        <div class="products-hero__stand"><ProductVisual format="stand" /></div>
+        <div class="products-hero__card"><ProductVisual format="card" /></div>
+        <div class="products-hero__chip"><ProductVisual format="chip" /></div>
+        <figcaption>Composición ilustrativa. Formatos y diseño a concretar.</figcaption>
+      </figure>
+    </section>
+
+    <section class="products-how products-section container" aria-labelledby="products-how-title">
+      <div class="products-section-heading"><h2 id="products-how-title">Acerca. Escanea. Conecta.</h2><p>Dos formas de llegar a lo importante. Tú eliges qué quieres compartir.</p></div>
+      <div class="products-how__grid">
+        <article><div class="products-how__drawing" aria-hidden="true"><span class="products-how__mini-card">7D <ProductIcon name="nfc" size={26} /></span><ProductIcon name="nfc" size={28} /><span class="products-how__phone"><ProductIcon name="phone" size={72} /></span></div><h3>Acerca el móvil.</h3><p>El NFC abre el destino acordado al acercar un móvil compatible, con NFC activado.</p></article>
+        <article><div class="products-how__drawing" aria-hidden="true"><span class="products-how__scan"><ProductIcon name="qr" size={64} /></span><ProductIcon name="phone" size={72} /></div><h3>O escanea el QR.</h3><p>La cámara ofrece otra forma de acceder a la información, sin utilizar NFC.</p></article>
+        <article><div class="products-how__drawing" aria-hidden="true"><div class="products-how__screen"><ProductIcon name="check" size={24} /><span></span><span></span><div><ProductIcon name="contact" size={20} /><ProductIcon name="web" size={20} /><ProductIcon name="whatsapp" size={20} /></div></div></div><h3>Conecta con tu negocio.</h3><p>Tu contacto, tu web o tu información se abre en el móvil. Para destinos online, hace falta internet.</p></article>
+      </div>
+    </section>
+
+    <section class="products-section container" id="catalogo-productos" aria-labelledby="catalog-title">
+      <div class="products-section-heading products-section-heading--split"><div><p class="products-eyebrow">ELIGE TU FORMATO</p><h2 id="catalog-title">Pequeños formatos.<br />Conexiones útiles.</h2></div><p>Para llevar contigo o dejar al alcance de tus clientes. Encuentra el punto de partida para tu negocio.</p></div>
+      <p class="products-illustration-note">Representaciones ilustrativas, no fotografías de producto. El diseño final se acuerda contigo.</p>
+      <div class="products-catalog">{products.map((product, index) => <article class="product-card" aria-labelledby={`title-${product.id}`}><div class="product-card__visual"><ProductVisual format={product.format} /><span class="product-card__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span></div><div class="product-card__content"><p class="product-card__use">{product.use}</p><h3 id={`title-${product.id}`}>{product.name}</h3><p class="product-card__description">{product.description}</p><a class="products-link" href={`?producto=${product.id}#contacto-productos`} data-product-select aria-label={`Consultar producto: ${product.name}`}>Consultar producto <ProductIcon name="arrow" size={18} /></a></div></article>)}</div>
+    </section>
+
+    <section class="products-uses products-section" aria-labelledby="products-uses-title"><div class="container products-uses__layout"><div><h2 id="products-uses-title">Un producto.<br />Muchas posibilidades.</h2><p>El formato es el punto de encuentro. El destino lo decides tú.</p><p class="products-uses__note">Conectamos con la información o los servicios que ya tengas. Si necesitas crear una web o un catálogo, lo valoramos por separado.</p></div><ul>{uses.map(use => <li><ProductIcon name={use.icon} size={25} /><div><h3>{use.name}</h3><p>{use.text}</p></div></li>)}</ul></div></section>
+
+    <section class="products-section container" aria-labelledby="products-process-title"><div class="products-section-heading"><h2 id="products-process-title">Lo preparamos para tu negocio.</h2><p>De la idea al producto, con los detalles claros desde el principio.</p></div><ol class="products-process">{steps.map((step, index) => <li><span class="products-process__number" aria-hidden="true">0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol></section>
+
+    <section class="products-faq products-section container" id="preguntas-productos" aria-labelledby="products-faq-title"><div><h2 id="products-faq-title">Antes de conectar,<br />resolvemos tus dudas.</h2><a class="products-link" href="#contacto-productos">¿Hablamos de tu caso? <ProductIcon name="arrow" size={18} /></a></div><div>{productFaqs.map((faq, index) => <details><summary><span>{emphasizeFaqText(faq.question, productFaqEmphasis[index].question).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</span><span class="products-faq__indicator" aria-hidden="true"></span></summary><p>{emphasizeFaqText(faq.answer, productFaqEmphasis[index].answer).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</p></details>)}</div></section>
+    <ProductContact />
+  </main>
+  <Footer />
+</BaseLayout>

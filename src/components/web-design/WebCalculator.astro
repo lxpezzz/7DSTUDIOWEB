@@ -32,11 +32,6 @@ const extraGroups = [
       </p>
     </div>
     <a class="web-estimate__early-help" href={site.whatsapp} target="_blank" rel="noopener noreferrer">¿No sabes qué elegir? Te orientamos por WhatsApp <span aria-hidden="true">↗</span><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
-    {
-      webPricing.reviewRequired && (
-        <p class="web-estimate__review">{webPricing.conditions.review}</p>
-      )
-    }
     <div class="calculator" data-web-calculator>
       <div class="calculator__compact" data-compact-quote hidden>
         <div><span>Total orientativo</span><strong data-compact-total aria-hidden="true">{formatWebPrice(initial.totalCents!)}</strong><small data-compact-tax>+ IVA</small></div>
@@ -73,11 +68,7 @@ const extraGroups = [
                           : "páginas incluidas"}
                       </span>
                     )}
-                    {type.provisional && (
-                      <span class="calculator__provisional">
-                        Precio y alcance provisionales
-                      </span>
-                    )}
+                    
                   </span>
                 </label>
               ))
@@ -140,9 +131,7 @@ const extraGroups = [
                     </label>
                   )}
                   <span class="calculator__extra-price">
-                    + {formatWebPrice(extra.unitCents)}
-                    {extra.quantity ? " / página" : ""}
-                    {extra.provisional && <small>Provisional</small>}
+                    + {formatWebPrice(extra.unitCents)}{extra.quantity ? ' / página' : ''}
                   </span>
                 </div>
               ))}
@@ -179,9 +168,6 @@ const extraGroups = [
         </div>
         <p class="calculator__custom" data-custom-message hidden>
           Cuéntanos tu proyecto y te prepararemos un presupuesto a medida.
-        </p>
-        <p class="calculator__warning" data-provisional hidden>
-          Incluye tarifas provisionales pendientes de confirmación.
         </p>
         <a
           class="button calculator__request"
@@ -225,19 +211,12 @@ const extraGroups = [
     background: var(--web-surface);
     border-block: 1px solid var(--web-border);
   }
-  .web-estimate__review {
-    margin: 12px 0 28px;
-    padding-left: 12px;
-    border-left: 3px solid #b88470;
-    color: var(--web-muted);
-    font-size: 13px;
-    line-height: 1.6;
-  }
   .web-estimate__early-help {
     display: inline-flex;
     align-items: center;
     gap: 10px;
     min-height: 44px;
+    margin-bottom: 24px;
     color: var(--web-accent-text);
     font-size: 14px;
     line-height: 1.6;
@@ -330,16 +309,12 @@ const extraGroups = [
     font-weight: 600;
     line-height: 1.5;
   }
-  .calculator__pages,
-  .calculator__provisional {
+  .calculator__pages {
     display: block;
     margin-top: 4px;
     color: var(--web-muted);
     font-size: 12px;
     line-height: 1.5;
-  }
-  .calculator__provisional {
-    color: var(--web-accent-text);
   }
   .calculator__included {
     margin-block: 20px 32px;
@@ -502,12 +477,6 @@ const extraGroups = [
   .calculator__custom {
     margin: 18px 0 0;
     font-size: 15px;
-    line-height: 1.6;
-  }
-  .calculator__warning {
-    margin: 14px 0 0;
-    color: var(--web-accent);
-    font-size: 12px;
     line-height: 1.6;
   }
   .calculator__request {

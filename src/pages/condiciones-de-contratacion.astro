@@ -3,6 +3,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
 import LegalIdentity from '../components/legal/LegalIdentity.astro';
 import { legal, legalSources, pendingValue } from '../data/legal';
 import { site } from '../data/site';
+import { webCareTerms, webPricing } from '../data/webPricing';
 const sections = [
   { id: 'prestador', title: '1. Prestador' },
   { id: 'oferta', title: '2. Servicios y productos' },
@@ -40,7 +41,7 @@ const sections = [
   <section id="calculadora">
     <h2>4. Carácter orientativo de la calculadora web</h2>
     <p>La <a href="/diseno-web/#presupuesto">calculadora de Diseño Web</a> aplica los importes y opciones publicados para ofrecer una estimación. No realiza un cobro ni formaliza un contrato. El presupuesto definitivo se confirma tras conocer el contenido, las funcionalidades y las necesidades del proyecto.</p>
-    <p>El cálculo distingue IVA y conceptos no incluidos. Dominio, alojamiento, mantenimiento y servicios SEO mensuales se valoran por separado, según se indica junto a la calculadora.</p>
+    <p>El cálculo muestra el precio inicial de desarrollo y los extras seleccionados, sin sumar la cuota mensual de mantenimiento. {webPricing.conditions.notIncluded}</p>
   </section>
   <section id="formalizacion">
     <h2>5. Aceptación y formalización</h2>
@@ -69,7 +70,7 @@ const sections = [
   </section>
   <section id="recurrentes">
     <h2>10. Dominio, hosting, mantenimiento y servicios recurrentes</h2>
-    <p>Diseño y desarrollo web se presupuestan como proyecto. Dominio, hosting y mantenimiento se valoran por separado. Los planes de SEO Local son servicios mensuales con el alcance publicado y el que se acuerde en la contratación.</p>
+    <p>Diseño y desarrollo web se presupuestan como proyecto. {webCareTerms} Los planes de SEO Local son servicios mensuales con el alcance publicado y el que se acuerde en la contratación.</p>
     <p>Proveedor y titularidad del dominio, renovaciones, periodicidad de facturación y procedimiento de baja: … . No se establece una permanencia ni renovación automática no acordada. Una recomendación de trabajar el SEO durante varios meses no equivale por sí sola a una obligación contractual de permanencia.</p>
   </section>
   <section id="licencias">

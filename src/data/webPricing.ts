@@ -20,6 +20,20 @@ export interface WebExtra {
 
 const corporateIncludedPages = 5;
 
+export const webCare = {
+  hosting: {
+    title: 'Hosting y dominio incluidos',
+    description: 'Sin coste adicional mientras mantengas tu web con 7D Studio',
+  },
+  maintenance: {
+    title: '3 meses de mantenimiento gratis',
+    description: 'Después, 19 €/mes. Incluye el mantenimiento de tu web y un cambio mensual.',
+    requirement: 'El mantenimiento es obligatorio a partir del cuarto mes si continúas con tu web alojada y gestionada por 7D Studio. La cuota mensual no se suma al precio inicial de desarrollo.',
+  },
+  separate: 'El SEO local se contrata por separado.',
+};
+
+export const webCareTerms = `${webCare.hosting.title}. ${webCare.hosting.description}. ${webCare.maintenance.title}. ${webCare.maintenance.description} ${webCare.maintenance.requirement} ${webCare.separate}`;
 
 export const webPricing = {
   defaultType: 'one-page' as WebTypeId,
@@ -27,31 +41,31 @@ export const webPricing = {
   types: [
     {
       id: 'one-page', name: 'Web de una página',
-      description: 'Toda la información importante de tu negocio en una única página.',
+      description: 'Tu negocio, servicios y contacto reunidos en una única página.',
       baseCents: 40000, includedPages: 1,
       included: ['Diseño adaptado a móvil, tablet y ordenador', 'Servicios e información de tu negocio en una página', 'Formulario de contacto y enlaces a tus vías de contacto', 'Enlace a WhatsApp o teléfono para que tus clientes puedan contactarte directamente', 'Optimización técnica de imágenes', 'Optimización y configuración de SEO básico'],
     },
     {
-      id: 'corporate', name: 'Web corporativa',
-      description: 'Varias páginas para explicar tus servicios, tu empresa y cómo contactar.',
+      id: 'corporate', name: 'Web de varias páginas',
+      description: 'Tu negocio organizado en distintas páginas para explicar cada servicio con más detalle.',
       baseCents: 75000, includedPages: corporateIncludedPages,
       included: ['Diseño adaptado a móvil, tablet y ordenador', 'Servicios e información de tu negocio en una página', 'Formulario de contacto y enlaces a tus vías de contacto', 'Enlace a WhatsApp o teléfono para que tus clientes puedan contactarte directamente', 'Optimización técnica de imágenes', 'Optimización y configuración de SEO básico'],
     },
     {
       id: 'redesign', name: 'Rediseño de una web existente',
-      description: 'Ya tienes una web, pero quieres mejorar su diseño o funcionamiento.',
+      description: 'Mejoramos el diseño o funcionamiento de tu web actual.',
       baseCents: null, includedPages: null,
       included: ['Valoramos tu web actual y el alcance de las mejoras antes de presupuestar.'],
     },
     {
       id: 'custom', name: 'Proyecto a medida',
-      description: 'Necesitas una tienda online, funcionalidades especiales o algo diferente.',
+      description: 'Tiendas online, funciones especiales y proyectos personalizados.',
       baseCents: null, includedPages: null,
       included: ['Tiendas online, integraciones complejas y desarrollos especiales requieren un análisis individual.'],
     },
   ] satisfies WebType[],
   extras: [
-    { id: 'pages', name: 'Páginas adicionales', description: 'Se añaden a las páginas incluidas en la web corporativa.', unitCents: 9000, quantity: true, compatibleWith: ['corporate'] },
+    { id: 'pages', name: 'Páginas adicionales', description: 'Se añaden a las páginas incluidas en la web de varias páginas.', unitCents: 9000, quantity: true, compatibleWith: ['corporate'] },
     { id: 'catalogo', name: 'Catálogo de productos o servicios', description: 'Mostramos tus productos o servicios mediante un catálogo visual, con fotografías, descripciones y botones de consulta. Sin pagos online.', unitCents: 15000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
     { id: 'idioma', name: 'Web en otro idioma', description: 'Ofrece tu página web en un idioma adicional.', unitCents: 8000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
     { id: 'gallery', name: 'Galería o portfolio personalizado', description: 'Una selección organizada de imágenes o trabajos.', unitCents: 8000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
@@ -65,7 +79,8 @@ export const webPricing = {
   ] satisfies WebExtra[],
   conditions: {
     estimate: 'El precio es orientativo. El presupuesto definitivo se confirmará después de conocer los detalles del proyecto.',
-    notIncluded: 'IVA no incluido. Hosting, dominio, mantenimiento y servicios SEO mensuales se valoran por separado; no están incluidos en este cálculo.',
+    notIncluded: `IVA no incluido. ${webCare.separate}`,
+    care: webCareTerms,
     scope: 'El alcance de contenidos, integraciones y publicación se acuerda antes de empezar. No incluye tarifas de plataformas externas.',
   },
 };
@@ -102,6 +117,7 @@ export function describeWebQuote(quote: ReturnType<typeof calculateWebQuote>) {
     ...quote.lines.map(line => `${line.name} × ${line.quantity}: ${formatWebPrice(line.amountCents)}`),
     ...(quote.totalCents !== null ? [`Total orientativo: ${formatWebPrice(quote.totalCents)} + IVA`] : []),
     webPricing.conditions.estimate,
+    webPricing.conditions.care,
     webPricing.conditions.notIncluded,
     webPricing.conditions.scope,
   ].join('\n');

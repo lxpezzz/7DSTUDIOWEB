@@ -6,13 +6,15 @@ import WebProjects from "../components/web-design/WebProjects.astro";
 import WebCalculator from "../components/web-design/WebCalculator.astro";
 import WebContact from "../components/web-design/WebContact.astro";
 import WebHeroMockup from "../components/web-design/WebHeroMockup.astro";
+import WebAdvantages from "../components/web-design/WebAdvantages.astro";
 import {
   ShieldCheck,
   LayoutTemplate,
   MousePointerClick,
   Smartphone,
+  TrendingUp,
   Check,
-  Minus,
+  X,
   Search,
   MessageCircle,
   Store,
@@ -24,7 +26,7 @@ import "../styles/web-design.css";
 const benefits = [
   {
     title: "Transmite confianza",
-    text: "Una presentación cuidada ayuda a que tus clientes conozcan mejor tu negocio.",
+    text: "Una página web cuidada ayuda a que tus clientes conozcan mejor tu negocio.",
     icon: ShieldCheck,
   },
   {
@@ -42,6 +44,7 @@ const benefits = [
     text: "Tu negocio se verá correctamente en móvil, tablet y ordenador.",
     icon: Smartphone,
   },
+  
 ];
 const process = [
   {
@@ -60,14 +63,14 @@ const process = [
 const situations = [
   {
     id: "scattered",
-    title: "Información dispersa",
+    title: "Información dispersa y desactualizada",
     label: "CUESTA CONOCERTE",
     points: [
       "Servicios difíciles de encontrar.",
       "Información repartida.",
       "Contacto poco visible.",
     ],
-    icon: Minus,
+    icon: X,
   },
   {
     id: "clear",
@@ -105,65 +108,112 @@ const faqs = [
     question: "¿Qué necesito para tener una página web?",
     answer:
       "Empezamos con información sobre tu negocio, tus servicios y las imágenes o materiales que tengas. Definimos contigo qué falta y qué alcance necesita el proyecto.",
-    questionStrong: ['Qué necesito', 'página web'],
-    answerStrong: ['información sobre tu negocio', 'imágenes o materiales', 'qué alcance necesita el proyecto'],
+    questionStrong: ["Qué necesito", "página web"],
+    answerStrong: [
+      "información sobre tu negocio",
+      "imágenes o materiales",
+      "qué alcance necesita el proyecto",
+    ],
   },
   {
     question: "¿Cuánto cuesta crear una web para mi negocio?",
     answer: `La referencia para una web de una página es de ${formatWebPrice(webPricing.types[0].baseCents!)} + IVA. Si necesitas varias páginas o funcionalidades adicionales, puedes calcular un precio orientativo con nuestra calculadora. Después revisaremos contigo los detalles para confirmar el presupuesto.`,
-    questionStrong: ['Cuánto cuesta'],
-    answerStrong: [`${formatWebPrice(webPricing.types[0].baseCents!)} + IVA`, 'precio orientativo con nuestra calculadora', 'confirmar el presupuesto'],
+    questionStrong: ["Cuánto cuesta"],
+    answerStrong: [
+      `${formatWebPrice(webPricing.types[0].baseCents!)} + IVA`,
+      "precio orientativo con nuestra calculadora",
+      "confirmar el presupuesto",
+    ],
   },
   {
     question: "¿Tengo que pagar todos los meses?",
     answer:
-      "El diseño y desarrollo de la web se paga como un proyecto. El dominio y el alojamiento pueden tener costes periódicos, mientras que el mantenimiento y los servicios de SEO se contratan por separado. Te explicaremos todos los costes antes de empezar.",
-    questionStrong: ['pagar todos los meses'],
-    answerStrong: ['se paga como un proyecto', 'dominio y el alojamiento', 'se contratan por separado'],
+      `El diseño y desarrollo de la web se paga como un proyecto. ${webPricing.conditions.care} Te explicaremos todos los costes antes de empezar.`,
+    questionStrong: ["pagar todos los meses"],
+    answerStrong: [
+      "se paga como un proyecto",
+      "Hosting y dominio incluidos",
+      "19 €/mes",
+    ],
+  },
+  {
+    question: "¿Qué incluye el mantenimiento mensual de 19 €?",
+    answer: [
+      "El mantenimiento incluye las tareas técnicas necesarias para mantener tu web actualizada y funcionando correctamente, además de una pequeña modificación al mes.",
+      "Por ejemplo, puedes solicitar un cambio de texto, sustituir una fotografía, actualizar un horario o modificar información de tus servicios.",
+      "No incluye la creación de nuevas páginas, rediseños completos ni funcionalidades adicionales. Estos trabajos se presupuestan por separado.",
+      "Los cambios mensuales no son acumulables y el servicio de SEO local se contrata por separado.",
+      "Los primeros 3 meses son gratuitos. A partir del cuarto mes, el mantenimiento cuesta 19 €/mes y es obligatorio mientras tu web permanezca alojada y gestionada por 7D Studio.",
+    ].join("\n\n"),
+    questionStrong: ["mantenimiento mensual de 19 €"],
+    answerStrong: ["Los primeros 3 meses son gratuitos."],
   },
   {
     question:
       "¿Qué diferencia hay entre una web de una página y una web corporativa?",
     answer:
       "La primera reúne la información en una única página. Una corporativa reparte servicios, empresa y contacto en varias páginas. La elección depende del contenido que necesites presentar.",
-    questionStrong: ['web de una página', 'web corporativa'],
-    answerStrong: ['una única página', 'varias páginas', 'contenido que necesites presentar'],
+    questionStrong: ["web de una página", "web corporativa"],
+    answerStrong: [
+      "una única página",
+      "varias páginas",
+      "contenido que necesites presentar",
+    ],
   },
   {
     question: "¿Mi web funcionará en el móvil?",
     answer:
       "Sí. Adaptamos el diseño a móvil, tablet y ordenador, y revisamos la navegación y las formas de contacto en diferentes tamaños de pantalla.",
-    questionStrong: ['funcionará en el móvil'],
-    answerStrong: ['Sí.', 'móvil, tablet y ordenador', 'navegación y las formas de contacto'],
+    questionStrong: ["funcionará en el móvil"],
+    answerStrong: [
+      "Sí.",
+      "móvil, tablet y ordenador",
+      "navegación y las formas de contacto",
+    ],
   },
   {
     question: "¿Podré solicitar cambios después?",
     answer:
-      "Por supuesto. Si más adelante necesitas actualizar información, añadir servicios o ampliar tu web, podemos ayudarte. Te indicaremos el presupuesto antes de realizar cualquier modificación.",
-    questionStrong: ['solicitar cambios después'],
-    answerStrong: ['actualizar información, añadir servicios o ampliar tu web', 'presupuesto antes de realizar cualquier modificación'],
+      "Por supuesto. El mantenimiento de tu web incluye un cambio mensual. Si necesitas actualizar información, añadir servicios o ampliar tu web más allá de lo incluido, te indicaremos el presupuesto antes de realizar esos trabajos adicionales.",
+    questionStrong: ["solicitar cambios después"],
+    answerStrong: [
+      "actualizar información, añadir servicios o ampliar tu web",
+      "incluye un cambio mensual",
+    ],
   },
   {
     question: "¿Mi página aparecerá en Google?",
     answer:
       "Preparamos la web para que los buscadores puedan entenderla. La indexación y el posicionamiento dependen de varios factores: no garantizamos posiciones. Si necesitas seguimiento, podemos valorar el servicio de SEO local.",
-    questionStrong: ['aparecerá en Google'],
-    answerStrong: ['los buscadores puedan entenderla', 'no garantizamos posiciones', 'SEO local'],
+    questionStrong: ["aparecerá en Google"],
+    answerStrong: [
+      "los buscadores puedan entenderla",
+      "no garantizamos posiciones",
+      "SEO local",
+    ],
   },
   {
     question: "¿Qué ocurre si no sé qué tipo de web necesito?",
     answer:
       "No necesitas llegar con todo decidido. Cuéntanos qué hace tu negocio y qué te gustaría conseguir; te ayudamos a elegir una opción adecuada antes de cerrar el presupuesto.",
-    questionStrong: ['no sé qué tipo de web necesito'],
-    answerStrong: ['No necesitas llegar con todo decidido.', 'te ayudamos a elegir una opción adecuada'],
+    questionStrong: ["no sé qué tipo de web necesito"],
+    answerStrong: [
+      "No necesitas llegar con todo decidido.",
+      "te ayudamos a elegir una opción adecuada",
+    ],
   },
 ];
 function emphasizeFaqText(text: string, phrases: readonly string[]) {
-  const pattern = phrases.map(phrase => phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-  return text.split(new RegExp(`(${pattern})`, 'g')).filter(Boolean).map(part => ({
-    text: part,
-    tag: phrases.includes(part) ? 'strong' as const : 'span' as const,
-  }));
+  const pattern = phrases
+    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+  return text
+    .split(new RegExp(`(${pattern})`, "g"))
+    .filter(Boolean)
+    .map((part) => ({
+      text: part,
+      tag: phrases.includes(part) ? ("strong" as const) : ("span" as const),
+    }));
 }
 const structuredData = [
   {
@@ -236,11 +286,11 @@ const structuredData = [
         <p class="web-eyebrow">LO QUE VE TU CLIENTE</p><h2
           id="web-problem-title"
         >
-          Tu negocio puede ser excelente. Tu web debería reflejarlo.
+          Tu negocio es excelente. Tu web debería reflejarlo.
         </h2><p>
-          Cuando alguien descubre tu empresa, quiere saber qué haces, qué
+          Cuando alguien descubre tu negocio, quiere saber qué haces, qué
           servicios ofreces y cómo contactar contigo. Si esa información no está
-          clara, puede seguir buscando otras opciones.
+          clara, el cliente eligirá otras opciones.
         </p>
       </div>
       <div class="web-comparison">
@@ -250,7 +300,25 @@ const structuredData = [
               class:list={["web-situation", `web-situation--${situation.id}`]}
             >
               <>
-                <p class="web-eyebrow">{situation.label}</p>
+                <p class="web-eyebrow">
+                  <svg
+                    class="web-situation__status"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    {situation.icon.map(([Tag, attributes]) => (
+                      <Tag {...attributes} />
+                    ))}
+                  </svg>
+                  {situation.label}
+                </p>
                 <h3>{situation.title}</h3>
               </>
               <div
@@ -345,8 +413,8 @@ const structuredData = [
         }
       </div>
       <p class="web-caption">
-        Ejemplo ilustrativo de cómo una web puede organizar mejor la información
-        de un negocio.
+        Una buena web no sustituye lo que hace grande a tu negocio. Lo
+        complementa y ayuda a que más personas lo descubran..
       </p>
     </section>
 
@@ -359,7 +427,7 @@ const structuredData = [
           <p class="web-eyebrow">MÁS QUE ESTAR ONLINE</p><h2
             id="web-benefits-title"
           >
-            Una web que presenta tu negocio como se merece.
+            Una web que muestra lo mejor de tu negocio y te ayuda a crecer
           </h2>
         </div>
         <div class="web-benefits__grid">
@@ -389,8 +457,34 @@ const structuredData = [
             ))
           }
         </div>
+        <article class="web-benefits__closing">
+          <div>
+            <p class="web-eyebrow">EL OBJETIVO FINAL</p>
+            <h3>
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                {TrendingUp.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+              <span>Convierte visitas en oportunidades de negocio</span>
+            </h3>
+          </div>
+          <p class="web-benefits__closing-copy">Una web clara y bien diseñada facilita que las personas interesadas en tus servicios den el siguiente paso y contacten contigo</p>
+        </article>
       </div>
     </section>
+
+    <WebAdvantages />
 
     <section
       class="web-process web-section container"
@@ -517,11 +611,25 @@ const structuredData = [
               <>
                 <summary>
                   <>
-                     <span>{emphasizeFaqText(faq.question, faq.questionStrong).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</span>
+                    <span>
+                      {emphasizeFaqText(faq.question, faq.questionStrong).map(
+                        ({ text, tag: Tag }) => (
+                          <Tag>{text}</Tag>
+                        ),
+                      )}
+                    </span>
                     <span class="web-faq__indicator" aria-hidden="true" />
                   </>
                 </summary>
-                 <p>{emphasizeFaqText(faq.answer, faq.answerStrong).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}</p>
+                {faq.answer.split("\n\n").map(paragraph => (
+                  <p>
+                    {emphasizeFaqText(paragraph, faq.answerStrong).map(
+                      ({ text, tag: Tag }) => (
+                        <Tag>{text}</Tag>
+                      ),
+                    )}
+                  </p>
+                ))}
               </>
             </details>
           ))

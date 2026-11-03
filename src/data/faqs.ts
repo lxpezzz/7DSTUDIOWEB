@@ -1,4 +1,4 @@
-import { webPricing, formatWebPrice } from './webPricing';
+import { webPricing, formatWebPrice, webCareTerms } from './webPricing';
 import { seoPlans } from './seoPlans';
 import { productFaqs } from './products';
 
@@ -51,7 +51,7 @@ export const faqCategories: readonly FaqCategory[] = [
     questions: [
       {
         question: '¿Cuánto cuesta crear una página web?',
-        answer: `La web de una página tiene un precio base de ${formatWebPrice(onePage.baseCents!)} + IVA y la corporativa, de ${formatWebPrice(corporate.baseCents!)} + IVA. Los extras dependen de lo que necesites. La calculadora muestra un precio orientativo; después revisamos contigo los detalles para confirmar el presupuesto. Dominio, alojamiento y mantenimiento se valoran por separado.`,
+        answer: `La web de una página tiene un precio base de ${formatWebPrice(onePage.baseCents!)} + IVA y la web de varias páginas, de ${formatWebPrice(corporate.baseCents!)} + IVA. Los extras dependen de lo que necesites. La calculadora muestra un precio orientativo; después revisamos contigo los detalles para confirmar el presupuesto. ${webCareTerms}`,
         highlight: [`${formatWebPrice(onePage.baseCents!)} + IVA`, `${formatWebPrice(corporate.baseCents!)} + IVA`, 'confirmar el presupuesto'],
         link: { href: '/diseno-web/#presupuesto', label: 'Calcular el presupuesto de mi web' },
       },
@@ -145,8 +145,8 @@ export const faqCategories: readonly FaqCategory[] = [
       },
       {
         question: '¿Tengo que pagar una cuota mensual?',
-        answer: 'El diseño y desarrollo de la web se paga como un proyecto. El dominio y el alojamiento pueden tener costes periódicos; el mantenimiento se valora por separado. Los planes de SEO Local son mensuales. Los productos QR/NFC se presupuestan según lo acordado. Te explicaremos los costes y las condiciones antes de empezar.',
-        highlight: ['se paga como un proyecto', 'pueden tener costes periódicos', 'Los planes de SEO Local son mensuales', 'antes de empezar'],
+        answer: `El diseño y desarrollo de la web se paga como un proyecto. ${webCareTerms} Los productos QR/NFC se presupuestan según lo acordado. Te explicaremos los costes y las condiciones antes de empezar.`,
+        highlight: ['se paga como un proyecto', '3 meses de mantenimiento gratis', '19 €/mes', 'antes de empezar'],
       },
       {
         question: '¿Puedo contratar varios servicios?',
@@ -155,8 +155,8 @@ export const faqCategories: readonly FaqCategory[] = [
       },
       {
         question: '¿Podré solicitar cambios o ampliaciones después?',
-        answer: 'Por supuesto. Si más adelante necesitas actualizar información, añadir servicios o ampliar tu web, podemos ayudarte. Te indicaremos el presupuesto antes de realizar cualquier modificación. En los productos QR/NFC, cambiar el destino depende de la configuración acordada; conviene consultarlo antes si prevés necesitar actualizaciones.',
-        highlight: ['presupuesto antes de realizar cualquier modificación', 'depende de la configuración acordada'],
+        answer: 'Por supuesto. El mantenimiento de tu web incluye un cambio mensual. Si necesitas actualizar información, añadir servicios o ampliar tu web más allá de lo incluido, te indicaremos el presupuesto antes de realizar esos trabajos adicionales. En los productos QR/NFC, cambiar el destino depende de la configuración acordada; conviene consultarlo antes si prevés necesitar actualizaciones.',
+        highlight: ['incluye un cambio mensual', 'depende de la configuración acordada'],
       },
     ],
   },

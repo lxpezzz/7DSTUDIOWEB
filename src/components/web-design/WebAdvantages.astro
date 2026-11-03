@@ -1,0 +1,226 @@
+---
+import {
+  Clock,
+  Search,
+  UsersRound,
+  LayoutList,
+  Fingerprint,
+  ShieldCheck,
+} from "lucide";
+
+const advantages = [
+  {
+    title: "Consigue más clientes",
+    description:
+      "Haz que más personas descubran tu negocio, conozcan tus servicios y tengan una forma sencilla de contactar contigo.",
+    icon: UsersRound,
+  },
+  {
+    title: "Destaca frente a tu competencia",
+    description:
+      "Muestra qué hace especial a tu negocio y por qué deberían elegirte a ti en lugar de otras opciones.",
+    icon: Fingerprint,
+  },
+  {
+    title: "Toda tu información en un solo lugar",
+    description:
+      "Servicios, horarios, ubicación, fotografías y formas de contacto. Todo organizado y fácil de encontrar.",
+    icon: LayoutList,
+  },
+  {
+    title: "Aparece cuando te buscan en Google",
+    description:
+      "Una web optimizada puede ayudarte a ganar visibilidad cuando alguien busca negocios como el tuyo.",
+    icon: Search,
+  },
+  {
+    title: "Genera confianza desde el primer momento",
+    description:
+      "Una presencia profesional ayuda a transmitir seriedad y facilita que los clientes se decidan por tu negocio.",
+    icon: ShieldCheck,
+  },
+  {
+    title: "Ahorra tiempo en tu día a día",
+    description:
+      "Resuelve las dudas más frecuentes de tus clientes sin tener que responder una y otra vez las mismas preguntas.",
+    icon: Clock,
+  },
+];
+---
+
+<section
+  class="web-advantages web-section"
+  aria-labelledby="web-advantages-title"
+>
+  <div class="web-advantages__layout container">
+    <div class="web-advantages__intro">
+      <p class="web-eyebrow">LAS VENTAJAS DE TENER TU PROPIA WEB</p>
+      <h2 id="web-advantages-title">Tu negocio tiene mucho que ganar.</h2>
+      <p class="web-advantages__description">
+        Una página web no es solo una forma de estar en Internet. Es una
+        herramienta para hacer crecer tu negocio, diferenciarte de la
+        competencia y facilitar el día a día.
+      </p>
+    </div>
+    <ol class="web-advantages__list" role="list">
+      {
+        advantages.map((advantage, index) => (
+          <li class="web-advantages__item">
+            <div class="web-advantages__marker" aria-hidden="true">
+              <span class="web-advantages__number">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                {advantage.icon.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+            </div>
+            <div class="web-advantages__content">
+              <h3>{advantage.title}</h3>
+              <p>{advantage.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .web-advantages__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 44px;
+  }
+
+  .web-advantages__intro {
+    min-width: 0;
+    max-width: 760px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .web-advantages__intro h2 {
+    max-width: 24ch;
+    margin-inline: auto;
+  }
+
+  .web-advantages__description {
+    max-width: 64ch;
+    margin: 24px auto 0;
+    color: var(--web-muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .web-advantages__list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 32px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .web-advantages__item {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 28px;
+    border-top: 1px solid var(--web-border);
+  }
+
+  .web-advantages__number {
+    padding-top: 5px;
+    color: var(--web-accent-text);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.5;
+  }
+
+  .web-advantages__marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--web-accent);
+  }
+
+  .web-advantages__content {
+    min-width: 0;
+  }
+
+  h3 {
+    margin: 0 0 12px;
+    color: var(--web-ink);
+    font-size: clamp(21px, 1.8vw, 24px);
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+    text-wrap: pretty;
+  }
+
+  .web-advantages__content p {
+    max-width: 68ch;
+    margin: 0;
+    color: var(--web-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .web-advantages__item:hover h3 {
+      color: var(--web-accent-text);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    h3 {
+      transition: color 160ms ease-out;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .web-advantages__layout {
+      gap: 36px;
+      padding-bottom: 0px;
+    }
+
+    .web-advantages__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .web-advantages__layout {
+      padding-bottom: 0px 
+    };
+    .web-advantages__list {
+      padding-bottom: 0px;
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .web-advantages__item {
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 16px;
+      padding-block: 24px;
+    }
+
+    .web-advantages__description {
+      margin-top: 20px;
+    }
+  }
+</style>

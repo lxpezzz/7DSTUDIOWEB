@@ -3,7 +3,9 @@ import {
   webPricing,
   calculateWebQuote,
   formatWebPrice,
+  webCare,
 } from "../../data/webPricing";
+import { Check } from "lucide";
 import { site } from "../../data/site";
 const initial = calculateWebQuote({
   typeId: webPricing.defaultType,
@@ -11,9 +13,17 @@ const initial = calculateWebQuote({
   additionalPages: 0,
 });
 const extraGroups = [
-  { id: 'content', name: 'Contenido de tu web', ids: ['pages', 'catalogo', 'idioma', 'gallery', 'blog'] },
-  { id: 'bookings', name: 'Reservas', ids: ['bookings'] },
-  { id: 'identity', name: 'Imagen de tu negocio', ids: ['logo', 'optimization-photos', 'profesional-photos'] },
+  {
+    id: "content",
+    name: "Contenido de tu web",
+    ids: ["pages", "catalogo", "gallery", "blog"],
+  },
+  { id: "features", name: "Funcionalidades", ids: ["idioma", "bookings"] },
+  {
+    id: "identity",
+    name: "Imagen de tu negocio",
+    ids: ["logo", "optimization-photos", "profesional-photos"],
+  },
 ];
 ---
 
@@ -31,12 +41,16 @@ const extraGroups = [
         compromiso.
       </p>
     </div>
-    <a class="web-estimate__early-help" href={site.whatsapp} target="_blank" rel="noopener noreferrer">¿No sabes qué elegir? Te orientamos por WhatsApp <span aria-hidden="true">↗</span><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+    <a
+      class="web-estimate__early-help"
+      href={site.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      >¿Tienes dudas? Te orientamos por WhatsApp <span aria-hidden="true"
+        >↗</span
+      ><span class="sr-only"> (se abre en una pestaña nueva)</span></a
+    >
     <div class="calculator" data-web-calculator>
-      <div class="calculator__compact" data-compact-quote hidden>
-        <div><span>Total orientativo</span><strong data-compact-total aria-hidden="true">{formatWebPrice(initial.totalCents!)}</strong><small data-compact-tax>+ IVA</small></div>
-        <a href="#resumen-web">Ver resumen <span aria-hidden="true">↓</span></a>
-      </div>
       <div class="calculator__options">
         <fieldset class="calculator__fieldset" data-options disabled>
           <legend>01. ¿Qué tipo de web necesitas?</legend>
@@ -68,76 +82,145 @@ const extraGroups = [
                           : "páginas incluidas"}
                       </span>
                     )}
-                    
                   </span>
                 </label>
               ))
             }
           </div>
         </fieldset>
-        <div class="calculator__included">
-          <p data-included-title>Incluido en el precio base</p>
+        <details class="calculator__included">
+          <summary>
+            <span data-included-summary>✓ Diseño adaptable · Formulario de contacto · SEO básico</span>
+            <span class="calculator__included-action">Ver todo lo incluido</span>
+          </summary>
+          <p class="calculator__included-title" data-included-title>Incluido en el precio base</p>
           <ul data-included>
             {initial.type.included.map((item) => <li>{item}</li>)}
           </ul>
-        </div>
+        </details>
+        <section class="calculator__care" aria-labelledby="web-care-title">
+          <h3 id="web-care-title">Incluido con tu página web</h3>
+          <ul role="list">
+            {
+              [webCare.hosting, webCare.maintenance].map(service => (
+                <li>
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    {Check.map(([Tag, attributes]) => <Tag {...attributes} />)}
+                  </svg>
+                  <div>
+                    <strong>{service.title}</strong>
+                    <p>{service.description}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+          <p>{webCare.maintenance.requirement}</p>
+          <p>{webCare.separate}</p>
+        </section>
         <fieldset class="calculator__fieldset" data-options disabled>
           <legend>02. Añade solo lo que necesitas</legend>
           <p class="calculator__hint" id="web-extras-hint">
             Los extras se suman una sola vez. Páginas adicionales y blog están
-            disponibles con la web corporativa.
+            disponibles con la web de varias páginas.
           </p>
-          {extraGroups.map(group => (
-            <div class="calculator__extra-group" role="group" aria-labelledby={`extras-${group.id}`}>
-              <h3 id={`extras-${group.id}`}>{group.name}</h3>
-              <div class="calculator__extras">
-              {webPricing.extras.filter(extra => group.ids.includes(extra.id)).map((extra) => (
-                <div class="calculator__extra" data-extra-id={extra.id}>
-                  {extra.quantity ? (
-                    <>
-                      <label for="web-extra-pages">
-                        <strong>{extra.name}</strong>
-                        <span>{extra.description}</span>
-                      </label>
-                      <input
-                        id="web-extra-pages"
-                        type="number"
-                        name="additional-pages"
-                        min="0"
-                        max={webPricing.maxAdditionalPages}
-                        step="1"
-                        value="0"
-                        disabled
-                        aria-describedby="web-extras-hint"
-                      />
-                    </>
-                  ) : (
-                    <label>
-                      <input
-                        type="checkbox"
-                        name="web-extra"
-                        value={extra.id}
-                        disabled={
-                          !(extra.compatibleWith as readonly string[]).includes(
-                            "one-page",
-                          )
-                        }
-                        aria-describedby="web-extras-hint"
-                      />
-                      <span>
-                        <strong>{extra.name}</strong>
-                        <span>{extra.description}</span>
-                      </span>
-                    </label>
-                  )}
-                  <span class="calculator__extra-price">
-                    + {formatWebPrice(extra.unitCents)}{extra.quantity ? ' / página' : ''}
-                  </span>
+          {
+            extraGroups.map((group, index) => (
+              <details
+                class="calculator__extra-group"
+                name="web-extra-groups"
+                data-extra-group
+                open={index === 0}
+              >
+                <summary>
+                  <span>{group.name}</span>
+                  <span class="calculator__group-count" data-group-count>0 seleccionados</span>
+                </summary>
+                <div class="calculator__extras">
+                  {webPricing.extras
+                    .filter((extra) => group.ids.includes(extra.id))
+                    .map((extra) => {
+                      const available = (
+                        extra.compatibleWith as readonly string[]
+                      ).includes(initial.type.id);
+                      const availability = `Disponible con ${extra.compatibleWith
+                        .map(id => webPricing.types.find(type => type.id === id)!.name.toLocaleLowerCase('es'))
+                        .join(' o ')}.`;
+                      return (
+                        <div
+                          class="calculator__extra"
+                          data-extra-id={extra.id}
+                          data-available={String(available)}
+                        >
+                          <div class="calculator__extra-row">
+                            {extra.quantity ? (
+                              <label for="web-extra-pages">
+                                <strong>{extra.name}</strong>
+                              </label>
+                            ) : (
+                              <label>
+                                <input
+                                  type="checkbox"
+                                  name="web-extra"
+                                  value={extra.id}
+                                  disabled={!available}
+                                  aria-describedby={`extra-${extra.id}-availability`}
+                                />
+                                <strong>{extra.name}</strong>
+                              </label>
+                            )}
+                            <span class="calculator__extra-price">
+                              + {formatWebPrice(extra.unitCents)}
+                              {extra.quantity ? " / página" : ""}
+                            </span>
+                          </div>
+                          <div class="calculator__extra-controls">
+                            {extra.quantity && (
+                              <input
+                                id="web-extra-pages"
+                                type="number"
+                                name="additional-pages"
+                                min="0"
+                                max={webPricing.maxAdditionalPages}
+                                step="1"
+                                value="0"
+                                disabled={!available}
+                                aria-describedby={`web-extras-hint extra-${extra.id}-availability`}
+                              />
+                            )}
+                            <details class="calculator__extra-details">
+                              <summary>
+                                Ver detalles
+                                <span class="sr-only"> de {extra.name}</span>
+                              </summary>
+                              <p>{extra.description}</p>
+                            </details>
+                          </div>
+                          <p
+                            class="calculator__availability"
+                            data-extra-availability
+                            id={`extra-${extra.id}-availability`}
+                            hidden={available}
+                          >
+                            {availability}
+                          </p>
+                        </div>
+                      );
+                    })}
                 </div>
-              ))}
-              </div>
-            </div>
-          ))}
+              </details>
+            ))
+          }
           <p
             class="calculator__change"
             data-compatibility
@@ -147,7 +230,11 @@ const extraGroups = [
           </p>
         </fieldset>
       </div>
-      <aside id="resumen-web" class="calculator__summary" aria-labelledby="web-summary-title">
+      <aside
+        id="resumen-web"
+        class="calculator__summary"
+        aria-labelledby="web-summary-title"
+      >
         <p class="web-eyebrow">SIN COMPROMISO</p>
         <h3 id="web-summary-title">Tu presupuesto orientativo</h3>
         <p class="calculator__selected" data-selected-type>
@@ -161,7 +248,7 @@ const extraGroups = [
           </div>
         </dl>
         <div class="calculator__total" aria-live="polite" aria-atomic="true">
-          <span>Total orientativo</span>
+          <span>Precio inicial orientativo · desarrollo y extras</span>
           <output data-quote-total>{formatWebPrice(initial.totalCents!)}</output
           >
           <small data-quote-tax>IVA no incluido</small>
@@ -188,21 +275,6 @@ const extraGroups = [
       <p>{webPricing.conditions.notIncluded}</p>
       <p>{webPricing.conditions.scope}</p>
     </div>
-    <div class="web-estimate__help">
-      <div>
-        <h3>¿No sabes qué web necesitas?</h3><p>
-          Hablemos 10 minutos. Nos cuentas tu idea y te ayudamos a encontrar la
-          opción más adecuada.
-        </p>
-      </div>
-      <a href={site.whatsapp} target="_blank" rel="noopener noreferrer"
-        >Resolver mis dudas por WhatsApp <span aria-hidden="true">↗</span><span
-          class="sr-only"
-        >
-          (se abre en una pestaña nueva)</span
-        ></a
-      >
-    </div>
   </div>
 </section>
 
@@ -223,18 +295,47 @@ const extraGroups = [
     text-decoration: underline;
     text-underline-offset: 4px;
   }
-  .calculator__compact {
-    display: none;
+  .calculator__extra-group {
+    border-top: 1px solid var(--web-border);
   }
-  .calculator__extra-group + .calculator__extra-group {
-    margin-top: 24px;
+  .calculator__extra-group:last-of-type {
+    border-bottom: 1px solid var(--web-border);
   }
-  .calculator__extra-group h3 {
-    margin: 0 0 12px;
-    color: var(--web-accent-text);
-    font-size: 14px;
+  .calculator__extra-group > summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 60px;
+    padding-block: 14px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1.5;
+    cursor: pointer;
+    list-style: none;
+  }
+  .calculator__group-count {
+    flex-shrink: 0;
+    margin-left: auto;
+    color: var(--web-muted);
+    font-size: 11px;
+    font-weight: 400;
+  }
+  .calculator__extra-group > summary::after,
+  .calculator__included > summary::after {
+    content: '';
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg);
+  }
+  .calculator__extra-group[open] > summary::after,
+  .calculator__included[open] > summary::after {
+    transform: rotate(225deg);
+  }
+  .calculator summary::-webkit-details-marker {
+    display: none;
   }
   .calculator {
     display: grid;
@@ -261,17 +362,28 @@ const extraGroups = [
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+    grid-auto-rows: 1fr;
   }
   .calculator__type {
-    display: flex;
-    align-items: start;
-    gap: 10px;
+    position: relative;
+    display: block;
     min-width: 0;
-    padding: 18px;
+    padding: 14px 16px;
     border: 1px solid var(--web-border);
     border-radius: 10px;
     background: #fff;
     cursor: pointer;
+  }
+  .calculator__type > span {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .calculator__type > input[type="radio"] {
+    position: absolute;
+    top: 16px;
+    right: 14px;
+    margin: 0;
   }
   .calculator__type:has(input:checked) {
     border-color: var(--web-accent);
@@ -294,17 +406,19 @@ const extraGroups = [
     font-size: 15px;
     font-weight: 600;
     line-height: 1.4;
+    padding-right: 28px;
   }
   .calculator__description {
     display: block;
-    margin-top: 8px;
+    margin-top: 6px;
     color: var(--web-muted);
     font-size: 13px;
-    line-height: 1.6;
+    line-height: 1.5;
   }
   .calculator__type-price {
     display: block;
-    margin-top: 14px;
+    margin-top: auto;
+    padding-top: 10px;
     font-size: 15px;
     font-weight: 600;
     line-height: 1.5;
@@ -317,17 +431,41 @@ const extraGroups = [
     line-height: 1.5;
   }
   .calculator__included {
-    margin-block: 20px 32px;
-    padding: 16px 0;
+    margin-block: 20px 28px;
     border-block: 1px solid var(--web-border);
   }
-  .calculator__included p {
-    margin: 0 0 10px;
+  .calculator__included > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding-block: 16px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .calculator__included > summary > span:first-child {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+  .calculator__included-action {
+    grid-column: 1;
+    color: var(--web-accent-text);
+    font-size: 12px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .calculator__included > summary::after {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .calculator__included-title {
+    margin: 4px 0 10px;
     font-size: 13px;
     font-weight: 600;
   }
   .calculator__included ul {
-    margin: 0;
+    margin: 0 0 18px;
     padding-left: 18px;
     color: var(--web-muted);
     font-size: 13px;
@@ -340,29 +478,60 @@ const extraGroups = [
     line-height: 1.6;
   }
   .calculator__extras {
-    display: grid;
-    gap: 10px;
+    padding-bottom: 8px;
   }
   .calculator__extra {
-    display: flex;
-    align-items: center;
-    gap: 14px;
     min-width: 0;
-    padding: 16px;
-    border: 1px solid var(--web-border);
-    border-radius: 8px;
-    background: #fff;
+    padding-block: 10px;
+    border-top: 1px solid var(--web-border);
   }
-  .calculator__extra > label {
+  .calculator__extra-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+  }
+  .calculator__extra-row > label {
     display: flex;
     align-items: start;
     gap: 10px;
-    flex: 1;
     min-width: 0;
+    padding-block: 10px;
     cursor: pointer;
   }
-  .calculator__extra[data-extra-id="pages"] > label {
-    display: block;
+  .calculator__extra-controls {
+    display: flex;
+    align-items: start;
+    gap: 16px;
+    padding-left: 28px;
+  }
+  .calculator__extra[data-extra-id="pages"] .calculator__extra-controls {
+    padding-left: 0;
+  }
+  .calculator__extra-details {
+    flex: 1;
+    min-width: 0;
+  }
+  .calculator__extra-details summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    color: var(--web-accent-text);
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    list-style: none;
+  }
+  .calculator__extra-details[open] summary {
+    font-weight: 600;
+  }
+  .calculator__extra-details p {
+    margin: 4px 0 8px;
+    color: var(--web-muted);
+    font-size: 12px;
+    line-height: 1.65;
   }
   .calculator__extra strong {
     display: block;
@@ -370,16 +539,15 @@ const extraGroups = [
     font-weight: 500;
     line-height: 1.5;
   }
-  .calculator__extra label span span,
-  .calculator__extra > label > span:not(:has(strong)) {
-    display: block;
-    margin-top: 4px;
+  .calculator__availability {
+    margin: 4px 0 6px;
     color: var(--web-muted);
     font-size: 12px;
     line-height: 1.6;
   }
-  .calculator__extra:has(input:disabled) {
-    background: #eeebe7;
+  .calculator__extra[data-available="false"] strong,
+  .calculator__extra[data-available="false"] .calculator__extra-price {
+    color: var(--web-muted);
   }
   .calculator__extra:has(input:checked) {
     border-color: var(--web-accent);
@@ -395,15 +563,9 @@ const extraGroups = [
     font: inherit;
   }
   .calculator__extra-price {
-    flex-shrink: 0;
     color: var(--web-accent-text);
     font-size: 13px;
     line-height: 1.5;
-  }
-  .calculator__extra-price small {
-    display: block;
-    color: var(--web-muted);
-    font-size: 11px;
   }
   .calculator__change {
     margin: 12px 0 0;
@@ -484,6 +646,48 @@ const extraGroups = [
     margin-top: 24px;
     gap: 16px;
   }
+  .calculator__care {
+    margin-block: 24px 28px;
+  }
+  .calculator__care h3 {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .calculator__care ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .calculator__care li {
+    display: grid;
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 10px;
+    padding-block: 12px;
+    border-top: 1px solid var(--web-border);
+  }
+  .calculator__care li:last-child {
+    border-bottom: 1px solid var(--web-border);
+  }
+  .calculator__care svg {
+    margin-top: 2px;
+    color: var(--web-accent-text);
+  }
+  .calculator__care strong {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .calculator__care p {
+    margin: 8px 0 0;
+    color: var(--web-muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .calculator__care li p {
+    margin-top: 4px;
+  }
   .calculator__footnote {
     margin: 16px 0 0;
     color: var(--web-muted);
@@ -500,38 +704,6 @@ const extraGroups = [
   .web-estimate__conditions p {
     margin: 8px 0 0;
   }
-  .web-estimate__help {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 28px;
-    margin-top: 32px;
-    padding-top: 28px;
-    border-top: 1px solid var(--web-border);
-  }
-  .web-estimate__help h3 {
-    margin: 0;
-    font-size: 21px;
-    font-weight: 500;
-  }
-  .web-estimate__help p {
-    max-width: 60ch;
-    margin: 10px 0 0;
-    color: var(--web-muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .web-estimate__help a {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 44px;
-    color: var(--web-accent);
-    font-size: 14px;
-    line-height: 1.5;
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
   @media (max-width: 1023px) {
     .calculator input {
       scroll-margin-top: 88px;
@@ -540,77 +712,16 @@ const extraGroups = [
       grid-template-columns: minmax(0, 1fr);
       gap: 24px;
     }
-    .calculator__compact {
-      position: sticky;
-      top: calc(var(--header-height) + 8px);
-      z-index: 25;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 14px;
-      border: 1px solid var(--web-border);
-      border-radius: 8px;
-      background: #fff;
-    }
-    .calculator__compact > div > span {
-      display: block;
-      color: var(--web-muted);
-      font-size: 11px;
-      line-height: 1.5;
-    }
-    .calculator__compact strong {
-      font-size: 20px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-    }
-    .calculator__compact small {
-      margin-left: 6px;
-      color: var(--web-muted);
-      font-size: 12px;
-    }
-    .calculator__compact a {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 44px;
-      color: var(--web-accent-text);
-      font-size: 13px;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
     .calculator__summary {
       position: static;
-    }
-    .web-estimate__help {
-      align-items: start;
-      flex-direction: column;
-      gap: 14px;
     }
   }
   @media (max-width: 599px) {
     .calculator__types {
       grid-template-columns: minmax(0, 1fr);
     }
-    .calculator__extra {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
-      gap: 10px;
-      padding: 14px;
-    }
-    .calculator__extra > label {
-      min-width: 0;
-    }
-    .calculator__extra-price {
-      margin-left: 0;
-    }
-    .calculator__extra[data-extra-id="pages"] > label {
-      grid-row: 1 / 3;
-    }
-    .calculator__extra[data-extra-id="pages"] .calculator__extra-price {
-      grid-column: 2;
-      margin-left: 0;
+    .calculator__extra-details summary {
+      min-height: 44px;
     }
     .calculator__summary {
       padding: 22px;

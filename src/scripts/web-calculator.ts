@@ -7,13 +7,18 @@ export function initWebCalculator(root: HTMLElement) {
   const radios = [...root.querySelectorAll<HTMLInputElement>('[name="web-type"]')];
   const checkboxes = [...root.querySelectorAll<HTMLInputElement>('[name="web-extra"]')];
   const pages = root.querySelector<HTMLInputElement>('[name="additional-pages"]')!;
+  const groups = [...root.querySelectorAll<HTMLDetailsElement>('[data-extra-group]')];
   const notice = root.querySelector<HTMLElement>('[data-compatibility]')!;
   const form = document.querySelector<HTMLFormElement>('#web-contact-form');
   const whatsappLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-web-quote-whatsapp], [data-mobile-destination="whatsapp"]')];
   const whatsappDefaults = whatsappLinks.map(link => link.href);
   let quoteApplied = false;
   let current = calculateWebQuote({ typeId: webPricing.defaultType, extraIds: [], additionalPages: 0 });
-  root.querySelector<HTMLElement>('[data-compact-quote]')!.hidden = false;
+
+  // Native exclusive details where supported; keep the same behavior elsewhere.
+  groups.forEach(group => group.addEventListener('toggle', () => {
+    if (group.open) groups.forEach(other => { if (other !== group) other.open = false; });
+  }));
 
   function syncContact() {
     const summary = describeWebQuote(current);
@@ -48,6 +53,9 @@ export function initWebCalculator(root: HTMLElement) {
         else { removed ||= input.checked; input.checked = false; }
       }
       input.disabled = !compatible;
+      const row = input.closest<HTMLElement>('[data-extra-id]')!;
+      row.dataset.available = String(compatible);
+      row.querySelector<HTMLElement>('[data-extra-availability]')!.hidden = compatible;
     });
     current = calculateWebQuote({ typeId: id, extraIds: checkboxes.filter(input => input.checked).map(input => input.value), additionalPages: Number(pages.value) });
     if (Number(pages.value) > webPricing.maxAdditionalPages || Number(pages.value) < 0 || !Number.isInteger(Number(pages.value))) {
@@ -55,7 +63,14 @@ export function initWebCalculator(root: HTMLElement) {
       pages.value = String(pageLine?.quantity || 0);
     }
     notice.textContent = removed ? 'Se han retirado extras incompatibles con el tipo de web elegido.' : '';
+    groups.forEach(group => {
+      const count = current.lines.filter(line => group.querySelector(`[data-extra-id="${line.id}"]`)).length;
+      group.querySelector<HTMLElement>('[data-group-count]')!.textContent = `${count} ${count === 1 ? 'seleccionado' : 'seleccionados'}`;
+    });
     root.querySelector<HTMLElement>('[data-selected-type]')!.textContent = current.type.name;
+    root.querySelector<HTMLElement>('[data-included-summary]')!.textContent = current.totalCents === null
+      ? 'Revisamos tu proyecto antes de presupuestar'
+      : '✓ Diseño adaptable · Formulario de contacto · SEO básico';
     root.querySelector<HTMLElement>('[data-included-title]')!.textContent = current.totalCents === null ? 'Antes de presupuestar' : `Incluido en el precio base${current.type.includedPages ? ` · ${current.type.includedPages} ${current.type.includedPages === 1 ? 'página' : 'páginas'}` : ''}`;
     const included = root.querySelector<HTMLElement>('[data-included]')!;
     included.replaceChildren(...current.type.included.map(text => { const li = document.createElement('li'); li.textContent = text; return li; }));
@@ -69,8 +84,6 @@ export function initWebCalculator(root: HTMLElement) {
     }));
     const total = root.querySelector<HTMLOutputElement>('[data-quote-total]')!;
     total.textContent = current.totalCents === null ? 'A medida' : formatWebPrice(current.totalCents);
-    root.querySelector<HTMLElement>('[data-compact-total]')!.textContent = total.textContent;
-    root.querySelector<HTMLElement>('[data-compact-tax]')!.hidden = current.totalCents === null;
     root.querySelector<HTMLElement>('[data-quote-tax]')!.hidden = current.totalCents === null;
     root.querySelector<HTMLElement>('[data-custom-message]')!.hidden = current.totalCents !== null;
     if (quoteApplied) syncContact();

@@ -408,6 +408,14 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   .cinematic-hero.cinematic-ready .cinematic-hero__stage {
     min-height: 0;
   }
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__photo,
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__foreground,
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__projection {
+    will-change: transform;
+  }
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__poster {
+    will-change: transform, opacity;
+  }
   .cinematic-hero.cinematic-complete .cinematic-hero__stage {
     visibility: hidden;
   }

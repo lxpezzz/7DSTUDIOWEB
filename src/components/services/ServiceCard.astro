@@ -127,6 +127,11 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   .service-card--web .service-card__cta {
     margin: 0;
   }
+  .service-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
   .service-card__heading {
     display: flex;
     align-items: flex-start;
@@ -151,7 +156,8 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   }
   .service-card__description {
     max-width: 44ch;
-    margin: 12px 0 0;
+    margin: auto 0;
+    padding-block: 10px 6px;
     color: #55504b;
     font-size: 15px;
     line-height: 1.5;
@@ -159,7 +165,7 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   .service-card--local .service-card__description,
   .service-card--digital .service-card__description {
     max-width: 30ch;
-    margin-top: 14px;
+    padding-block: 12px 8px;
     font-size: 14.5px;
     line-height: 1.48;
   }

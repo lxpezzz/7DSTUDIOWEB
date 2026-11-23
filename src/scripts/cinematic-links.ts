@@ -17,6 +17,7 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
   let complete = false;
   let active = false;
   let aperture = 'none';
+  let lastClipPath = '';
 
   function sync(nextComplete: boolean) {
     complete = nextComplete;
@@ -61,7 +62,11 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
     render(matrix: string, nextComplete: boolean, photoVisible: boolean) {
       layer.style.transform = matrix;
       // The notch/hand mask also clips hit-testing, not only the photograph.
-      layer.style.clipPath = photoVisible ? aperture : 'none';
+      const nextClipPath = photoVisible ? aperture : 'none';
+      if (nextClipPath !== lastClipPath) {
+        layer.style.clipPath = nextClipPath;
+        lastClipPath = nextClipPath;
+      }
       sync(nextComplete);
     },
     destroy() {

@@ -166,19 +166,27 @@ export async function initCinematicHero() {
     let posterSize: { width: number; height: number } | null = null;
     let projectPhoto: ReturnType<typeof createPhotoProjector>;
     const debugMode = import.meta.env.DEV && new URLSearchParams(location.search).has('debugScreen');
-    const handoff = { hero, stage, layers: [photo, foreground, projection, ...(poster ? [poster] : []), outside], debug, debugMode };
+    // El póster gestiona su propia visibilidad (showPoster) para evitar alternar hidden en cada frame.
+    const handoff = { hero, stage, layers: [photo, foreground, projection, outside], debug, debugMode };
     const interaction = createCinematicLinks(hero, projection, surface);
     debug.hidden = !debugMode;
     if (debugMode) {
       debug.innerHTML = '<svg width="100%" height="100%" style="overflow:visible"><polygon fill="none" stroke="#3159e8" stroke-width="2"/><g></g></svg>';
     }
+    let lastComplete: boolean | null = null;
+    let lastNativeRes: boolean | null = null;
+    let lastOutsideInert: boolean | null = null;
     const clamp = (value: number) => Math.min(1, Math.max(0, value));
     const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
     function render() {
       const p = state.progress;
-      // Con póster activo, pasa a resolución nativa en p >= 0.40 (mientras el póster aún
-      // cubre el clon al 100%) para que durante el crossfade 0.42→0.54 las métricas coincidan al píxel.
-      hero.classList.toggle('cinematic-native-resolution', posterSize ? p >= .40 : p >= .68);
+      // Con póster activo, el clon HTML permanece siempre a resolución nativa 1×:
+      // evita el reflujo y re-rasterización síncrona de zoom:2 al cruzar p=0.40 durante el scroll.
+      const nativeRes = Boolean(posterSize) || p >= .68;
+      if (nativeRes !== lastNativeRes) {
+        hero.classList.toggle('cinematic-native-resolution', nativeRes);
+        lastNativeRes = nativeRes;
+      }
       const approach = smooth((p - .15) / .60);
       const straighten = smooth((p - .45) / .30);
       const scale = Math.exp(Math.log(zoom) * approach);
@@ -195,26 +203,36 @@ export async function initCinematicHero() {
       const screenMatrix = projectiveMatrix(current, width, height);
       projection.style.transform = screenMatrix;
       outside.style.opacity = String(1 - smooth((p - .15) / .22));
-      outside.inert = p > .37;
+      const nextOutsideInert = p > .37;
+      if (nextOutsideInert !== lastOutsideInert) {
+        outside.inert = nextOutsideInert;
+        lastOutsideInert = nextOutsideInert;
+      }
       // La foto original desaparece sin reaparecer debajo de la interfaz nueva.
       const photoOpacity = String(1 - smooth((p - .68) / .07));
       photo.style.opacity = photoOpacity;
       foreground.style.opacity = photoOpacity;
       const complete = pastEnd || p >= visualEnd;
       // Reverse: reveal the stage before transferring keyboard focus into it.
-      if (!complete) applyCinematicHandoff(handoff, false);
+      if (!complete && lastComplete !== false) {
+        applyCinematicHandoff(handoff, false);
+        lastComplete = false;
+      }
       if (poster) {
         // Transición cuando la pantalla supera ~0.55x (p=0.42→0.54) y el HTML real ya es nítido.
         const posterOpacity = posterSize ? 1 - smooth((p - .42) / .12) : 0;
         const showPoster = !complete && Boolean(posterSize) && posterOpacity > .001;
-        poster.hidden = !showPoster;
+        if (poster.hidden !== !showPoster) poster.hidden = !showPoster;
         if (showPoster && posterSize) {
           poster.style.transform = projectiveMatrix(current, posterSize.width, posterSize.height);
           poster.style.opacity = String(posterOpacity);
         }
       }
       interaction.render(screenMatrix, complete, Number(photoOpacity) > 0);
-      if (complete) applyCinematicHandoff(handoff, true);
+      if (complete && lastComplete !== true) {
+        applyCinematicHandoff(handoff, true);
+        lastComplete = true;
+      }
       if (debugMode && !complete) {
         debug.querySelector('polygon')!.setAttribute('points', current.map(point => `${point.x},${point.y}`).join(' '));
         debug.querySelector('g')!.innerHTML = current.map((point, i) => `<circle cx="${point.x}" cy="${point.y}" r="5" fill="#3159e8"/><text x="${point.x + 9}" y="${point.y - 9}" fill="#3159e8">${i + 1}</text>`).join('');
@@ -223,6 +241,7 @@ export async function initCinematicHero() {
     function measure() {
       // hidden retira las imágenes del layout al completar. Medirlas temporalmente
       // bajo el escenario oculto y volver a aplicar el estado antes del siguiente paint.
+      lastComplete = null;
       photo.hidden = false;
       foreground.hidden = false;
       width = stage.clientWidth;

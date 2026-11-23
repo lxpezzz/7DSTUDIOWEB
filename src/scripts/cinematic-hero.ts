@@ -14,11 +14,7 @@ export async function initCinematicHero() {
   const foreground = hero.querySelector<HTMLElement>('.cinematic-hero__foreground')!;
   const projection = hero.querySelector<HTMLElement>('.cinematic-hero__projection')!;
   const poster = hero.querySelector<HTMLElement>('.cinematic-hero__poster');
-  function getPosterScale(): number {
-    // Mantiene la textura GPU en ~0.64× del viewport en DPR<=1.25 y ~0.52× (1.04× físico) en HiDPI,
-    // evitando aliasing en p=0 (~0.32×) y upscaling blando durante el zoom hasta p=0.52.
-    return (window.devicePixelRatio || 1) >= 1.5 ? 0.52 : 0.64;
-  }
+  const POSTER_SCALE = 0.35;
   function configurePoster(width: number, height: number): { width: number; height: number } | null {
     if (!poster) return null;
     let src = '';
@@ -41,9 +37,8 @@ export async function initCinematicHero() {
       poster.hidden = true;
       return null;
     }
-    const posterScale = getPosterScale();
-    const posterW = width * posterScale;
-    const posterH = height * posterScale;
+    const posterW = width * POSTER_SCALE;
+    const posterH = height * POSTER_SCALE;
     poster.style.width = `${posterW}px`;
     poster.style.height = `${posterH}px`;
     let img = poster.querySelector<HTMLImageElement>('img');
@@ -57,8 +52,8 @@ export async function initCinematicHero() {
       img.src = src;
       img.dataset.src = src;
     }
-    img.style.width = `${baseW * posterScale}px`;
-    img.style.height = `${baseH * posterScale}px`;
+    img.style.width = `${baseW * POSTER_SCALE}px`;
+    img.style.height = `${baseH * POSTER_SCALE}px`;
     return { width: posterW, height: posterH };
   }
   function createReplica() {
@@ -181,9 +176,9 @@ export async function initCinematicHero() {
     const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
     function render() {
       const p = state.progress;
-      // Con póster activo, el clon HTML se mantiene siempre a resolución nativa 1×:
-      // evita reservar una capa 4× (zoom:2) oculta y elimina el reflujo al cruzar p=0.40.
-      hero.classList.toggle('cinematic-native-resolution', Boolean(posterSize) || p >= .68);
+      // Con póster activo, pasa a resolución nativa en p >= 0.40 (mientras el póster aún
+      // cubre el clon al 100%) para que durante el crossfade 0.42→0.54 las métricas coincidan al píxel.
+      hero.classList.toggle('cinematic-native-resolution', posterSize ? p >= .40 : p >= .68);
       const approach = smooth((p - .15) / .60);
       const straighten = smooth((p - .45) / .30);
       const scale = Math.exp(Math.log(zoom) * approach);
@@ -209,9 +204,8 @@ export async function initCinematicHero() {
       // Reverse: reveal the stage before transferring keyboard focus into it.
       if (!complete) applyCinematicHandoff(handoff, false);
       if (poster) {
-        // Transición suave entre p=0.42 (~0.60×) y p=0.52 (~0.78×), antes de cualquier
-        // upscaling perceptible del póster y cuando el HTML nativo ya es completamente nítido.
-        const posterOpacity = posterSize ? 1 - smooth((p - .42) / .10) : 0;
+        // Transición cuando la pantalla supera ~0.55x (p=0.42→0.54) y el HTML real ya es nítido.
+        const posterOpacity = posterSize ? 1 - smooth((p - .42) / .12) : 0;
         const showPoster = !complete && Boolean(posterSize) && posterOpacity > .001;
         poster.hidden = !showPoster;
         if (showPoster && posterSize) {

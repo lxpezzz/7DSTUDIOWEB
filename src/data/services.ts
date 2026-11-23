@@ -12,19 +12,19 @@ export interface Service {
 export const services: readonly Service[] = [
   {
     id: 'diseno-web', title: 'Diseño web', scene: 'web',
-    description: 'Webs profesionales que transmiten confianza y facilitan el contacto.',
+    description: 'Webs a medida que transmiten confianza y convierten visitas en clientes.',
     tags: ['Landing pages', 'Webs corporativas', 'Rediseños'],
     route: '/diseno-web/', published: true,
   },
   {
     id: 'seo-local', title: 'SEO local', scene: 'local',
-    description: 'Mejoramos tu visibilidad en Google para que tus clientes puedan encontrarte.',
+    description: 'Mejora tu visibilidad en Google y atrae clientes en tu zona.',
     tags: ['Perfil de Empresa', 'Reseñas', 'Optimización local'],
     route: '/seo-local/', published: true,
   },
   {
     id: 'productos-fisicos', title: 'Soluciones QR y NFC', scene: 'digital',
-    description: 'Productos personalizados con QR y NFC que conectan tu negocio físico con tus clientes.',
+    description: 'Soportes con QR y NFC que conectan tu local con tu web al instante.',
     tags: ['QR', 'NFC', 'Personalización'],
     route: '/productos/', published: true,
   },

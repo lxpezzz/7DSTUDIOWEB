@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import site from '../data/site.json';
+---
+
+<section class="section section-warm philosophy" aria-labelledby="philosophy-title">
+  <div class="container philosophy__grid">
+    <div class="philosophy__text">
+      <p class="text-label philosophy__eyebrow reveal">Nuestra idea</p>
+      <h2 id="philosophy-title" class="text-display philosophy__title reveal">
+        Cada perro tiene su ritmo.
+      </h2>
+      <div class="philosophy__body reveal">
+        <p class="text-body">
+          En Huella trabajamos con atención individual. Evitamos las prisas, priorizamos el bienestar
+          y adaptamos cada servicio al animal que tenemos entre manos.
+        </p>
+        <p class="text-body">
+          Porque un perro relajado es un perro guapo.
+        </p>
+      </div>
+    </div>
+
+    <div class="philosophy__visual reveal-scale">
+      <div class="philosophy__frame">
+        <Image
+          src={site.images.philosophy}
+          alt="Perro tranquilo recibiendo caricias durante su sesión de peluquería"
+          class="img-cover"
+          width={800}
+          height={800}
+          widths={[400, 600, 800]}
+          sizes="(max-width: 768px) 100vw, 38vw"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    overflow: hidden;
+  }
+
+  .philosophy__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .philosophy__text {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .philosophy__eyebrow {
+    color: var(--caramel);
+  }
+
+  .philosophy__title {
+    font-size: var(--text-xl);
+    color: var(--text);
+    max-width: 16ch;
+  }
+
+  .philosophy__body {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 52ch;
+  }
+
+  .philosophy__visual {
+    justify-self: stretch;
+  }
+
+  .philosophy__frame {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 3%;
+  }
+
+  @media (min-width: 768px) {
+    .philosophy__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-2xl);
+    }
+
+    .philosophy__text {
+      gap: var(--space-lg);
+    }
+  }
+</style>

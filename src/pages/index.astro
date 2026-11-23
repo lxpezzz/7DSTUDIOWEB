@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/layout/Header.astro';
 import Hero from '../components/home/Hero.astro';
 import Services from '../components/home/Services.astro';
+import Connections from '../components/home/Connections.astro';
 import Projects from '../components/home/Projects.astro';
 import Process from '../components/home/Process.astro';
 import Contact from '../components/home/Contact.astro';
@@ -13,9 +14,21 @@ import Footer from '../components/layout/Footer.astro';
   <main id="contenido">
     <Hero />
     <Services />
+    <Connections />
     <Projects />
     <Process />
-    <Contact />
+    <Contact>
+      <Fragment slot="title">Algo bueno empieza <span class="home-contact-accent">aquí.</span></Fragment>
+    </Contact>
   </main>
   <Footer />
 </BaseLayout>
+
+<style>
+  .home-contact-accent {
+    color: #e4c4b5;
+    font-style: italic;
+    font-synthesis: style;
+    font-weight: 550;
+  }
+</style>

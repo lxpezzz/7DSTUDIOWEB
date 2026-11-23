@@ -1,4 +1,4 @@
-# 7D Studio · v2
+# 7DStudio · v2
 
 Home estática con Astro, TypeScript, Tailwind CSS v4 y Geist autohospedada mediante Fontsource. Hero cinematográfico con GSAP y ScrollTrigger, cargados bajo demanda en escritorio/tablet sin preferencia de movimiento reducido. Sin rastreadores, cookies no necesarias ni frameworks cliente.
 

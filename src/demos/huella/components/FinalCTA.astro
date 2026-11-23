@@ -1,0 +1,77 @@
+---
+import site from '../data/site.json';
+---
+
+<section class="final-cta" aria-labelledby="final-cta-title">
+  <div class="container final-cta__inner">
+    <div class="final-cta__content reveal">
+      <p class="text-label final-cta__eyebrow">¿Le toca sesión?</p>
+      <h2 id="final-cta-title" class="text-display final-cta__title">
+        Escríbenos y reservamos el mejor momento.
+      </h2>
+      <a href={site.social.whatsapp} class="btn final-cta__button" target="_blank" rel="noopener noreferrer">
+        Pedir cita por WhatsApp
+      </a>
+      <p class="final-cta__note">Respuesta en menos de 24h · Sin compromiso</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    position: relative;
+    padding-block: var(--space-2xl);
+    background-color: var(--green);
+    color: var(--surface);
+    overflow: hidden;
+  }
+
+  .final-cta__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .final-cta__content {
+    display: grid;
+    gap: var(--space-md);
+    justify-items: start;
+    max-width: 720px;
+  }
+
+  .final-cta__eyebrow {
+    opacity: 0.8;
+    color: var(--caramel-light);
+  }
+
+  .final-cta__title {
+    font-size: var(--text-xl);
+  }
+
+  .final-cta__button {
+    background-color: var(--surface);
+    color: var(--green);
+    border-color: var(--surface);
+    margin-top: var(--space-xs);
+  }
+
+  .final-cta__button:hover {
+    background-color: var(--bg);
+    border-color: var(--bg);
+    color: var(--green-dark);
+  }
+
+  .final-cta__button:focus-visible {
+    outline-color: var(--surface);
+  }
+
+  .final-cta__note {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+  }
+
+  @media (min-width: 768px) {
+    .final-cta__title {
+      font-size: var(--text-2xl);
+    }
+  }
+</style>

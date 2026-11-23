@@ -1,0 +1,148 @@
+---
+import site from '../data/site.json';
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="container footer__inner">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <span class="footer__logo">{site.name}</span>
+        <p class="footer__tagline">{site.tagline}</p>
+      </div>
+
+      <nav class="footer__nav" aria-label="Footer">
+        <ul class="footer__list">
+          <li><a href="#servicios" class="footer__link">Servicios</a></li>
+          <li><a href="#nosotros" class="footer__link">Nosotros</a></li>
+          <li><a href="#trabajos" class="footer__link">Trabajos</a></li>
+          <li><a href="#opiniones" class="footer__link">Opiniones</a></li>
+          <li><a href="#contacto" class="footer__link">Contacto</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__contact">
+        <a href={site.social.instagram} class="footer__link" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href={site.social.whatsapp} class="footer__link" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href={site.address.mapsUrl} class="footer__link" target="_blank" rel="noopener noreferrer">Ubicación</a>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="footer__legal">
+        <a href="#" class="footer__legal-link">Aviso legal</a>
+        <a href="#" class="footer__legal-link">Privacidad</a>
+      </div>
+      <p class="footer__credit">
+        Demo creada por <a href={site.demo.creatorUrl} class="footer__credit-link">{site.demo.creator}</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-xl);
+    background-color: var(--bg);
+    color: var(--text);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .footer__logo {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+  }
+
+  .footer__tagline {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .footer__list,
+  .footer__contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+  }
+
+  .footer__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .footer__link:hover,
+  .footer__link:focus-visible {
+    color: var(--text);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer__legal {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .footer__legal-link {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    transition: color var(--transition-fast);
+  }
+
+  .footer__legal-link:hover,
+  .footer__legal-link:focus-visible {
+    color: var(--text);
+  }
+
+  .footer__credit {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+  }
+
+  .footer__credit-link {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (min-width: 768px) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: start;
+    }
+
+    .footer__list,
+    .footer__contact {
+      flex-direction: column;
+    }
+
+    .footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+</style>

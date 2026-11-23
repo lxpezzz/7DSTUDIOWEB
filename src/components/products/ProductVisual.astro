@@ -1,13 +1,35 @@
 ---
 import ProductIcon from './ProductIcon.astro';
 import type { Product } from '../../data/products';
+import { brand } from '../../data/brand';
 interface Props { format: Product['format'] }
 const { format } = Astro.props;
 const upright = format === 'stand' || format === 'reviews';
 ---
 <div class:list={['product-visual', `product-visual--${format}`]} aria-hidden="true">
-  <div class:list={['product-object', { 'product-object--upright': upright }]}>
-    <div class="product-object__brand">7D<span>STUDIO</span></div>
+  {upright ? (
+    <svg class="product-stand" viewBox="35 0 210 248" fill="none" aria-hidden="true">
+      <ellipse cx="148" cy="220" rx="78" ry="7" fill="#554555" opacity=".1" />
+      <path d="m74 188 130 10 25 16-132-10Z" fill="#eae1e8" stroke="#c5b6c2" stroke-linejoin="round" />
+      <path d="m97 204 132 10v5L97 209Z" fill="#c5b6c2" stroke="#826d80" stroke-width=".6" stroke-linejoin="round" />
+      <path d="m196 34 5-2 8 164-5 2Z" fill="#c5b6c2" stroke="#826d80" stroke-width=".6" stroke-linejoin="round" />
+      <g transform="matrix(1 .08 .05 1 66 24)">
+        <rect class="product-stand__panel" width="130" height="164" rx="3" fill="#f7f5f3" stroke="#c5b6c2" />
+        <path d="M3 160V4a1 1 0 0 1 1-1h122" stroke="#fff" stroke-opacity=".65" />
+        <image href={format === 'reviews' ? brand.logoWhite : brand.logo} x="17" y="15" width="96" height="21" />
+        <svg x="32" y="54" width="66" height="66" viewBox="0 0 25 25" fill="currentColor">
+          <use href="/icons/sprite.svg#icon-qr" />
+        </svg>
+        <path d="M38 132h54M48 138h34" stroke="currentColor" stroke-opacity=".5" stroke-width="2" />
+        <g transform="translate(104 141) scale(.65)">
+          <ProductIcon name="nfc" size={20} />
+        </g>
+      </g>
+      <path d="m80 191 121 10" stroke="#fff" stroke-opacity=".65" />
+    </svg>
+  ) : (
+  <div class="product-object">
+    <div class="product-object__brand"><img src={format === 'card' ? brand.logoWhite : brand.logo} width="990" height="215" alt="" loading="lazy" decoding="async" /></div>
     {format === 'chip' ? <div class="product-object__coil"><ProductIcon name="nfc" size={40} /></div> : (
       <>
         <span class="product-object__symbol"><ProductIcon name={format === 'card' ? 'nfc' : 'qr'} size={upright ? 58 : 44} /></span>
@@ -17,24 +39,19 @@ const upright = format === 'stand' || format === 'reviews';
       </>
     )}
   </div>
-  {upright && <div class="product-object__base"></div>}
+  )}
 </div>
 
 <style>
   .product-visual { display: grid; place-items: center; position: relative; height: 248px; background: #eae1e8; overflow: hidden; color: #554555; }
   .product-object { position: relative; width: 226px; height: 136px; padding: 18px; border: 1px solid #c5b6c2; border-radius: 9px; background: #f7f5f3; transform: rotate(-9deg); box-shadow: 0 14px 22px rgb(85 69 85 / 12%); }
-  .product-object__brand { display: flex; align-items: baseline; gap: 6px; font-size: 26px; font-weight: 650; letter-spacing: -.04em; }
-  .product-object__brand span { font-size: 8px; letter-spacing: .1em; }
+  .product-object__brand { width: 110px; }
+  .product-object__brand img { display: block; width: 100%; height: auto; }
   .product-object__symbol { position: absolute; right: 18px; bottom: 23px; }
   .product-object__line { display: block; width: 64px; height: 3px; margin-top: 16px; background: #826d80; }
   .product-object__line--short { width: 40px; margin-top: 7px; opacity: .5; }
   .product-object__nfc { position: absolute; top: 18px; right: 18px; }
-  .product-object--upright { width: 146px; height: 184px; transform: rotate(6deg); border-radius: 7px 7px 2px 2px; z-index: 1; }
-  .product-object--upright .product-object__symbol { right: 44px; bottom: 48px; }
-  .product-object--upright .product-object__line { position: absolute; bottom: 25px; left: 40px; }
-  .product-object--upright .product-object__line--short { display: none; }
-  .product-object--upright .product-object__nfc { top: auto; bottom: 19px; right: 17px; }
-  .product-object__base { position: absolute; width: 180px; height: 16px; bottom: 25px; border-radius: 50%; background: #c5b6c2; transform: rotate(6deg); }
+  .product-stand { width: 230px; max-width: 100%; height: 248px; overflow: visible; }
   .product-visual--card .product-object { background: #554555; color: #f7f5f3; border-color: #554555; }
   .product-visual--card .product-object__line { background: #eae1e8; }
   .product-visual--chip { background: #eee9ec; }
@@ -44,12 +61,15 @@ const upright = format === 'stand' || format === 'reviews';
   .product-visual--qr-card { background: #eee9ec; }
   .product-visual--qr-card .product-object { transform: rotate(7deg); }
   .product-visual--sticker .product-object { width: 140px; height: 140px; transform: rotate(-7deg); border-radius: 28px; }
-  .product-visual--sticker .product-object__brand { font-size: 20px; }
+  .product-visual--sticker .product-object__brand { width: 90px; }
   .product-visual--sticker .product-object__symbol { right: 47px; bottom: 22px; }
   .product-visual--sticker .product-object__line { display: none; }
   .product-visual--sticker .product-object__nfc { top: auto; bottom: 19px; right: 16px; }
   .product-visual--reviews { background: #eee9ec; }
-  .product-visual--reviews .product-object { transform: rotate(-5deg); background: #554555; color: #f7f5f3; border-color: #554555; }
-  .product-visual--reviews .product-object__line { background: #eae1e8; }
-  @media (max-width: 599px) { .product-visual { height: 224px; } }
+  .product-visual--reviews .product-stand { color: #f7f5f3; }
+  .product-visual--reviews .product-stand__panel { fill: #554555; stroke: #554555; }
+  @media (max-width: 599px) {
+    .product-visual { height: 224px; }
+    .product-stand { height: 224px; }
+  }
 </style>

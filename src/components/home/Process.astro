@@ -37,7 +37,7 @@ const steps = [
 <section id="como-trabajamos" class="process section container" aria-labelledby="process-title">
   <div class="process__heading">
     <h2 id="process-title" class="section-title">
-      De la idea a la realidad.<br />Sin complicaciones.
+      De la idea a la realidad. Sin complicaciones.
     </h2>
   </div>
   <ol class="process__steps">
@@ -81,8 +81,11 @@ const steps = [
     text-align: center;
   }
   .process__heading h2 {
-    max-width: 760px;
+    max-width: 25ch;
     margin-inline: auto;
+    font-size: clamp(30px, 3.3vw, 48px);
+    font-weight: 500;
+    line-height: 1.15;
   }
   .process__steps {
     display: grid;

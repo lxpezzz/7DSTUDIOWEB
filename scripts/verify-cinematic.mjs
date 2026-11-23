@@ -3,6 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import strictAssert from 'node:assert/strict';
+import { createQAContext } from './qa-browser.mjs';
 const failures = [];
 const check = fn => (...args) => { try { fn(...args); } catch (error) { failures.push(error.message); } };
 const assert = new Proxy(strictAssert, { get: (target, key) => typeof target[key] === 'function' ? check(target[key]) : target[key] });
@@ -37,7 +38,7 @@ async function scroll(page, y) {
 }
 try {
   for (const [width, height] of [[1440, 900], [1920, 1080], [1024, 768], [768, 1024], [390, 844], [360, 800]]) {
-    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'no-preference' });
+    const context = await createQAContext(browser, { viewport: { width, height }, reducedMotion: 'no-preference' });
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -141,15 +142,13 @@ try {
             return Boolean(document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)?.closest('#servicios'));
           });
           assert.equal(result.realContentReceivesPointer, true, 'El pin no debe bloquear Servicios al terminar');
-          const title = page.locator('#servicios [data-service="diseno-web"] h3');
+          // Las tarjetas ya son enlaces publicados. Seleccionar el encabezado
+          // no enlazado prueba el HTML real sin activar una navegación nativa.
+          const title = page.locator('#services-title');
           await title.evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
           await settle(page);
-          const box = await title.boundingBox();
-          await page.mouse.move(box.x + 1, box.y + box.height / 2);
-          await page.mouse.down();
-          await page.mouse.move(box.x + box.width - 1, box.y + box.height / 2, { steps: 18 });
-          await page.mouse.up();
-          assert.equal(await page.evaluate(() => getSelection().toString().trim()), 'Diseño web', 'Selección nativa del título real');
+          await title.dblclick();
+          assert.ok(await page.evaluate(() => getSelection().toString().trim().length > 0), 'Selección nativa del título real');
           await page.evaluate(() => getSelection().removeAllRanges());
           await scroll(page, pinDistance);
         }
@@ -181,7 +180,8 @@ try {
     await context.close();
   }
   for (const options of [{ reducedMotion: 'reduce' }, { javaScriptEnabled: false }]) {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, ...options });
+    const context = await createQAContext(browser, { viewport: { width: 1440, height: 900 }, ...options });
+    const page = await context.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
     await page.evaluate(() => document.fonts.ready);
     await settle(page);
@@ -191,7 +191,7 @@ try {
     await page.locator('#servicios').scrollIntoViewIfNeeded();
     assert.ok(await page.locator('#services-title').isVisible());
     await page.screenshot({ path: `${output}/${options.reducedMotion ? 'reduced' : 'nojs'}.png` });
-    await page.close();
+    await context.close();
   }
   assert.deepEqual(errors, []);
   await writeFile(`${output}/qa.json`, JSON.stringify({ results, errors, failures, reducedMotion: 'static', noJavaScript: 'visible' }, null, 2));

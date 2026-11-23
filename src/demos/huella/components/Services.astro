@@ -1,0 +1,150 @@
+---
+import site from "../data/site.json";
+---
+
+<section
+  id="servicios"
+  class="section services"
+  aria-labelledby="services-title"
+>
+  <div class="container">
+    <div class="services__header reveal">
+      <p class="text-label services__eyebrow">Qué hacemos</p>
+      <h2 id="services-title" class="text-display services__title">
+        Servicios con calma
+      </h2>
+    </div>
+
+    <ul class="services__bento" role="list">
+      {
+        site.services.map((service, index) => (
+          <li class={`services__item services__item--${index + 1}`}>
+            <article
+              class={`services__card reveal ${index === 0 ? "services__card--featured" : ""}`}
+            >
+              <span class="services__number">{service.number}</span>
+              <h3 class="services__name">{service.title}</h3>
+              <p class="services__desc">{service.description}</p>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services__header {
+    margin-bottom: var(--space-xl);
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .services__eyebrow {
+    color: var(--caramel);
+  }
+
+  .services__title {
+    font-size: var(--text-xl);
+    max-width: 18ch;
+  }
+
+  .services__bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background-color: var(--border);
+    overflow: hidden;
+    border-radius: 3%;
+  }
+
+  .services__card {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background-color: var(--surface);
+    height: 100%;
+    transition: background-color var(--transition-base);
+  }
+
+  .services__card:hover {
+    background-color: var(--bg);
+  }
+
+  .services__card--featured {
+    background-color: var(--green);
+    color: var(--surface);
+  }
+
+  .services__card--featured:hover {
+    background-color: var(--green-dark);
+  }
+
+  .services__card--featured .services__desc {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .services__number {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    line-height: 1;
+    color: var(--caramel);
+  }
+
+  .services__card--featured .services__number {
+    color: var(--caramel-light);
+  }
+
+  .services__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+
+  .services__desc {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (min-width: 768px) {
+    .services__bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .services__item--1 {
+      grid-column: span 2;
+    }
+
+    .services__item--4 {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services__bento {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .services__item--1 {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .services__item--1 .services__card {
+      padding: var(--space-lg);
+    }
+
+    .services__item--1 .services__number {
+      font-size: var(--text-xl);
+    }
+
+    .services__item--1 .services__name {
+      font-size: var(--text-xl);
+    }
+
+    .services__item--4 {
+      grid-column: span 1;
+    }
+  }
+</style>

@@ -16,6 +16,7 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       />
     </div>
     <div class="cinematic-hero__projection" aria-hidden="true" inert></div>
+    <div class="cinematic-hero__poster" aria-hidden="true" inert hidden></div>
     <div class="cinematic-hero__foreground" aria-hidden="true">
       <svg
         viewBox={`0 0 ${heroScene.width} ${heroScene.height}`}
@@ -47,38 +48,55 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     <div class="cinematic-hero__interaction" hidden></div>
     <div class="cinematic-hero__outside">
       <div class="cinematic-hero__copy">
+        <p class="cinematic-hero__eyebrow">Estudio web independiente</p>
         <h1 id="hero-title">
-          Tu negocio,<br />mejor presentado.<br /><span
-            >Y más fácil de encontrar.</span
-          >
+          Tu negocio,<br />mejor presentado.
         </h1>
+        <p class="cinematic-hero__subtitle">
+          Y más fácil de <span class="cinematic-hero__underline">encontrar.</span>
+        </p>
         <p class="cinematic-hero__description">
           Diseño web, SEO local y soluciones digitales para conectar tu negocio
           con tus clientes.
         </p>
-        <a class="button" href="#contacto"
-          >Cuéntanos tu proyecto <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
-          ></a
-        >
+        <div class="cinematic-hero__actions">
+          <a class="button cinematic-hero__cta-primary" href="#contacto"
+            >Cuéntanos tu proyecto <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
+            ></a
+          >
+          <a class="cinematic-hero__cta-secondary" href="#proyectos"
+            >Ver nuestros trabajos <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
+            ></a
+          >
+        </div>
       </div>
-      <a class="cinematic-hero__scroll" href="#servicios"
-        >DESLIZA PARA EXPLORAR <svg
-          width="15"
-          height="15"
+      <a class="cinematic-hero__scroll" href="#servicios">
+        <span class="cinematic-hero__scroll-line" aria-hidden="true"></span>
+        <span>DESLIZA HACIA ABAJO</span>
+        <svg
+          width="14"
+          height="14"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="1.5"
+          stroke-width="1.75"
           aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"></path></svg
-        ></a
-      >
+        >
+      </a>
     </div>
     <div class="cinematic-hero__debug" aria-hidden="true" hidden></div>
   </div>
@@ -152,6 +170,54 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     pointer-events: none;
     visibility: hidden;
   }
+  /* Capa estática dedicada proyectada a ~0.35x del viewport (casi 1:1 con la pantalla
+     del portátil) para evitar el submuestreo bilineal de matrix3d() en p=0. */
+  .cinematic-hero__poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: #f4f1eb;
+    pointer-events: none;
+  }
+  .cinematic-hero__poster :global(img) {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    max-width: none;
+    pointer-events: none;
+  }
+  /* Sobremuestreo del HTML sin cambiar su composición ni los puntos proyectados.
+     Se fija el ancho lógico al medir, nunca durante los frames del zoom. */
+  .cinematic-hero__projection :global(.cinematic-hero__replica) {
+    transform-origin: 0 0;
+  }
+  .cinematic-hero__projection :global(header.cinematic-hero__replica-header) {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .cinematic-hero__projection :global(header.cinematic-hero__replica-header .nav > span) {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 44px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  @media (max-resolution: 1.49dppx) {
+    @supports (zoom: 2) {
+      .cinematic-hero:not(.cinematic-native-resolution) .cinematic-hero__projection :global(.cinematic-hero__replica) {
+        zoom: 2;
+        transform: scale(.5);
+      }
+    }
+  }
   .cinematic-hero__outside {
     position: relative;
     z-index: 3;
@@ -164,43 +230,164 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   }
   .cinematic-hero__copy {
     position: absolute;
-    top: max(150px, 20%);
+    top: max(112px, 12.5%);
     left: var(--gutter);
-    width: 31%;
-    max-width: 470px;
+    width: min(29%, 440px);
+  }
+  .cinematic-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 14px;
+    color: var(--color-muted);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .cinematic-hero__eyebrow::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+    flex-shrink: 0;
   }
   h1 {
     margin: 0;
-    font-size: clamp(36px, 3.4vw, 58px);
-    font-weight: 450;
-    line-height: 1.045;
-    letter-spacing: -0.04em;
+    width: max-content;
+    max-width: calc(100vw - var(--gutter) * 2);
+    color: var(--color-ink);
+    font-size: clamp(44px, 4.6vw, 84px);
+    font-weight: 550;
+    line-height: 0.96;
+    letter-spacing: -0.048em;
   }
-  h1 span {
-    display: block;
-    max-width: 12ch;
-    margin-top: 14px;
-    color: #565656;
-    font-size: 0.78em;
+  .cinematic-hero__subtitle {
+    margin: 16px 0 0;
+    color: #66615b;
+    font-size: clamp(32px, 3.1vw, 52px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.032em;
+  }
+  .cinematic-hero__underline {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.16em;
+    text-decoration-color: currentColor;
+    text-decoration-skip-ink: auto;
   }
   .cinematic-hero__description {
-    max-width: 330px;
-    margin: 26px 0 22px;
-    font-size: 15px;
-    line-height: 1.6;
+    max-width: 28ch;
+    margin: 22px 0 28px;
+    color: var(--color-muted);
+    font-size: clamp(19px, 1.55vw, 24px);
+    line-height: 1.48;
   }
-  .cinematic-hero__scroll {
-    position: none;
-    left: var(--gutter);
-    padding-top: 18px;
-    bottom: 32px;
+  .cinematic-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 26px;
+  }
+  .cinematic-hero__cta-primary {
+    min-height: 62px;
+    padding: 18px 30px;
+    gap: 20px;
+    font-size: 20px;
+  }
+  .cinematic-hero__cta-secondary {
     display: inline-flex;
     align-items: center;
-    gap: 22px;
+    gap: 9px;
     min-height: 44px;
-    color: var(--color-paper);
-    font-size: 9px;
-    letter-spacing: 0.1em;
+    color: var(--color-ink);
+    font-size: 20px;
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+    text-decoration-color: rgba(23, 23, 23, 0.35);
+    transition: text-decoration-color 0.25s ease, color 0.25s ease;
+  }
+  .cinematic-hero__cta-secondary svg {
+    transition: transform 0.3s ease;
+  }
+  .cinematic-hero__cta-secondary:hover {
+    text-decoration-color: currentColor;
+  }
+  .cinematic-hero__cta-secondary:hover svg,
+  .cinematic-hero__cta-secondary:focus-visible svg {
+    transform: translate(3px, -3px);
+  }
+  .cinematic-hero__scroll {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(50px, 6.8svh, 72px);
+    width: max-content;
+    margin-inline: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    opacity: 0.96;
+    transition: opacity 0.25s ease;
+  }
+  .cinematic-hero__scroll:hover {
+    opacity: 1;
+  }
+  .cinematic-hero__scroll svg {
+    transition: transform 0.25s ease;
+  }
+  .cinematic-hero__scroll:hover svg,
+  .cinematic-hero__scroll:focus-visible svg {
+    transform: translateY(3px);
+  }
+  .cinematic-hero__scroll-line {
+    display: block;
+    width: 1px;
+    height: 22px;
+    background: currentColor;
+    opacity: 0.8;
+  }
+  @keyframes hero-reveal {
+    from {
+      opacity: 0.01;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .cinematic-hero__eyebrow {
+      animation: hero-reveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+    h1 {
+      animation: hero-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.06s backwards;
+    }
+    .cinematic-hero__subtitle {
+      animation: hero-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.12s backwards;
+    }
+    .cinematic-hero__description {
+      animation: hero-reveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.18s backwards;
+    }
+    .cinematic-hero__actions {
+      animation: hero-reveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.22s backwards;
+    }
+    .cinematic-hero__scroll {
+      animation: hero-reveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.28s backwards;
+    }
   }
   .cinematic-hero__debug {
     position: absolute;
@@ -249,17 +436,33 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       top: 180px;
     }
     .cinematic-hero__copy {
-      top: 135px;
-      width: 55%;
-      max-width: 440px;
+      top: 102px;
+      width: 68%;
+      max-width: 520px;
+    }
+    .cinematic-hero__eyebrow {
+      margin-bottom: 10px;
+      font-size: 10px;
     }
     h1 {
-      font-size: clamp(36px, 4.6vw, 48px);
+      width: auto;
+      font-size: clamp(34px, 4.4vw, 46px);
+    }
+    .cinematic-hero__subtitle {
+      margin-top: 8px;
+      font-size: clamp(19px, 2.4vw, 26px);
     }
     .cinematic-hero__description {
-      margin-top: 18px;
+      margin: 12px 0 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .cinematic-hero__cta-primary {
+      min-height: 46px;
+      padding: 12px 20px;
     }
     .cinematic-hero__scroll {
+      bottom: calc(var(--mobile-nav-height) + 16px);
       color: var(--color-ink);
       background: var(--color-paper);
       padding-inline: 12px;
@@ -279,26 +482,45 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     .cinematic-hero__copy {
       position: static;
       order: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
       width: auto;
       max-width: none;
-      margin: 36px var(--gutter) 32px;
+      margin: 32px var(--gutter) 28px;
+    }
+    .cinematic-hero__eyebrow {
+      margin-bottom: 16px;
+      font-size: 10px;
     }
     h1 {
-      font-size: clamp(43px, 8.6vw, 64px);
+      width: auto;
+      margin-inline: auto;
+      font-size: clamp(40px, 9.6vw, 56px);
+      line-height: 1.02;
       max-width: 12ch;
     }
-    h1 span {
-      max-width: 13ch;
+    .cinematic-hero__subtitle {
+      margin: 12px auto 0;
+      font-size: clamp(22px, 5.4vw, 30px);
+      max-width: 16ch;
     }
     .cinematic-hero__description {
-      margin-top: 24px;
-      font-size: 16px;
+      margin: 20px auto 24px;
+      font-size: 15px;
+    }
+    .cinematic-hero__actions {
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
     .cinematic-hero__photo {
       display: none;
     }
     .cinematic-hero.cinematic-projected .cinematic-hero__foreground,
-    .cinematic-hero__projection {
+    .cinematic-hero__projection,
+    .cinematic-hero__poster {
       display: none;
     }
     .cinematic-hero__scroll {
@@ -308,12 +530,12 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
       /* Centrado horizontal */
       align-self: center;
       justify-content: center;
-      margin: 0 auto 20px;
+      margin: 4px auto 20px;
 
-      /* Distribución del texto y la flecha */
+      /* Distribución del texto y la línea */
       display: inline-flex;
       align-items: center;
-      gap: 20px;
+      gap: 12px;
 
       /* Estética */
       width: max-content;

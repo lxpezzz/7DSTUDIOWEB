@@ -1,0 +1,138 @@
+{
+  "name": "Huella",
+  "tagline": "Peluquería canina con calma",
+  "description": "Peluquería canina cercana en la que cada perro recibe atención individual, buenos productos y el tiempo que necesita.",
+  "phone": "+34 600 789 012",
+  "whatsapp": "34600789012",
+  "email": "hola@huella.pet",
+  "address": {
+    "street": "Calle de la Alameda, 12",
+    "city": "Madrid",
+    "zip": "28014",
+    "mapsUrl": "https://maps.google.com/?q=Calle+de+la+Alameda+12+Madrid"
+  },
+  "hours": [
+    {
+      "days": "Lunes a Viernes",
+      "time": "09:30 – 19:00"
+    },
+    {
+      "days": "Sábados",
+      "time": "10:00 – 14:00"
+    }
+  ],
+  "social": {
+    "instagram": "https://instagram.com/huella.pet",
+    "whatsapp": "https://wa.me/34600789012"
+  },
+  "demo": {
+    "creator": "7DStudio",
+    "creatorUrl": "/",
+    "basePath": "/demos/huella",
+    "badgeText": "Demo ficticia creada por 7DStudio"
+  },
+  "meta": {
+    "title": "Huella — Peluquería canina con calma",
+    "ogImage": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=1200&q=80"
+  },
+  "images": {
+    "heroMain": "/images/hero-main.webp",
+    "heroSecondary": "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=800&q=80",
+    "philosophy": "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&w=800&q=80",
+    "gallery": [
+      "/images/gallery/gallery-01.webp",
+      "/images/gallery/gallery-02.webp",
+      "/images/gallery/gallery-03.webp",
+      "/images/gallery/gallery-04.webp",
+      "/images/gallery/gallery-05.webp",
+      "/images/gallery/gallery-06.webp"
+    ],
+    "beforeAfter": [
+      {
+        "before": "/images/before-after/before-01.webp",
+        "after": "/images/before-after/after-01.webp"
+      },
+      {
+        "before": "/images/before-after/after-02.webp",
+        "after": "/images/before-after/before-02.webp"
+      }
+    ],
+    "about": "/images/about/about-01.webp",
+    "reviewers": [
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+    ]
+  },
+  "services": [
+    {
+      "number": "01",
+      "title": "Baño + cuidado",
+      "description": "Baño relajante con productos naturales, secado sin prisas y cepillado completo."
+    },
+    {
+      "number": "02",
+      "title": "Corte",
+      "description": "Corte a mano adaptado a la raza, el pelo y el carácter de cada perro."
+    },
+    {
+      "number": "03",
+      "title": "Deslanado",
+      "description": "Eliminamos el pelo muerto para que respiren mejor y tu casa también."
+    },
+    {
+      "number": "04",
+      "title": "Higiene",
+      "description": "Corte de uñas, limpieza de oídos y cuidado de almohadillas incluidos."
+    },
+    {
+      "number": "05",
+      "title": "Tratamientos",
+      "description": "Hidratación, suavizantes y mascarillas para pelos que lo necesiten."
+    },
+    {
+      "number": "06",
+      "title": "Cachorros",
+      "description": "Primera visita suave para que se familiaricen con la peluquería."
+    }
+  ],
+  "reviews": [
+    {
+      "quote": "Lola normalmente se pone nerviosa en las peluquerías y aquí entra encantada.",
+      "name": "Laura",
+      "dog": "Lola"
+    },
+    {
+      "quote": "Notas que entienden a los perros. No es solo cortar pelo, es cuidarlos.",
+      "name": "Carlos",
+      "dog": "Rocky"
+    },
+    {
+      "quote": "Le dedican el tiempo que haga falta. Volvemos siempre que podemos.",
+      "name": "Marta",
+      "dog": "Kiwi"
+    }
+  ],
+  "process": [
+    {
+      "step": "01",
+      "title": "Escríbenos",
+      "description": "Cuéntanos quién viene y qué necesita."
+    },
+    {
+      "step": "02",
+      "title": "Conocemos a tu perro",
+      "description": "Nos adaptamos a su ritmo antes de empezar."
+    },
+    {
+      "step": "03",
+      "title": "Nos ponemos guapos",
+      "description": "Baño, corte o cuidado con tiempo y buenas manos."
+    },
+    {
+      "step": "04",
+      "title": "A presumir",
+      "description": "Te avisamos y vuelve a casa oloroso y feliz."
+    }
+  ]
+}

@@ -1,23 +1,27 @@
 // Completar con datos contrastados del titular. No sustituir por datos de ejemplo.
 export const legal = {
-  updatedAt: '2026-10-30',
-  reviewed: false,
-  // Mantener false: el titular aún no ha creado su cuenta de Web3Forms.
-  formsEnabled: false,
-  entityName: '',
-  taxId: '',
-  address: '',
-  email: '',
+  updatedAt: '2026-11-04',
+  reviewed: true,
+  // Revisión editorial pendiente: no controla la activación técnica de formularios.
+  // No marcar como completa sin verificar proveedores y condiciones pendientes.
+  publicationReady: false,
+  // Integración autorizada por el titular. La activación sigue sujeta a
+  // completar la identidad y revisar la privacidad (site.privacyReady).
+  formsEnabled: true,
+  entityName: 'Héctor López Díaz',
+  taxId: '20925225D',
+  address: 'Calle Carlos González Espresati, 19, 12004 Castellón de la Plana, España',
+  email: '7dstudio.es@gmail.com',
   registry: '',
   authorizations: '',
   hostingProvider: '',
   hostingLocation: '',
   emailProvider: '',
   retentionSchedule: '',
-  paymentTerms: '',
-  deliveryTerms: '',
-  revisionTerms: '',
-  cancellationTerms: '',
+  paymentTerms: 'Según contrato o acuerdo previo',
+  deliveryTerms: 'De 2 a 3 semanas desde la recepción del contenido necesario, según el alcance del proyecto',
+  revisionTerms: 'Según contrato o acuerdo previo',
+  cancellationTerms: 'Según contrato o acuerdo previo',
 };
 
 export const legalLinks = [
@@ -39,4 +43,6 @@ export const legalSources = {
   web3formsDpa: 'https://web3forms.com/dpa',
 };
 
-export const pendingValue = (value: string) => value || '…';
+export const pendingValue = (value: string) => value || 'Pendiente de confirmar';
+
+export const formPrivacyNotice = `Responsable: ${legal.entityName}. Usamos tus datos para atender la consulta o preparar el presupuesto solicitado, sobre la base de medidas precontractuales o del consentimiento para otras consultas. Sin publicidad. El envío se procesa por Web3Forms y correo y puede implicar transferencias internacionales. Puedes solicitar acceso, rectificación, supresión y los demás derechos en ${legal.email}. Consulta los detalles y las verificaciones pendientes en la política de privacidad enlazada arriba.`;

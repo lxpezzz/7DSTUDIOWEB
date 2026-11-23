@@ -1,0 +1,28 @@
+/* Recursos opt-in para fragmentos de H1/H2; nunca afectan a títulos sin clase. */
+.heading-emphasis {
+  font-weight: 650;
+}
+
+.heading-quiet {
+  font-weight: 400;
+}
+
+.heading-accent {
+  color: var(--heading-accent);
+}
+
+.heading-underline {
+  text-decoration-line: underline;
+  text-decoration-thickness: .035em;
+  text-underline-offset: .12em;
+  text-decoration-skip-ink: auto;
+}
+
+.heading-aside {
+  display: block;
+  margin-top: .22em;
+  font-size: .72em;
+  font-weight: 450;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}

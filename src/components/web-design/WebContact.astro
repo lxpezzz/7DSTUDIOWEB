@@ -1,4 +1,5 @@
 ---
+import { formPrivacyNotice } from "../../data/legal";
 import { site } from "../../data/site";
 const configured = site.formsConfigured;
 const privacyReady = site.privacyReady;
@@ -12,7 +13,7 @@ const privacyReady = site.privacyReady;
   <div class="web-contact__panel">
     <div class="web-contact__copy">
       <p class="web-eyebrow">HABLEMOS DE TU NEGOCIO</p>
-      <h2 id="web-contact-title">¿Hablamos de tu próxima web?</h2>
+      <h2 id="web-contact-title">¿Hablamos de <span class="heading-accent">tu próxima web?</span></h2>
       <p>
         Cuéntanos qué negocio tienes y qué te gustaría conseguir. Te ayudamos a
         darle forma.
@@ -63,9 +64,9 @@ const privacyReady = site.privacyReady;
             <input
               type="hidden"
               name="subject"
-              value="Consulta Diseño Web · 7D Studio"
+              value="Consulta Diseño Web · 7DStudio"
             />
-            <input type="hidden" name="from_name" value="7D Studio" />
+            <input type="hidden" name="from_name" value="7DStudio" />
           </>
         )
       }
@@ -161,7 +162,7 @@ const privacyReady = site.privacyReady;
           !privacyReady
             ? "El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp."
             : configured
-              ? "Usaremos tus datos para responder a tu consulta. El envío se procesa a través de Web3Forms."
+              ? formPrivacyNotice
               : "El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente."
         }
       </p>

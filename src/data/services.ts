@@ -23,9 +23,9 @@ export const services: readonly Service[] = [
     route: '/seo-local/', published: true,
   },
   {
-    id: 'productos-fisicos', title: 'Productos físicos', scene: 'digital',
-    description: 'Productos físicos personalizados con QR y NFC para mejorar la experiencia de tus clientes.',
-    tags: ['QR', 'NFC', 'Personalizados'],
+    id: 'productos-fisicos', title: 'Soluciones QR y NFC', scene: 'digital',
+    description: 'Productos personalizados con QR y NFC que conectan tu negocio físico con tus clientes.',
+    tags: ['QR', 'NFC', 'Personalización'],
     route: '/productos/', published: true,
   },
 ];

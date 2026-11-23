@@ -17,10 +17,13 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
     aria-labelledby="services-title"
   >
     <div class="services__heading">
-      <p class="services__label">01 / SERVICIOS</p>
-      <h2 class="section-title" id="services-title">
-        Soluciones digitales para tu negocio.
-      </h2>
+      <div class="services__title-col">
+        <p class="services__label">01 / SERVICIOS</p>
+        <h2 class="section-title" id="services-title">
+          <span class="services__title-lead">Soluciones digitales</span>
+          <span class="services__title-focus">para tu negocio.</span>
+        </h2>
+      </div>
       <p class="services__description">
         Diseño, visibilidad y herramientas que te ayudan a conectar con tus
         clientes.
@@ -61,40 +64,82 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
     color: #171717;
   }
   .services {
-    padding-block: 120px 80px;
+    width: min(100% - var(--gutter) * 2, 1340px);
+    padding-block: 120px 96px;
   }
   .services__heading {
-    max-width: 860px;
-    margin: 0 auto 36px;
-    text-align: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.65fr);
+    align-items: end;
+    gap: 24px 48px;
+    margin: 0 0 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid #ddd8cf;
+    text-align: left;
   }
   .services__label {
-    margin: 0 0 16px;
-    color: #66615c;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 18px;
+    color: #57524d;
     font-size: 11px;
     font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.08em;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .services__label::before {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.5;
   }
   .services__heading h2 {
-    max-width: 840px;
-    margin-inline: auto;
-    font-size: clamp(34px, 3.6vw, 52px);
+    margin: 0;
+    font-size: clamp(40px, 4.7vw, 70px);
+    font-weight: 550;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    text-wrap: normal;
+  }
+  .services__title-lead {
+    display: block;
+    color: #171717;
+    font-weight: 580;
+  }
+  .services__title-focus {
+    display: block;
+    margin-top: 0.06em;
+    color: #66615b;
+    font-weight: 380;
   }
   .services__description {
-    max-width: 610px;
-    margin: 18px auto 0;
-    color: #66615c;
-    font-size: 16px;
-    line-height: 1.6;
+    max-width: 34ch;
+    margin: 0 0 4px auto;
+    color: #55504b;
+    font-size: 17px;
+    line-height: 1.58;
   }
   .services__bento {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+    gap: 24px;
     align-items: stretch;
   }
-  @media (max-width: 959px) {
+  @media (max-width: 1023px) {
+    .services__heading {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+    }
+    .services__description {
+      margin: 0;
+      max-width: 48ch;
+    }
     .services__bento {
       grid-template-columns: minmax(0, 1fr);
     }
@@ -105,6 +150,10 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
     }
     .services__heading {
       margin-bottom: 28px;
+      padding-bottom: 20px;
+    }
+    .services__heading h2 {
+      font-size: clamp(34px, 9.2vw, 48px);
     }
     .services__label {
       margin-bottom: 14px;
@@ -113,7 +162,7 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
       font-size: 15px;
     }
     .services__bento {
-      gap: 16px;
+      gap: 18px;
     }
   }
 </style>

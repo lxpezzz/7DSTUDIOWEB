@@ -1,0 +1,124 @@
+---
+import { Image } from "astro:assets";
+import site from "../data/site.json";
+---
+
+<section id="nosotros" class="section about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <div class="about__content">
+      <p class="text-label about__eyebrow reveal">Sobre Huella</p>
+      <h2 id="about-title" class="text-display about__title reveal">
+        Aquí conocemos a nuestros clientes por su nombre.
+        <em> A los de cuatro patas también.</em>
+      </h2>
+      <div class="about__body reveal">
+        <p class="text-body">
+          Somos un espacio pequeño en el que cada perro entra con su propio
+          ritmo. No hacemos citas encadenadas ni trabajamos con prisas:
+          preferimos dedicar el tiempo que cada animal necesita.
+        </p>
+        <p class="text-body">
+          Usamos productos adecuados a cada tipo de piel y pelaje, y nos
+          formamos continuamente.
+        </p>
+      </div>
+      <ul class="about__highlights reveal">
+        <li class="about__highlight">Trato cercano</li>
+        <li class="about__highlight">Productos adecuados</li>
+        <li class="about__highlight">Atención individual</li>
+      </ul>
+    </div>
+
+    <div class="about__visual reveal-scale">
+      <div class="about__frame">
+        <Image
+          src={`${site.demo.basePath}${site.images.about}`}
+          alt="Equipo de Huella atendiendo a un perro con calma"
+          class="img-cover"
+          width={900}
+          height={900}
+          widths={[500, 700, 900]}
+          sizes="(max-width: 768px) 100vw, 42vw"
+          decoding="async"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: center;
+  }
+
+  .about__content {
+    display: grid;
+    gap: var(--space-md);
+    order: 2;
+  }
+
+  .about__eyebrow {
+    color: var(--green);
+  }
+
+  .about__title {
+    font-size: var(--text-xl);
+    max-width: 24ch;
+  }
+
+  .about__title em {
+    color: var(--caramel);
+  }
+
+  .about__body {
+    display: grid;
+    gap: var(--space-sm);
+    max-width: 56ch;
+  }
+
+  .about__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+  }
+
+  .about__highlight {
+    padding: 0.6rem 1.1rem;
+    background-color: var(--bg-warm);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text);
+  }
+
+  .about__visual {
+    order: 1;
+  }
+
+  .about__frame {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .about__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
+    }
+
+    .about__content {
+      order: 1;
+      gap: var(--space-lg);
+    }
+
+    .about__visual {
+      order: 2;
+    }
+  }
+</style>

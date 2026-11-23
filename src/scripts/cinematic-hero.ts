@@ -13,9 +13,60 @@ export async function initCinematicHero() {
   const photo = hero.querySelector<HTMLElement>('.cinematic-hero__photo')!;
   const foreground = hero.querySelector<HTMLElement>('.cinematic-hero__foreground')!;
   const projection = hero.querySelector<HTMLElement>('.cinematic-hero__projection')!;
+  const poster = hero.querySelector<HTMLElement>('.cinematic-hero__poster');
+  const POSTER_SCALE = 0.35;
+  function configurePoster(width: number, height: number): { width: number; height: number } | null {
+    if (!poster) return null;
+    let src = '';
+    let baseW = 0;
+    let baseH = 0;
+    // Selecciona la captura que coincide con los tamaños tipográficos y .container de cada rango.
+    if (width >= 1520) {
+      src = heroScene.screenPoster1920;
+      baseW = 1920;
+      baseH = 1080;
+    } else if (width >= 1360) {
+      src = heroScene.screenPoster1440;
+      baseW = 1440;
+      baseH = 900;
+    } else if (width >= 1220) {
+      src = heroScene.screenPoster1280;
+      baseW = 1280;
+      baseH = 800;
+    } else {
+      poster.hidden = true;
+      return null;
+    }
+    const posterW = width * POSTER_SCALE;
+    const posterH = height * POSTER_SCALE;
+    poster.style.width = `${posterW}px`;
+    poster.style.height = `${posterH}px`;
+    let img = poster.querySelector<HTMLImageElement>('img');
+    if (!img) {
+      img = document.createElement('img');
+      img.alt = '';
+      img.decoding = 'async';
+      poster.replaceChildren(img);
+    }
+    if (img.dataset.src !== src) {
+      img.src = src;
+      img.dataset.src = src;
+    }
+    img.style.width = `${baseW * POSTER_SCALE}px`;
+    img.style.height = `${baseH * POSTER_SCALE}px`;
+    return { width: posterW, height: posterH };
+  }
   function createReplica() {
     const replica = surface!.cloneNode(true) as HTMLElement;
+    replica.classList.add('cinematic-hero__replica');
     replica.removeAttribute('id');
+    const siteHeader = document.querySelector<HTMLElement>('body > header.header');
+    if (siteHeader) {
+      const headerClone = siteHeader.cloneNode(true) as HTMLElement;
+      headerClone.classList.add('cinematic-hero__replica-header');
+      headerClone.classList.remove('header--scrolled');
+      replica.prepend(headerClone);
+    }
     replica.querySelectorAll('[id], [aria-labelledby], [aria-describedby]').forEach(element => {
       element.removeAttribute('id');
       element.removeAttribute('aria-labelledby');
@@ -46,7 +97,14 @@ export async function initCinematicHero() {
         .map(point => ({ x: point.x + left, y: point.y + top })) as Quad;
       projection.style.width = `${width}px`;
       projection.style.height = `${height}px`;
+      (projection.firstElementChild as HTMLElement).style.width = `${width}px`;
       projection.style.transform = projectiveMatrix(points, width, height);
+      const posterSize = configurePoster(width, height);
+      if (poster && posterSize) {
+        poster.hidden = false;
+        poster.style.opacity = '1';
+        poster.style.transform = projectiveMatrix(points, posterSize.width, posterSize.height);
+      }
       foreground.style.top = `${top}px`;
       foreground.style.left = `${left}px`;
       foreground.style.width = `${photo.clientWidth}px`;
@@ -62,6 +120,11 @@ export async function initCinematicHero() {
       hero.classList.remove('cinematic-projected');
       projection.replaceChildren();
       projection.removeAttribute('style');
+      if (poster) {
+        poster.hidden = true;
+        poster.replaceChildren();
+        poster.removeAttribute('style');
+      }
       foreground.removeAttribute('style');
     };
   }
@@ -100,9 +163,10 @@ export async function initCinematicHero() {
     const visualEnd = heroScene.handoffProgress;
     let pastEnd = false;
     let width = 0, height = 0, quad: Quad, center = { x: 0, y: 0 }, zoom = 1;
+    let posterSize: { width: number; height: number } | null = null;
     let projectPhoto: ReturnType<typeof createPhotoProjector>;
     const debugMode = import.meta.env.DEV && new URLSearchParams(location.search).has('debugScreen');
-    const handoff = { hero, stage, layers: [photo, foreground, projection, outside], debug, debugMode };
+    const handoff = { hero, stage, layers: [photo, foreground, projection, ...(poster ? [poster] : []), outside], debug, debugMode };
     const interaction = createCinematicLinks(hero, projection, surface);
     debug.hidden = !debugMode;
     if (debugMode) {
@@ -112,6 +176,9 @@ export async function initCinematicHero() {
     const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
     function render() {
       const p = state.progress;
+      // Con póster activo, pasa a resolución nativa en p >= 0.40 (mientras el póster aún
+      // cubre el clon al 100%) para que durante el crossfade 0.42→0.54 las métricas coincidan al píxel.
+      hero.classList.toggle('cinematic-native-resolution', posterSize ? p >= .40 : p >= .68);
       const approach = smooth((p - .15) / .60);
       const straighten = smooth((p - .45) / .30);
       const scale = Math.exp(Math.log(zoom) * approach);
@@ -136,6 +203,16 @@ export async function initCinematicHero() {
       const complete = pastEnd || p >= visualEnd;
       // Reverse: reveal the stage before transferring keyboard focus into it.
       if (!complete) applyCinematicHandoff(handoff, false);
+      if (poster) {
+        // Transición cuando la pantalla supera ~0.55x (p=0.42→0.54) y el HTML real ya es nítido.
+        const posterOpacity = posterSize ? 1 - smooth((p - .42) / .12) : 0;
+        const showPoster = !complete && Boolean(posterSize) && posterOpacity > .001;
+        poster.hidden = !showPoster;
+        if (showPoster && posterSize) {
+          poster.style.transform = projectiveMatrix(current, posterSize.width, posterSize.height);
+          poster.style.opacity = String(posterOpacity);
+        }
+      }
       interaction.render(screenMatrix, complete, Number(photoOpacity) > 0);
       if (complete) applyCinematicHandoff(handoff, true);
       if (debugMode && !complete) {
@@ -152,6 +229,8 @@ export async function initCinematicHero() {
       height = stage.clientHeight;
       projection.style.width = `${width}px`;
       projection.style.height = `${height}px`;
+      (projection.firstElementChild as HTMLElement).style.width = `${width}px`;
+      posterSize = configurePoster(width, height);
       const [px, py] = getComputedStyle(image).objectPosition.split(' ').map(value => Number.parseFloat(value) / 100);
       const position = { x: px ?? heroScene.objectPosition.x, y: py ?? heroScene.objectPosition.y };
       const frame = { width: photo.clientWidth, height: photo.clientHeight };
@@ -200,10 +279,15 @@ export async function initCinematicHero() {
     return () => {
       cancelAnimationFrame(restoration);
       interaction.destroy();
-      hero.classList.remove('cinematic-ready', 'cinematic-complete', 'cinematic-projected');
+      hero.classList.remove('cinematic-ready', 'cinematic-complete', 'cinematic-projected', 'cinematic-native-resolution');
       for (const layer of handoff.layers) layer.hidden = false;
       stage.inert = false;
       projection.replaceChildren();
+      if (poster) {
+        poster.hidden = true;
+        poster.replaceChildren();
+        poster.removeAttribute('style');
+      }
       for (const element of [photo, foreground, projection, outside]) element.removeAttribute('style');
       outside.inert = false;
       debug.hidden = true;

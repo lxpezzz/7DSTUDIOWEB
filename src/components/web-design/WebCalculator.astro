@@ -35,7 +35,7 @@ const extraGroups = [
   <div class="container">
     <div class="web-heading">
       <p class="web-eyebrow">TU WEB, A TU MEDIDA</p>
-      <h2 id="web-estimate-title">Calcula cuánto podría costar tu web.</h2>
+      <h2 id="web-estimate-title"><span class="heading-emphasis">Calcula</span> cuánto podría costar tu web.</h2>
       <p>
         Elige lo que necesitas y descubre un precio orientativo al instante. Sin
         compromiso.
@@ -256,6 +256,15 @@ const extraGroups = [
         <p class="calculator__custom" data-custom-message hidden>
           Cuéntanos tu proyecto y te prepararemos un presupuesto a medida.
         </p>
+        <div class="calculator__recurring">
+          <strong>Mantenimiento · cuota aparte</strong>
+          <p>
+            {webCare.maintenance.title}. {webCare.maintenance.description}
+          </p>
+          <p>
+            Obligatorio mientras tu web siga alojada y gestionada por {site.name}.
+          </p>
+        </div>
         <a
           class="button calculator__request"
           href="#contacto-web"
@@ -640,6 +649,20 @@ const extraGroups = [
     margin: 18px 0 0;
     font-size: 15px;
     line-height: 1.6;
+  }
+  .calculator__recurring {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--web-border);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .calculator__recurring strong {
+    font-weight: 600;
+  }
+  .calculator__recurring p {
+    margin: 6px 0 0;
+    color: var(--web-muted);
   }
   .calculator__request {
     width: 100%;

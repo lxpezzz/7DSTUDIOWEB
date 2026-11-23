@@ -8,7 +8,7 @@ Guía local de Servicios, del traspaso cinematográfico al HTML real y de los en
 - `ServiceCard.astro`: contenedor, contenido comercial, variantes y enlace único opcional.
 - `WebScene.astro`: navegador con la captura WebP real de HUELLA proporcionada por el usuario, ya existente en `src/images/projects/huella.webp`. Astro genera versiones de 640 y 960px (aproximadamente 16 y 28KB); no se ha generado una imagen nueva ni una captura ficticia.
 - `LocalScene.astro`: mapa geométrico y ficha HTML. Valoración y horario son exclusivamente ilustrativos y están identificados visualmente como ejemplo; no son reseñas ni resultados reales.
-- `DigitalScene.astro`: microlanding de ejemplo con símbolo propio de 7D Studio y NFC; no hay un QR falso ni controles interactivos dentro de la escena.
+- `DigitalScene.astro`: microlanding de ejemplo con símbolo propio de 7DStudio y NFC; no hay un QR falso ni controles interactivos dentro de la escena.
 - `../../data/services.ts`: textos, etiquetas, rutas y estado de publicación.
 
 ## Activar las rutas

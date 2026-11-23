@@ -8,7 +8,7 @@ interface Props {
 const { service, href, pending = !href } = Astro.props;
 const Card = href ? "a" : "article";
 const titleId = `service-${service.id}-${crypto.randomUUID()}`;
-const serviceLabel = { web: "diseño web", local: "SEO local", digital: "productos" }[service.scene];
+const serviceLabel = { web: "diseño web", local: "SEO local", digital: "soluciones" }[service.scene];
 const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
 ---
 
@@ -21,56 +21,55 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   ]}
   href={href}
   draggable={href ? "false" : undefined}
-  aria-labelledby={pending && href ? undefined : titleId}
-  aria-label={pending && href
-    ? `${service.title}: consultar en Contacto`
-    : undefined}
+  aria-labelledby={href ? undefined : titleId}
   data-service={service.id}
 >
   <div class="service-card__scene"><slot /></div>
   <div class="service-card__copy">
-    <div class="service-card__heading">
-      <h3 id={titleId}>{service.title}</h3>
-      <svg
-        class="service-card__arrow"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
-      >
+    <div class="service-card__body">
+      <div class="service-card__heading">
+        <h3 id={titleId}>{service.title}</h3>
+        <svg
+          class="service-card__arrow"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
+        >
+      </div>
+      <p class="service-card__description">{service.description}</p>
     </div>
-    <p class="service-card__description">{service.description}</p>
-    <ul
-      class="service-card__tags"
-      aria-label={`Especialidades de ${service.title}`}
-    >
-      {service.tags.map((tag) => <li>{tag}</li>)}
-    </ul>
-    {href && (
-      <span class="service-card__cta">
-        {ctaLabel}
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
-      </span>
-    )}
+    <div class="service-card__footer">
+      <ul
+        class="service-card__tags"
+        aria-label={`Especialidades de ${service.title}`}
+      >
+        {service.tags.map((tag) => <li>{tag}</li>)}
+      </ul>
+      {href && (
+        <span class="service-card__cta">
+          {ctaLabel}
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" /></svg>
+        </span>
+      )}
+    </div>
   </div>
-      
 </Card>
 
 <style>
   .service-card {
     display: flex;
     flex-direction: column;
-    gap: 24px;
     min-width: 0;
-    padding: 28px;
-    border: 1px solid #e5e0d8;
-    border-radius: 20px;
+    padding: 0;
+    border: 1px solid #dfd9cf;
+    border-radius: 16px;
     background: #fff;
     color: #171717;
-    overflow: visible;
+    overflow: hidden;
     box-shadow: 0 2px 12px 0 transparent, 0 4px 24px -4px transparent;
   }
   .service-card--web {
@@ -85,21 +84,48 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   .service-card--local,
   .service-card--digital {
     display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: 24px;
-    padding: 24px;
-    min-height: 244px;
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+    min-height: 296px;
   }
   .service-card__scene {
     min-width: 0;
-    border-radius: 12px;
     overflow: hidden;
     isolation: isolate;
   }
+  .service-card--web .service-card__scene {
+    border-bottom: 1px solid #ebe6de;
+  }
+  .service-card--local .service-card__scene,
+  .service-card--digital .service-card__scene {
+    border-right: 1px solid #ebe6de;
+  }
   .service-card__copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
     min-width: 0;
-    align-self: center;
+    padding: 28px 28px 26px;
     user-select: text;
+  }
+  .service-card--web .service-card__copy {
+    padding: 30px 34px 32px;
+    gap: 22px;
+  }
+  .service-card--web .service-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px 24px;
+    padding-top: 18px;
+    border-top: 1px solid #eeeae3;
+  }
+  .service-card--web .service-card__tags {
+    margin: 0;
+  }
+  .service-card--web .service-card__cta {
+    margin: 0;
   }
   .service-card__heading {
     display: flex;
@@ -109,14 +135,14 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   }
   h3 {
     margin: 0;
-    font-size: clamp(25px, 2.1vw, 34px);
-    line-height: 1.12;
-    font-weight: 500;
-    letter-spacing: -0.035em;
+    font-size: clamp(30px, 2.4vw, 40px);
+    line-height: 1.06;
+    font-weight: 520;
+    letter-spacing: -0.038em;
   }
   .service-card--local h3,
   .service-card--digital h3 {
-    font-size: clamp(23px, 1.9vw, 28px);
+    font-size: clamp(24px, 1.95vw, 30px);
   }
   .service-card__arrow {
     flex-shrink: 0;
@@ -124,33 +150,26 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
     opacity: 0.45;
   }
   .service-card__description {
-    max-width: 44ch;
-    margin: 14px 0 0;
-    color: #66615c;
-    font-size: 15px;
-    line-height: 1.6;
+    max-width: 46ch;
+    margin: 12px 0 0;
+    color: #55504b;
+    font-size: 16px;
+    line-height: 1.56;
   }
   .service-card__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 5px 0;
-    margin: 18px 0 0;
+    margin: 0;
     padding: 0;
     list-style: none;
-    color: #66615c;
-    font-size: 11px;
-    line-height: 1.6;
+    color: #5c5752;
+    font-size: 13px;
+    line-height: 1.5;
   }
   .service-card__tags li:not(:last-child)::after {
     content: "·";
     margin-inline: 8px;
-  }
-  .service-card__availability {
-    display: block;
-    margin-top: 12px;
-    color: #66615c;
-    font-size: 10px;
-    line-height: 1.5;
   }
   .service-card--linked {
     cursor: pointer;
@@ -159,13 +178,13 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     min-height: 44px;
-    margin-top: 18px;
-    padding: 10px 14px;
-    border: 1px solid currentColor;
+    margin-top: 16px;
+    padding: 10px 16px;
+    border: 1px solid #171717;
     border-radius: 3px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.3;
     user-select: none;
@@ -187,8 +206,6 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   .service-card--linked:focus-visible {
     outline: 2px solid #171717;
     outline-offset: 4px;
-  }
-  .service-card--linked:focus-visible {
     border-color: color-mix(in srgb, var(--card-accent) 65%, var(--card-accent-ink));
     box-shadow: 0 2px 12px 0 color-mix(in srgb, var(--card-accent) 34%, transparent),
       0 4px 24px -4px color-mix(in srgb, var(--card-accent) 30%, transparent);
@@ -196,11 +213,13 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
   .service-card--linked:focus-visible .service-card__arrow {
     color: var(--card-accent-ink);
     opacity: 1;
+    transform: translate(4px, -4px);
   }
   @media (prefers-reduced-motion: no-preference) {
-    .service-card__cta { transition: background-color .2s, color .2s; }
-    .service-card { transition: border-color 225ms ease-out, box-shadow 225ms ease-out; }
-    .service-card__arrow { transition: color 225ms ease-out, opacity 225ms ease-out; }
+    .service-card__cta { transition: background-color 220ms ease, color 220ms ease; }
+    .service-card__cta svg { transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1); }
+    .service-card { transition: border-color 250ms ease-out, box-shadow 250ms ease-out; }
+    .service-card__arrow { transition: color 250ms ease-out, opacity 250ms ease-out, transform 350ms cubic-bezier(0.16, 1, 0.3, 1); }
   }
   @media (hover: hover) and (pointer: fine) {
     .service-card--linked:hover {
@@ -211,21 +230,23 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
     .service-card--linked:hover .service-card__arrow {
       color: var(--card-accent-ink);
       opacity: 1;
+      transform: translate(4px, -4px);
+    }
+    .service-card--linked:hover .service-card__cta svg {
+      transform: translate(3px, -3px);
     }
   }
-  @media (max-width: 959px) {
+  @media (max-width: 1023px) {
     .service-card,
-    .service-card--web,
-    .service-card--local,
-    .service-card--digital {
+    .service-card--web {
       display: flex;
       flex-direction: column;
-      gap: 24px;
       grid-row: auto;
       min-height: 0;
     }
-    .service-card__copy {
-      align-self: stretch;
+    .service-card--local,
+    .service-card--digital {
+      min-height: 260px;
     }
     .service-card__scene {
       width: 100%;
@@ -235,13 +256,31 @@ const ctaLabel = `${pending ? "Consultar" : "Ver"} ${serviceLabel}`;
     }
   }
   @media (max-width: 767px) {
-    .service-card {
-      padding: 20px;
+    .service-card--local,
+    .service-card--digital {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .service-card--local .service-card__scene,
+    .service-card--digital .service-card__scene {
+      border-right: 0;
+      border-bottom: 1px solid #ebe6de;
+    }
+    .service-card__copy,
+    .service-card--web .service-card__copy {
+      padding: 22px 20px 24px;
+      gap: 18px;
+    }
+    .service-card--web .service-card__footer {
+      flex-direction: column;
+      align-items: flex-start;
+      padding-top: 14px;
     }
     h3,
     .service-card--local h3,
     .service-card--digital h3 {
-      font-size: 28px;
+      font-size: 27px;
     }
   }
 </style>

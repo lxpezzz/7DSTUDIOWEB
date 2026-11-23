@@ -1,44 +1,95 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/layout/Header.astro';
-import Footer from '../components/layout/Footer.astro';
-import AboutProjects from '../components/about/AboutProjects.astro';
-import { AlignLeft, PanelsTopLeft, MousePointer2, ArrowUpRight, ArrowDown } from 'lucide';
-import { site } from '../data/site';
-import symbol from '../images/branding/simbolo-7dstudio.webp';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import AboutProjects from "../components/about/AboutProjects.astro";
+import {
+  AlignLeft,
+  PanelsTopLeft,
+  MousePointer2,
+  ArrowUpRight,
+  ArrowDown,
+} from "lucide";
+import { site } from "../data/site";
+import { brand } from "../data/brand";
 
 const principles = [
-  { title: 'Claridad.', text: 'Que se entienda lo que haces y cómo dar el siguiente paso.', icon: AlignLeft },
-  { title: 'Diseño.', text: 'Una presencia cuidada, coherente con lo que ofrece tu negocio.', icon: PanelsTopLeft },
-  { title: 'Utilidad.', text: 'Cada elemento tiene una función. Lo importante es que te sirva.', icon: MousePointer2 },
+  {
+    title: "Claridad.",
+    text: "Que se entienda lo que haces y cómo dar el siguiente paso.",
+    icon: AlignLeft,
+  },
+  {
+    title: "Diseño.",
+    text: "Una presencia cuidada, coherente con lo que ofrece tu negocio.",
+    icon: PanelsTopLeft,
+  },
+  {
+    title: "Utilidad.",
+    text: "Cada elemento tiene una función. Lo importante es que te sirva.",
+    icon: MousePointer2,
+  },
 ];
 
 const services = [
-  { title: 'Diseño Web', href: '/diseno-web/', purpose: 'Presenta lo que haces.', description: 'Páginas claras y adaptadas a móvil para explicar tus servicios y facilitar el contacto.' },
-  { title: 'SEO Local', href: '/seo-local/', purpose: 'Cuida cómo te encuentran.', description: 'Trabajamos tu presencia en Google para que tus clientes encuentren información útil y actualizada sobre tu negocio.' },
-  { title: 'Productos QR/NFC', href: '/productos/', purpose: 'Acerca tu información.', description: 'Productos físicos personalizados que conectan tu espacio con tu contacto, tu web o la información que quieras compartir.' },
+  {
+    title: "Diseño Web",
+    href: "/diseno-web/",
+    purpose: "Presenta lo que haces.",
+    description:
+      "Páginas claras y adaptadas a móvil para explicar tus servicios y facilitar el contacto.",
+  },
+  {
+    title: "SEO Local",
+    href: "/seo-local/",
+    purpose: "Cuida cómo te encuentran.",
+    description:
+      "Trabajamos tu presencia en Google para que tus clientes encuentren información útil y actualizada sobre tu negocio.",
+  },
+  {
+    title: "Productos QR/NFC",
+    href: "/productos/",
+    purpose: "Acerca tu información.",
+    description:
+      "Productos físicos personalizados que conectan tu espacio con tu contacto, tu web o la información que quieras compartir.",
+  },
 ];
 
 const steps = [
-  { title: 'Entendemos', text: 'Conocemos tu negocio, tus objetivos y lo que necesitas resolver.' },
-  { title: 'Proponemos', text: 'Definimos una solución adecuada y explicamos claramente su alcance.' },
-  { title: 'Desarrollamos', text: 'Convertimos la propuesta en una solución funcional y cuidada.' },
-  { title: 'Revisamos', text: 'Comprobamos los detalles antes de la entrega o puesta en marcha.' },
+  {
+    title: "Entendemos",
+    text: "Conocemos tu negocio, tus objetivos y lo que necesitas resolver.",
+  },
+  {
+    title: "Proponemos",
+    text: "Definimos una solución adecuada y explicamos claramente su alcance.",
+  },
+  {
+    title: "Desarrollamos",
+    text: "Convertimos la propuesta en una solución funcional y cuidada.",
+  },
+  {
+    title: "Revisamos",
+    text: "Comprobamos los detalles antes de la entrega o puesta en marcha.",
+  },
 ];
 
-const structuredData = [{
-  '@context': 'https://schema.org',
-  '@type': 'AboutPage',
-  name: 'Quiénes somos · 7D Studio',
-  url: `${site.url}/quienes-somos/`,
-  description: 'Soluciones digitales claras, bien diseñadas y útiles para negocios: diseño web, SEO Local y productos QR/NFC.',
-  about: { '@type': 'Organization', name: site.name, url: site.url },
-}];
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "Quiénes somos · 7DStudio",
+    url: `${site.url}/quienes-somos/`,
+    description:
+      "Soluciones digitales claras, bien diseñadas y útiles para negocios: diseño web, SEO Local y productos QR/NFC.",
+    about: { "@type": "Organization", name: site.name, url: site.url },
+  },
+];
 ---
 
 <BaseLayout
-  title="Quiénes somos | Diseño web y soluciones digitales · 7D Studio"
-  description="Conoce 7D Studio: diseño web, SEO Local y productos QR/NFC para negocios. Nuestra filosofía, cómo trabajamos y proyectos de clientes y demostraciones."
+  title="Quiénes somos | Diseño web y soluciones digitales · 7DStudio"
+  description="Conoce 7DStudio: diseño web, SEO Local y productos QR/NFC para negocios. Nuestra filosofía, cómo trabajamos y proyectos de clientes y demostraciones."
   structuredData={structuredData}
 >
   <Header />
@@ -51,94 +102,262 @@ const structuredData = [{
       </nav>
       <div class="about-hero__layout">
         <div>
-          <p class="about-eyebrow">QUIÉNES SOMOS / 7D STUDIO</p>
-          <h1 id="about-title">Lo digital debería hacerte las cosas más fáciles.</h1>
-          <p class="about-hero__description">En 7D Studio creamos soluciones digitales para que los negocios puedan presentar mejor lo que hacen, ganar visibilidad y conectar con sus clientes.</p>
+          <p class="about-eyebrow">QUIÉNES SOMOS / 7DStudio</p>
+          <h1 id="about-title">
+            Lo digital debería hacerte <span class="heading-emphasis">las cosas más fáciles.</span>
+          </h1>
+          <p class="about-hero__description">
+            En 7DStudio creamos soluciones digitales para que los negocios
+            puedan presentar mejor lo que hacen, ganar visibilidad y conectar
+            con sus clientes.
+          </p>
           <div class="about-hero__actions">
-            <a class="about-link" href="#nuestro-trabajo">Ver proyectos <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
-            <a class="about-link" href="#como-trabajamos">Nuestra forma de trabajar <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowDown.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+            <a class="about-link" href="#nuestro-trabajo"
+              >Ver proyectos <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                >{
+                  ArrowUpRight.map(([Tag, attributes]) => (
+                    <Tag {...attributes} />
+                  ))
+                }</svg
+              ></a
+            >
+            <a class="about-link" href="#como-trabajamos"
+              >Nuestra forma de trabajar <svg
+                width="17"
+                height="17"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                >{
+                  ArrowDown.map(([Tag, attributes]) => <Tag {...attributes} />)
+                }</svg
+              ></a
+            >
           </div>
         </div>
         <div class="about-hero__signature" aria-hidden="true">
-          <img src={symbol.src} width={symbol.width} height={symbol.height} alt="" decoding="async" />
-          <span>7D Studio</span>
+          <img
+            src={brand.symbol}
+            width="512"
+            height="512"
+            alt=""
+            decoding="async"
+          />
+          <span>7DStudio</span>
           <p>Claridad. Diseño. Utilidad.</p>
         </div>
       </div>
     </section>
 
-    <section class="about-philosophy about-section container" aria-labelledby="philosophy-title">
+    <section
+      class="about-philosophy about-section container"
+      aria-labelledby="philosophy-title"
+    >
       <div class="about-philosophy__intro">
-        <h2 id="philosophy-title">La tecnología tiene que ser útil. No complicada.</h2>
+        <h2 id="philosophy-title">
+          La tecnología tiene que ser <span class="heading-emphasis">útil.</span> No complicada.
+        </h2>
         <div class="about-copy">
-          <p>Una página web debe explicar bien lo que ofreces. Tu presencia en Google debe ayudar a que te encuentren. Y las herramientas digitales deben facilitar el contacto con tus clientes.</p>
-          <p>En 7D Studio partimos de esa idea: crear soluciones claras, bien diseñadas y adaptadas a las necesidades de cada negocio.</p>
+          <p>
+            Una página web debe explicar bien lo que ofreces. Tu presencia en
+            Google debe ayudar a que te encuentren. Y las herramientas digitales
+            deben facilitar el contacto con tus clientes.
+          </p>
+          <p>
+            En 7DStudio partimos de esa idea: crear soluciones claras, bien
+            diseñadas y adaptadas a las necesidades de cada negocio.
+          </p>
         </div>
       </div>
       <div class="about-principles">
-        {principles.map(principle => (
-          <article>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              {principle.icon.map(([Tag, attributes]) => <Tag {...attributes} />)}
-            </svg>
-            <h3>{principle.title}</h3>
-            <p>{principle.text}</p>
-          </article>
-        ))}
+        {
+          principles.map((principle) => (
+            <article>
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                {principle.icon.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+              <h3>{principle.title}</h3>
+              <p>{principle.text}</p>
+            </article>
+          ))
+        }
       </div>
     </section>
 
-    <section class="about-services about-section" aria-labelledby="services-title">
+    <section
+      class="about-services about-section"
+      aria-labelledby="services-title"
+    >
       <div class="container about-services__layout">
         <div>
-          <h2 id="services-title">Diferentes soluciones.<br />Un mismo objetivo.</h2>
-          <p class="about-services__intro">Que tu presencia digital acompañe a tu negocio: al presentarlo, al encontrarlo y al contactar contigo.</p>
+          <h2 id="services-title">
+            Diferentes soluciones. <span class="heading-aside">Un mismo objetivo.</span>
+          </h2>
+          <p class="about-services__intro">
+            Que tu presencia digital acompañe a tu negocio: al presentarlo, al
+            encontrarlo y al contactar contigo.
+          </p>
         </div>
         <ul class="about-services__list">
-          {services.map(service => (
-            <li>
-              <p class="about-services__purpose">{service.purpose}</p>
-              <h3><a href={service.href}>{service.title}<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a></h3>
-              <p class="about-services__description">{service.description}</p>
-            </li>
-          ))}
+          {
+            services.map((service) => (
+              <li>
+                <p class="about-services__purpose">{service.purpose}</p>
+                <h3>
+                  <a href={service.href}>
+                    {service.title}
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      {ArrowUpRight.map(([Tag, attributes]) => (
+                        <Tag {...attributes} />
+                      ))}
+                    </svg>
+                  </a>
+                </h3>
+                <p class="about-services__description">{service.description}</p>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </section>
 
-    <section id="como-trabajamos" class="about-process about-section container" aria-labelledby="process-title">
-      <h2 id="process-title">Cada proyecto empieza por entender lo que necesitas.</h2>
+    <section
+      id="como-trabajamos"
+      class="about-process about-section container"
+      aria-labelledby="process-title"
+    >
+      <h2 id="process-title">
+        Cada proyecto empieza por entender lo que necesitas.
+      </h2>
       <ol>
-        {steps.map((step, index) => (
-          <li>
-            <span class="about-process__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-            <h3>{step.title}</h3>
-            <p>{step.text}</p>
-          </li>
-        ))}
+        {
+          steps.map((step, index) => (
+            <li>
+              <span class="about-process__number" aria-hidden="true">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))
+        }
       </ol>
     </section>
 
-    <section id="nuestro-trabajo" class="about-work about-section container" aria-labelledby="work-title">
+    <section
+      id="nuestro-trabajo"
+      class="about-work about-section container"
+      aria-labelledby="work-title"
+    >
       <div class="about-work__heading">
         <div>
-          <h2 id="work-title">Nuestro trabajo habla por nosotros.</h2>
-          <p>Una selección de webs de clientes y demostraciones de diseño, identificadas para que sepas qué estás viendo.</p>
+          <h2 id="work-title">Nuestro trabajo <span class="heading-underline">habla por nosotros.</span></h2>
+          <p>
+            Una selección de webs de clientes y demostraciones de diseño,
+            identificadas para que sepas qué estás viendo.
+          </p>
         </div>
-        <a class="about-link" href="/diseno-web/#proyectos">Ver proyectos <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
+        <a class="about-link" href="/diseno-web/#proyectos"
+          >Ver proyectos <svg
+            width="17"
+            height="17"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            >{
+              ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)
+            }</svg
+          ></a
+        >
       </div>
       <AboutProjects />
     </section>
 
-    <section class="about-contact container" aria-labelledby="about-contact-title">
+    <section
+      class="about-contact container"
+      aria-labelledby="about-contact-title"
+    >
       <div class="about-contact__panel">
         <div>
           <h2 id="about-contact-title">¿Tienes un proyecto en mente?</h2>
           <p>Cuéntanos qué necesitas y vemos cómo podemos ayudarte.</p>
         </div>
         <div class="about-contact__actions">
-          <a class="button" href="/contacto/">Hablemos de tu proyecto <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg></a>
-          <a class="about-link" href={site.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg><span class="sr-only"> (se abre en una pestaña nueva)</span></a>
+          <a class="button" href="/contacto/"
+            >Hablemos de tu proyecto <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              >{
+                ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)
+              }</svg
+            ></a
+          >
+          <a
+            class="about-link"
+            href={site.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            >WhatsApp <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              >{
+                ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)
+              }</svg
+            ><span class="sr-only"> (se abre en una pestaña nueva)</span></a
+          >
         </div>
       </div>
     </section>
@@ -181,16 +400,16 @@ const structuredData = [{
 
   .about-page h2 {
     font-size: clamp(32px, 3.3vw, 46px);
-    font-weight: 480;
+    font-weight: 500;
     line-height: 1.15;
-    letter-spacing: -.035em;
+    letter-spacing: -0.035em;
   }
 
   .about-page h3 {
     font-size: 23px;
     font-weight: 500;
     line-height: 1.35;
-    letter-spacing: -.025em;
+    letter-spacing: -0.025em;
   }
 
   .about-hero {
@@ -225,15 +444,15 @@ const structuredData = [{
     font-size: 12px;
     line-height: 1.6;
     font-weight: 550;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
   }
 
   h1 {
     max-width: 19ch;
     font-size: clamp(42px, 4.8vw, 70px);
-    font-weight: 480;
+    font-weight: 450;
     line-height: 1.07;
-    letter-spacing: -.04em;
+    letter-spacing: -0.04em;
   }
 
   .about-hero__description {
@@ -290,7 +509,7 @@ const structuredData = [{
     font-size: 30px;
     font-weight: 500;
     line-height: 1.3;
-    letter-spacing: -.04em;
+    letter-spacing: -0.04em;
   }
 
   .about-hero__signature p {
@@ -355,7 +574,7 @@ const structuredData = [{
 
   .about-services__layout {
     display: grid;
-    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
     gap: 88px;
     align-items: start;
   }
@@ -380,7 +599,7 @@ const structuredData = [{
   }
 
   .about-services__list li::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 5px;
     left: -4px;

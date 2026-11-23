@@ -1,0 +1,134 @@
+---
+import { Image } from 'astro:assets';
+import site from '../data/site.json';
+---
+
+<section id="opiniones" class="section reviews" aria-labelledby="reviews-title">
+  <div class="container">
+    <div class="reviews__header reveal">
+      <p class="text-label reviews__eyebrow">Opiniones</p>
+      <h2 id="reviews-title" class="text-display reviews__title">Lo que dicen las familias</h2>
+    </div>
+
+    <ul class="reviews__list" role="list">
+      {site.reviews.map((review, index) => (
+        <li class="reviews__item">
+          <blockquote class={`reviews__card ${index % 2 === 1 ? 'reviews__card--offset' : ''}`}>
+            <p class="reviews__quote reveal">“{review.quote}”</p>
+            <footer class="reviews__footer reveal">
+              <div class="reviews__avatar">
+                <Image
+                  src={site.images.reviewers[index]}
+                  alt={`Foto de ${review.name}`}
+                  class="img-cover"
+                  width={200}
+                  height={200}
+                  widths={[100, 200]}
+                  sizes="3rem"
+                  decoding="async"
+                />
+              </div>
+              <div class="reviews__meta">
+                <cite class="reviews__name">{review.name}</cite>
+                <span class="reviews__dog">+ {review.dog}</span>
+              </div>
+            </footer>
+          </blockquote>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .reviews__header {
+    margin-bottom: var(--space-xl);
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .reviews__eyebrow {
+    color: var(--caramel);
+  }
+
+  .reviews__title {
+    font-size: var(--text-xl);
+    max-width: 18ch;
+  }
+
+  .reviews__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .reviews__card {
+    display: grid;
+    gap: var(--space-md);
+    margin: 0;
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .reviews__card:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .reviews__card--offset {
+    margin-left: auto;
+    max-width: 80%;
+  }
+
+  .reviews__quote {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  .reviews__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .reviews__avatar {
+    width: 3rem;
+    height: 3rem;
+    overflow: hidden;
+  }
+
+  .reviews__meta {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .reviews__name {
+    font-style: normal;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    color: var(--text);
+  }
+
+  .reviews__dog {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .reviews__quote {
+      font-size: var(--text-2xl);
+      max-width: 24ch;
+    }
+
+    .reviews__card--offset .reviews__quote {
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .reviews__card--offset .reviews__footer {
+      justify-content: flex-end;
+    }
+  }
+</style>

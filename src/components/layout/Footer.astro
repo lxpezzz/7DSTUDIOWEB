@@ -1,18 +1,19 @@
 ---
 import { site, getNavigation } from "../../data/site";
-import logo from "../../images/branding/logo-7dstudio.webp";
+import { brand } from "../../data/brand";
 const navigation = getNavigation(Astro.url.pathname);
 ---
 
 <footer class="footer container">
   <div class="footer__top">
     <div>
-      <a class="brand" href="/" aria-label="7D Studio, inicio"
+      <a class="brand" href="/" aria-label="7DStudio, inicio"
         ><img
-          src={logo.src}
-          width={logo.width}
-          height={logo.height}
+          src={brand.logo}
+          width="990"
+          height="215"
           alt="7DStudio"
+          loading="lazy"
           decoding="async"
         /></a
       ><p class="footer__description">
@@ -36,7 +37,8 @@ const navigation = getNavigation(Astro.url.pathname);
           stroke="currentColor"
           stroke-width="1.5"
           aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"></path></svg
-        ></a>
+        ></a
+      >
     </div>
   </div>
   <div class="footer__bottom">

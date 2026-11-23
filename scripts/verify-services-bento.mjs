@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { services, getServiceHref } from '../src/data/services.ts';
+import { createQAContext } from './qa-browser.mjs';
 const modules = resolve(process.argv[2]);
 const { chromium } = await import(pathToFileURL(join(modules, 'playwright/index.mjs')));
 const { default: AxeBuilder } = await import(pathToFileURL(join(modules, '@axe-core/playwright/dist/index.mjs')));
@@ -21,7 +22,7 @@ for (const service of services) {
 const browser = await chromium.launch();
 try {
   for (const width of [360, 390, 768, 1024, 1440, 1920]) {
-    const context = await browser.newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
+    const context = await createQAContext(browser, { viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -67,8 +68,9 @@ try {
     results.push({ ...layout, accessibilityViolations: violations, errors });
     await context.close();
   }
-  // Prueba del contenido real tras el pin y de los enlaces temporales a Contacto.
-  const interactive = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+   // Prueba del contenido real tras el pin y de los destinos publicados.
+  const interactiveContext = await createQAContext(browser, { viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+  const interactive = await interactiveContext.newPage();
   await interactive.goto(process.argv[3] || 'http://127.0.0.1:4330', { waitUntil: 'networkidle' });
   await interactive.waitForSelector('.cinematic-ready');
   await interactive.evaluate(() => scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }));
@@ -86,13 +88,14 @@ try {
   check(await linked.evaluate(el => el.matches(':focus-visible') && getComputedStyle(el).outlineStyle === 'solid'), 'Foco visible de tarjeta futura');
   await linked.locator('h3').click();
   await interactive.waitForTimeout(900);
-  check(new URL(interactive.url()).hash === '#contacto', 'Click en contenido de la tarjeta futura');
+   check(new URL(interactive.url()).pathname === services[0].route, 'Click en contenido de la tarjeta publicada');
+   await interactive.goto(process.argv[3] || 'http://127.0.0.1:4330', { waitUntil: 'networkidle' });
   await interactive.evaluate(() => scrollTo({ top: innerHeight * 1.5, behavior: 'instant' }));
   await interactive.waitForTimeout(1400);
   await interactive.locator('#servicios .section-cta a').click();
   check(new URL(interactive.url()).hash === '#contacto', 'CTA real accesible tras el pin');
-  await interactive.close();
-  await writeFile(`${output}/qa.json`, JSON.stringify({ results, failures, realSectionInteraction: 'checked', routeState: 'SEO local published; other services use contact fallback' }, null, 2));
+  await interactiveContext.close();
+   await writeFile(`${output}/qa.json`, JSON.stringify({ results, failures, realSectionInteraction: 'checked', routeState: 'all service pages published' }, null, 2));
   console.log(JSON.stringify({ results, failures }, null, 2));
   assert.deepEqual(failures, []);
 } finally { await browser.close(); }

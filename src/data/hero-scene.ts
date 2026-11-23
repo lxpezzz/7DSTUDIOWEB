@@ -1,4 +1,7 @@
 import heroImage from '../images/hero/hero-7dstudio.webp?url';
+import screenPoster1920 from '../images/hero/hero-screen-1920.webp?url';
+import screenPoster1440 from '../images/hero/hero-screen-1440.webp?url';
+import screenPoster1280 from '../images/hero/hero-screen-1280.webp?url';
 
 // Calibración sobre el PNG original de 1672 × 941, no sobre un recorte CSS.
 // Orden: superior izquierda, superior derecha, inferior derecha, inferior izquierda.
@@ -6,6 +9,9 @@ export const heroScene = {
   width: 1672,
   height: 941,
   image: heroImage,
+  screenPoster1920,
+  screenPoster1440,
+  screenPoster1280,
   screen: [
     [592 / 1672, 382 / 941],
     [1035 / 1672, 374 / 941],

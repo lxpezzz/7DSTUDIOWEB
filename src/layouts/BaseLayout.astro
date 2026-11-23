@@ -1,33 +1,48 @@
 ---
-import '../styles/global.css';
-import { site } from '../data/site';
-import MobileStickyCta from '../components/layout/MobileStickyCta.astro';
-import WhatsAppWidget from '../components/layout/WhatsAppWidget.astro';
-import manropeFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import "../styles/global.css";
+import { site } from "../data/site";
+import { brand } from "../data/brand";
+import MobileStickyCta from "../components/layout/MobileStickyCta.astro";
+import WhatsAppWidget from "../components/layout/WhatsAppWidget.astro";
+import manropeFont from "@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url";
 interface Props {
   title?: string;
   description?: string;
   structuredData?: Record<string, unknown>[];
   noindex?: boolean;
+  canonicalPath?: string;
 }
-const { title = site.title, description = site.description, structuredData = [], noindex = false } = Astro.props;
-const canonical = new URL(Astro.url.pathname, site.url).href;
+const {
+  title = site.title,
+  description = site.description,
+  structuredData = [],
+  noindex = false,
+  canonicalPath = Astro.url.pathname,
+} = Astro.props;
+const canonical = new URL(canonicalPath, site.url).href;
 const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
   name: site.name,
   url: site.url,
+  logo: new URL(brand.logo, site.url).href,
+  image: new URL(brand.socialImage, site.url).href,
   description: site.description,
-  telephone: '+34621200800',
-  areaServed: { '@type': 'Place', name: 'Castellón de la Plana, España' },
+  telephone: "+34621200800",
+  areaServed: { "@type": "Place", name: "Castellón de la Plana, España" },
   hasOfferCatalog: {
-    '@type': 'OfferCatalog', name: 'Servicios digitales',
-    itemListElement: ['Diseño web', 'SEO local', 'Soluciones digitales'].map(name => ({
-      '@type': 'Offer', itemOffered: { '@type': 'Service', name },
-    })),
+    "@type": "OfferCatalog",
+    name: "Servicios digitales",
+    itemListElement: ["Diseño web", "SEO local", "Soluciones digitales"].map(
+      (name) => ({
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name },
+      }),
+    ),
   },
 };
 ---
+
 <!doctype html>
 <html lang="es">
   <head>
@@ -38,7 +53,14 @@ const schema = {
     {noindex && <meta name="robots" content="noindex, follow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href={manropeFont} as="font" type="font/woff2" crossorigin />
+    <link rel="alternate icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link
+      rel="preload"
+      href={manropeFont}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta name="theme-color" content="#F8F7F4" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
@@ -46,16 +68,30 @@ const schema = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={`${site.url}/og.png`} />
+    <meta property="og:image" content={new URL(brand.socialImage, site.url).href} />
+    <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="7D Studio. Tu negocio, mejor presentado. Y más fácil de encontrar." />
+    <meta
+      property="og:image:alt"
+      content="7DStudio — Diseño web y SEO local en Castellón"
+    />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(brand.twitterImage, site.url).href} />
+    <meta name="twitter:image:alt" content="7DStudio — Diseño web y SEO local en Castellón" />
     <script type="application/ld+json" set:html={JSON.stringify(schema)} />
-    {structuredData.map(data => <script type="application/ld+json" set:html={JSON.stringify(data).replace(/</g, '\\u003c')} />)}
+    {
+      structuredData.map((data) => (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(data).replace(/</g, "\\u003c")}
+        />
+      ))
+    }
   </head>
   <body>
-
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
     <slot />
     <MobileStickyCta />

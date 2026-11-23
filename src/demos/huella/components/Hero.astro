@@ -1,0 +1,190 @@
+---
+import { Image } from "astro:assets";
+import site from "../data/site.json";
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero__wrap">
+    <div class="hero__media">
+      <Image
+        src={`${site.demo.basePath}${site.images.heroMain}`}
+        alt="Perro relajado en la peluquería canina"
+        class="img-cover hero__image"
+        width={1200}
+        height={444}
+        widths={[480, 800, 1200]}
+        sizes="(max-width: 768px) 100vw, 1200px"
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Peluquería canina · huella</p>
+      <h1 id="hero-title" class="hero__title">
+        Menos estrés.<br />
+        Más mimos.<br />
+        <em>Y un pelazo.</em>
+      </h1>
+      <p class="hero__lead">
+        Atención individual, buenos productos y el tiempo que cada perro
+        necesita.
+      </p>
+      <div class="hero__actions">
+        <a
+          href={site.social.whatsapp}
+          class="hero__btn hero__btn--primary"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pedir cita
+        </a>
+        <a href="#servicios" class="hero__btn hero__btn--secondary">
+          Ver servicios
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: var(--space-md) var(--space-2xl);
+  }
+
+  .hero__wrap {
+    position: relative;
+  }
+
+  .hero__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 851 / 315;
+    background-color: var(--bg-warm);
+    border-radius: clamp(32px, 7vw, 183px);
+    overflow: hidden;
+  }
+
+  .hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    width: min(576px, calc(100% - 1rem));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(28px, 4vw, 47px);
+    padding: clamp(28px, 4vw, 47px);
+    margin-left: 0.5rem;
+    margin-top: -12%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 29px;
+  }
+
+  .hero__eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--caramel);
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2.5rem, 6vw, 4.375rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .hero__title em {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .hero__lead {
+    font-size: clamp(1rem, 2.5vw, 1.1875rem);
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 480px;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1;
+    border-radius: 9px;
+    border: 2px solid;
+    transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+  }
+
+  .hero__btn--primary {
+    background-color: var(--green);
+    border-color: var(--green);
+    color: var(--surface);
+  }
+
+  .hero__btn--primary:hover {
+    background-color: var(--green-dark);
+    border-color: var(--green-dark);
+  }
+
+  .hero__btn--secondary {
+    background-color: transparent;
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  .hero__btn--secondary:hover {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .hero__btn:focus-visible {
+    outline: 3px solid var(--green-light);
+    outline-offset: 3px;
+  }
+
+  @media (min-width: 768px) {
+    .hero__content {
+      width: 576px;
+      max-width: 100%;
+      gap: 47px;
+      padding: 47px;
+      margin-left: 47px;
+      margin-top: -24.4%;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .hero__media {
+      border-radius: 183px;
+    }
+  }
+</style>

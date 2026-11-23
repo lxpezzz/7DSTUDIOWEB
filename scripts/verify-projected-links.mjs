@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createQAContext } from './qa-browser.mjs';
 const modules = resolve(process.argv[2]);
 const { chromium } = await import(pathToFileURL(join(modules, 'playwright/index.mjs')));
 const { default: AxeBuilder } = await import(pathToFileURL(join(modules, '@axe-core/playwright/dist/index.mjs')));
@@ -39,7 +40,7 @@ async function point(page, index, fx = .5, fy = .5) {
 }
 try {
   for (const [width, height] of [[1440, 900], [1920, 1080], [1024, 768], [768, 1024], [390, 844], [360, 800]]) {
-    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: 'no-preference' });
+    const context = await createQAContext(browser, { viewport: { width, height }, reducedMotion: 'no-preference' });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -48,9 +49,10 @@ try {
       document.addEventListener('click', event => {
         const card = event.target.closest('a[data-service]');
         if (card) window.serviceEvents.push({ service: card.dataset.service, projected: !!card.closest('.cinematic-hero__interaction'), trusted: event.isTrusted });
-        // Keep this lifecycle test on the home. Real SEO navigation is covered by verify-seo-local.mjs.
-        if (card?.getAttribute('href') === '/seo-local/') {
-          window.seoDestination = card.getAttribute('href');
+        // Mantener este test de ciclo de vida en Inicio. Los destinos reales
+        // de los tres servicios se comprueban en verify-service-links.mjs.
+        if (card) {
+          window.serviceDestination = card.getAttribute('href');
           event.preventDefault();
         }
       });
@@ -80,11 +82,7 @@ try {
         await page.waitForTimeout(1000);
         const events = await page.evaluate(() => window.serviceEvents);
         assert.deepEqual(events.at(-1), { service: ['diseno-web', 'seo-local', 'productos-fisicos'][index], projected: true, trusted: true });
-        if (index === 1) assert.equal(await page.evaluate(() => window.seoDestination), '/seo-local/');
-        else {
-          assert.equal(new URL(page.url()).hash, '#contacto');
-          assert.ok(await page.locator('#contact-title').evaluate(el => el.getBoundingClientRect().top < innerHeight && el.getBoundingClientRect().bottom > 0));
-        }
+        assert.equal(await page.evaluate(() => window.serviceDestination), ['/diseno-web/', '/seo-local/', '/productos/'][index]);
       }
       await at(page, .5); // Reverse after navigating to Contacto.
       assert.equal(await links.first().isVisible(), true);
@@ -105,7 +103,7 @@ try {
       assert.ok(await links.nth(2).evaluate(el => document.activeElement === el && !el.closest('[inert]')));
       await page.keyboard.press('Enter');
       await page.waitForTimeout(1000);
-      assert.equal(new URL(page.url()).hash, '#contacto');
+      assert.equal(await page.evaluate(() => window.serviceDestination), '/productos/');
       await at(page, .25);
       const before = await page.evaluate(() => scrollY);
       const p = await point(page, 1);
@@ -139,8 +137,7 @@ try {
       await real.nth(index).scrollIntoViewIfNeeded();
       await real.nth(index).locator('h3').click();
       await page.waitForTimeout(1000);
-      if (index === 1) assert.equal(await page.evaluate(() => window.seoDestination), '/seo-local/');
-      else assert.equal(new URL(page.url()).hash, '#contacto');
+      assert.equal(await page.evaluate(() => window.serviceDestination), ['/diseno-web/', '/seo-local/', '/productos/'][index]);
     }
     await page.goto(`${url}/#servicios`, { waitUntil: 'networkidle' });
     await settle(page);
@@ -152,12 +149,13 @@ try {
     await context.close();
   }
   for (const options of [{ reducedMotion: 'reduce' }, { javaScriptEnabled: false }]) {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, ...options });
+    const context = await createQAContext(browser, { viewport: { width: 1440, height: 900 }, ...options });
+    const page = await context.newPage();
     await page.goto(url, { waitUntil: 'networkidle' });
     assert.equal(await page.locator('.cinematic-hero__interaction a').count(), 0);
     await page.locator('#servicios a.service-card').first().click();
-    assert.equal(new URL(page.url()).hash, '#contacto');
-    await page.close();
+    await page.waitForURL('**/diseno-web/');
+    await context.close();
   }
   const page = await browser.newPage();
   const routes = [];

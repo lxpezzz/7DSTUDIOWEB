@@ -1,0 +1,63 @@
+# 7DStudio: sitio Astro estático en la raíz de 7dstudio.es.
+# Preparado, NO aplicado al servidor. Revisar docs/produccion-lucushost.md.
+# Requiere HTTPS en origen, sin terminación TLS en un proxy no configurado.
+
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # No interferir en los ficheros de validación de certificados de cPanel.
+  RewriteRule ^\.well-known/(acme-challenge|pki-validation)/ - [L]
+
+  # Destino constante: no se construye una redirección con el Host del cliente.
+  RewriteCond %{HTTP_HOST} !^7dstudio\.es$ [NC,OR]
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://7dstudio.es%{REQUEST_URI} [R=301,L,NE]
+
+  # Solo peticiones explícitas: no redirigir el DirectoryIndex interno.
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[?\s] [NC]
+  RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
+
+  # Defensa adicional, no sustituto de subir únicamente dist/.
+  RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+
+  # Solo ficheros existentes del directorio generado con hashes por Astro.
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^_astro/ - [E=ASTRO_IMMUTABLE:1]
+
+  # Sin fallback SPA ni reescritura de rutas inexistentes a Inicio.
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+
+  # Recursos sin hash: caché corta; el HTML siempre debe revalidarse.
+  <FilesMatch "\.(css|js|mjs|svg|png|jpe?g|webp|avif|ico|woff2?)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+  Header set Cache-Control "public, max-age=31536000, immutable" env=ASTRO_IMMUTABLE
+  <FilesMatch "\.(html?|xml|txt)$">
+    Header always set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # No se habilitan HSTS ni Content-Security-Policy sin validación previa.
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/ld+json application/xml text/xml image/svg+xml
+</IfModule>
+
+<IfModule mod_authz_core.c>
+  <FilesMatch "(?i)^(\.env.*|\.ht.*|package(-lock)?\.json|.*\.(map|log|bak|sql))$">
+    Require all denied
+  </FilesMatch>
+</IfModule>

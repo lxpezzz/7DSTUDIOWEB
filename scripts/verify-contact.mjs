@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createQAContext } from './qa-browser.mjs';
 const modules = resolve(process.argv[2]);
 const { chromium } = await import(pathToFileURL(join(modules, 'playwright/index.mjs')));
 const { default: AxeBuilder } = await import(pathToFileURL(join(modules, '@axe-core/playwright/dist/index.mjs')));
@@ -13,7 +14,7 @@ const browser = await chromium.launch();
 const results = [];
 try {
   for (const width of [360, 390, 768, 1024, 1440, 1920]) {
-    const context = await browser.newContext({ viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
+    const context = await createQAContext(browser, { viewport: { width, height: 1000 }, reducedMotion: 'reduce' });
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -68,7 +69,8 @@ try {
 
   // QA fixture only: use a dummy public key and intercept every provider request.
   // This validates the real submit handler, not real email delivery.
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  const context = await createQAContext(browser, { viewport: { width: 1440, height: 1000 } });
+  const page = await context.newPage();
   let requests = 0, payload = '', mode = 'success', release;
   let gate = Promise.resolve();
   await page.route('https://api.web3forms.com/submit', async route => {
@@ -138,18 +140,22 @@ try {
     assert.equal(await page.locator('#name').inputValue(), 'Prueba de contacto');
     assert.equal(await button.isDisabled(), false);
   }
-  // Existing WhatsApp fallback must include the new service field.
-  await form.evaluate(el => { el.dataset.configured = 'false'; el.action = 'https://wa.me/34621200800'; });
-  await button.click();
-  await page.locator('.contact__continue').waitFor({ state: 'visible' });
-  assert.match(new URL(await page.locator('.contact__continue').getAttribute('href')).searchParams.get('text'), /Servicio: Productos QR\/NFC/);
-  await page.close();
-  const noJS = await browser.newPage({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  // Sin configuración se bloquea el envío; WhatsApp es un canal independiente.
+  const before = requests;
+  await form.evaluate(el => { el.dataset.configured = 'false'; });
+  await form.evaluate(el => el.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })));
+  assert.equal(requests, before);
+  assert.equal(await page.locator('.contact__continue').isVisible(), false);
+  await context.close();
+  const noJSContext = await createQAContext(browser, { javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  const noJS = await noJSContext.newPage();
   await noJS.goto(`${url}/#contacto`, { waitUntil: 'networkidle' });
   assert.ok(await noJS.locator('.contact__whatsapp').isVisible());
-  assert.ok(await noJS.locator('.contact__submit').isDisabled());
-  await noJS.close();
-  const report = { results, simulatedWeb3Forms: 'success, HTTP error, network error, validation, consent, antispam, duplicate prevention', fallback: 'service included', realDelivery: 'not tested: requires published privacy policy and configured key' };
+  const configured = await noJS.locator('form').getAttribute('data-configured') === 'true';
+  const privacyReady = await noJS.locator('form').getAttribute('data-privacy-ready') === 'true';
+  assert.equal(await noJS.locator('.contact__submit').isDisabled(), !configured || !privacyReady);
+  await noJSContext.close();
+  const report = { results, simulatedWeb3Forms: 'success, HTTP error, network error, validation, consent, antispam, duplicate prevention', inactive: 'submission blocked; WhatsApp independent', realDelivery: 'not tested; no external submissions' };
   await writeFile(`${output}/qa.json`, JSON.stringify(report, null, 2));
   console.log(JSON.stringify({ widths: results.map(r => r.width), ...report, results: undefined }, null, 2));
 } finally { await browser.close(); }

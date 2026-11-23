@@ -1,4 +1,4 @@
-# 7D Studio
+# 7DStudio
 
 <!-- impeccable:product-schema 1 -->
 

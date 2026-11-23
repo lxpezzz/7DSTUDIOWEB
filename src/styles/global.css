@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './typography.css';
 
 @font-face {
   font-family: 'Manrope Variable';
@@ -226,10 +227,14 @@ img {
 
 @media (max-width: 1023px) {
 
-  /* Reserva también los enlaces visibles cuando JavaScript no está disponible. */
   :root {
-    --header-height: 164px;
+    --header-height: 84px;
     --mobile-nav-height: calc(88px + env(safe-area-inset-bottom));
+  }
+
+  /* Sin mejora JS, el header está en el flujo y no necesita compensación. */
+  :root:has(.header:not(.header--enhanced)) {
+    --header-height: 0px;
   }
 
   body {

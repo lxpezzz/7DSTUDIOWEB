@@ -1,5 +1,6 @@
 ---
 import { getDemoUrl, type Project } from "../../data/projects";
+import { Image } from "astro:assets";
 interface Props {
   items: readonly Project[];
 }
@@ -30,13 +31,15 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
             href={demoUrl}
             target={demoUrl ? "_blank" : undefined}
             rel={demoUrl ? "noopener noreferrer" : undefined}
-            aria-label={demoUrl ? `Explorar demo de ${project.title} (se abre en una pestaña nueva)` : undefined}
           >
             <div class="project__image">
-              <img
-                src={project.image.src}
-                width={project.image.width}
-                height={project.image.height}
+              <Image
+                src={project.image}
+                width={1280}
+                widths={[320, 480, 640, 960, 1280]}
+                sizes="(max-width: 767px) 80vw, (max-width: 1023px) 57vw, (min-width: 1408px) 548px, 40vw"
+                format="webp"
+                quality={85}
                 alt={project.image.alt}
                 loading="lazy"
                 decoding="async"
@@ -44,17 +47,28 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
             </div>
             <div class="project__meta">
               <span>{project.sector}</span>
-              {project.type === "demo" && (
-                <span class="project__type">Demostración</span>
-              )}
+              <span
+                class:list={[
+                  "project__type",
+                  { "project__type--demo": project.type === "demo" },
+                ]}
+              >
+                {project.type === "demo" ? "DEMO CONCEPTUAL" : "PROYECTO REAL"}
+              </span>
             </div>
             <h3>{project.title}</h3>
             <p class="project__description">{project.description}</p>
+            {project.highlights && project.highlights.length > 0 && (
+              <p class="project__highlights">
+                {project.highlights.join(" · ")}
+              </p>
+            )}
             {demoUrl && (
-              <span
-                class="text-link project__link"
-              >
-                Explorar
+              <span class="text-link project__link">
+                {project.type === "demo" ? "Explorar demo" : "Explorar proyecto"}
+                <span class="sr-only">
+                  {" "}— {project.title} (se abre en una pestaña nueva)
+                </span>
                 <svg
                   width="17"
                   height="17"
@@ -162,6 +176,7 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
   .project__image {
     overflow: hidden;
     aspect-ratio: 16 / 10;
+    border: 1px solid var(--color-line);
     background: var(--color-line);
   }
   .project__image img {
@@ -174,6 +189,7 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
   .project__meta {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
     gap: 8px 16px;
     justify-content: space-between;
     margin-top: 22px;
@@ -182,7 +198,16 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
     line-height: 1.6;
   }
   .project__type {
+    color: var(--color-muted);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project__type--demo {
     color: var(--color-ink);
+    padding: 2px 7px;
+    border: 1px solid var(--color-line);
   }
   h3 {
     margin: 10px 0 0;
@@ -200,8 +225,17 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
     line-height: 1.65;
     overflow-wrap: anywhere;
   }
+  .project__highlights {
+    margin: 10px 0 0;
+    color: var(--color-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
   .project__link {
     margin-top: 14px;
+  }
+  .project--linked:hover .project__link {
+    text-decoration-color: currentColor;
   }
   .catalogue__controls {
     display: flex;

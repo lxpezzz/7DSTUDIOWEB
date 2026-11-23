@@ -1,0 +1,193 @@
+---
+import site from '../data/site.json';
+---
+
+<section id="contacto" class="section section-warm location" aria-labelledby="location-title">
+  <div class="container location__grid">
+    <div class="location__info">
+      <p class="text-label location__eyebrow reveal">Encuéntranos</p>
+      <h2 id="location-title" class="text-display location__title reveal">Ven a saludar</h2>
+      <address class="location__address reveal">
+        {site.address.street}<br />
+        {site.address.zip} {site.address.city}
+      </address>
+
+      <dl class="location__details reveal">
+        <div class="location__detail">
+          <dt class="location__label">Teléfono</dt>
+          <dd>
+            <a href={`tel:${site.phone.replace(/\s/g, '')}`} class="location__link">{site.phone}</a>
+          </dd>
+        </div>
+        <div class="location__detail">
+          <dt class="location__label">WhatsApp</dt>
+          <dd>
+            <a href={site.social.whatsapp} class="location__link" target="_blank" rel="noopener noreferrer">
+              Escribir por WhatsApp
+            </a>
+          </dd>
+        </div>
+        <div class="location__detail">
+          <dt class="location__label">Email</dt>
+          <dd>
+            <a href={`mailto:${site.email}`} class="location__link">{site.email}</a>
+          </dd>
+        </div>
+      </dl>
+
+      <div class="location__hours reveal">
+        <h3 class="text-label location__hours-title">Horario</h3>
+        <ul class="location__hours-list" role="list">
+          {site.hours.map((hour) => (
+            <li class="location__hour">
+              <span>{hour.days}</span>
+              <span>{hour.time}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <a href={site.address.mapsUrl} class="btn btn-primary location__maps reveal" target="_blank" rel="noopener noreferrer">
+        Ver en Google Maps
+      </a>
+    </div>
+
+    <div class="location__visual reveal-scale" aria-hidden="true">
+      <div class="location__card">
+        <span class="location__letter">H</span>
+        <span class="location__sub">Peluquería canina</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .location__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+    align-items: start;
+  }
+
+  .location__info {
+    display: grid;
+    gap: var(--space-md);
+  }
+
+  .location__eyebrow {
+    color: var(--caramel);
+  }
+
+  .location__title {
+    font-size: var(--text-xl);
+  }
+
+  .location__address {
+    font-style: normal;
+    font-size: var(--text-md);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .location__details {
+    display: grid;
+    gap: var(--space-sm);
+  }
+
+  .location__detail {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .location__label {
+    font-size: var(--text-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+  }
+
+  .location__link {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast);
+  }
+
+  .location__link:hover,
+  .location__link:focus-visible {
+    color: var(--green);
+  }
+
+  .location__hours {
+    display: grid;
+    gap: var(--space-xs);
+    padding: var(--space-md);
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+  }
+
+  .location__hours-list {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .location__hour {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+  }
+
+  .location__maps {
+    justify-self: start;
+    margin-top: var(--space-xs);
+  }
+
+  .location__visual {
+    justify-self: center;
+    display: grid;
+    place-items: center;
+    width: clamp(14rem, 50vw, 22rem);
+    aspect-ratio: 1 / 1;
+    background-color: var(--green);
+  }
+
+  .location__card {
+    display: grid;
+    place-items: center;
+    gap: var(--space-xs);
+    text-align: center;
+    color: var(--surface);
+  }
+
+  .location__letter {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    line-height: 1;
+  }
+
+  .location__sub {
+    font-size: var(--text-sm);
+    opacity: 0.8;
+  }
+
+  @media (min-width: 768px) {
+    .location__grid {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: var(--space-2xl);
+    }
+
+    .location__info {
+      gap: var(--space-lg);
+    }
+
+    .location__visual {
+      justify-self: end;
+    }
+  }
+</style>

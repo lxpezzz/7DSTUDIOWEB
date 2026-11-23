@@ -1,5 +1,5 @@
 ---
-name: 7D Studio
+name: 7DStudio
 description: Sistema construido de minimalismo editorial digital para un estudio independiente.
 colors:
   paper: "#f8f7f4"
@@ -105,7 +105,7 @@ components:
     width: "100%"
 ---
 
-# Design System: 7D Studio
+# Design System: 7DStudio
 
 ## Overview
 

@@ -20,20 +20,36 @@ export interface WebExtra {
 
 const corporateIncludedPages = 5;
 
+export const webMaintenanceScope = [
+  'El mantenimiento incluye las tareas técnicas necesarias para mantener tu web actualizada y funcionando correctamente, además de una modificación sencilla mensual no acumulable.',
+  'Por ejemplo, puedes solicitar un cambio de texto, sustituir una fotografía, actualizar un horario o modificar información de tus servicios.',
+  'No incluye la creación de nuevas páginas, rediseños completos ni funcionalidades adicionales. Estos trabajos se presupuestan por separado.',
+  'Los cambios mensuales no son acumulables y el servicio de SEO local se contrata por separado.',
+] as const;
+
+export const webOwnership = {
+  domain: 'El dominio se registra siempre a nombre del cliente, que mantiene su titularidad.',
+  continuity: 'No existe permanencia obligatoria.',
+  handover: 'Si decides cambiar de proveedor, te facilitaremos los archivos, contenidos y trabajos de tu web que hayas abonado y la información necesaria para trasladarla, respetando las licencias de terceros.',
+};
+
+const maintenancePriceLabel = '19 €/mes + IVA';
+
 export const webCare = {
   hosting: {
     title: 'Hosting y dominio incluidos',
-    description: 'Sin coste adicional mientras mantengas tu web con 7D Studio',
+    description: `Sin coste adicional mientras mantengas el servicio con 7DStudio. ${webOwnership.domain}`,
   },
   maintenance: {
     title: '3 meses de mantenimiento gratis',
-    description: 'Después, 19 €/mes. Incluye el mantenimiento de tu web y un cambio mensual.',
-    requirement: 'El mantenimiento es obligatorio a partir del cuarto mes si continúas con tu web alojada y gestionada por 7D Studio. La cuota mensual no se suma al precio inicial de desarrollo.',
+    priceLabel: maintenancePriceLabel,
+    description: `Desde la publicación de tu web. Desde el cuarto mes, ${maintenancePriceLabel}. Incluye una modificación sencilla mensual no acumulable.`,
+    requirement: 'El mantenimiento es obligatorio a partir del cuarto mes si continúas con tu web alojada y gestionada por 7DStudio. La cuota mensual no se suma al precio inicial de desarrollo.',
   },
   separate: 'El SEO local se contrata por separado.',
 };
 
-export const webCareTerms = `${webCare.hosting.title}. ${webCare.hosting.description}. ${webCare.maintenance.title}. ${webCare.maintenance.description} ${webCare.maintenance.requirement} ${webCare.separate}`;
+export const webCareTerms = `${webCare.hosting.title}. ${webCare.hosting.description} ${webCare.maintenance.title}. ${webCare.maintenance.description} ${webCare.maintenance.requirement} ${webCare.separate} ${webOwnership.continuity}`;
 
 export const webPricing = {
   defaultType: 'one-page' as WebTypeId,
@@ -49,7 +65,7 @@ export const webPricing = {
       id: 'corporate', name: 'Web de varias páginas',
       description: 'Tu negocio organizado en distintas páginas para explicar cada servicio con más detalle.',
       baseCents: 75000, includedPages: corporateIncludedPages,
-      included: ['Diseño adaptado a móvil, tablet y ordenador', 'Servicios e información de tu negocio en una página', 'Formulario de contacto y enlaces a tus vías de contacto', 'Enlace a WhatsApp o teléfono para que tus clientes puedan contactarte directamente', 'Optimización técnica de imágenes', 'Optimización y configuración de SEO básico'],
+      included: ['Diseño adaptado a móvil, tablet y ordenador', `Servicios e información de tu negocio organizados en las ${corporateIncludedPages} páginas incluidas`, 'Formulario de contacto y enlaces a tus vías de contacto', 'Enlace a WhatsApp o teléfono para que tus clientes puedan contactarte directamente', 'Optimización técnica de imágenes', 'Optimización y configuración de SEO básico'],
     },
     {
       id: 'redesign', name: 'Rediseño de una web existente',

@@ -4,14 +4,14 @@
 
 ## Identidad
 
-Reutiliza `src/images/finalcta/simbolometal-7d.webp`, recurso original transparente de 1024 × 1145. Astro genera derivados WebP; no se recrea ni se altera el símbolo. Es decorativo, `aria-hidden`, sin eventos de puntero. WhatsApp conserva `site.whatsapp`, sin números inventados.
+Utiliza el isotipo SVG original de `brand/svg/7dstudio-isotipo.svg`, centralizado en `src/data/brand.ts`. Es decorativo, `aria-hidden`, sin eventos de puntero. WhatsApp conserva `site.whatsapp`, sin números inventados.
 
 ## Configuración y privacidad
 
-- `PUBLIC_WEB3FORMS_KEY`: clave pública del proveedor, todavía sin configurar. Se mantienen endpoint y honeypot `botcheck`.
+- La clave pública facilitada por el titular está centralizada en `site.web3formsKey`; `PUBLIC_WEB3FORMS_KEY` permite sustituirla. Se mantienen endpoint y honeypot `botcheck`.
 - La ruta de privacidad es `/politica-de-privacidad/`. Que exista el borrador no habilita formularios.
-- `src/data/legal.ts` centraliza datos pendientes y conserva `reviewed: false` y `formsEnabled: false`. Por decisión expresa del usuario, casilla y envío permanecen deshabilitados; WhatsApp es un enlace directo independiente.
-- `site.privacyReady` exige identidad completa y revisión; `site.formsConfigured` exige además autorización de activación y clave. Solo deben modificarse tras completar datos, revisar proveedores y textos y obtener autorización del titular. Es necesario volver a compilar.
+- `src/data/legal.ts` centraliza datos pendientes. La integración está autorizada (`formsEnabled: true`), pero `reviewed: false` y la identidad incompleta mantienen deshabilitados la casilla y el envío; WhatsApp es un enlace directo independiente.
+- `site.privacyReady` exige identidad completa y revisión; `site.formsConfigured` exige además autorización de activación y la clave efectiva (configurada o de entorno). No marcar la revisión como realizada sin confirmación. Es necesario volver a compilar.
 - El helper bloquea también envíos programáticos cuando faltan esos requisitos. Los estados de éxito y error se comprueban mediante respuestas simuladas, no enviando datos reales. Sin JS, el POST nativo solo se configura cuando se cumplen los requisitos.
 - `mode="contact"` reutiliza la sección en `/contacto/`, con teléfono opcional y selector. Admite `?servicio=web`, `seo-local`, `productos` u `otro`, sin guardar datos personales en la URL.
 
@@ -27,4 +27,4 @@ El estado de envío bloquea dobles solicitudes, marca `aria-busy` y restablece e
 
 - 360, 390, 768, 1024, 1440 y 1920px: sin overflow, proporciones y altura de paneles correctas, símbolo visible, un formulario, teclado y sin infracciones axe detectadas.
 - Fixture exclusivamente en navegador, con solicitudes interceptadas: payload del servicio/consentimiento, validación de email, honeypot, bloqueo de duplicados, éxito, error HTTP y error de red. WhatsApp se ofrece mediante un enlace independiente; ya no se convierte un formulario desconfigurado en una solicitud de envío.
-- No equivale a entrega real de correo. Queda pendiente configurar la política y Web3Forms y verificar recepción autorizada. Pruebas ejecutadas en Chromium, no en dispositivos físicos ni otros motores.
+- No equivale a entrega real de correo. Queda pendiente completar la identidad del responsable, revisar la política y verificar recepción autorizada. Pruebas ejecutadas en Chromium, no en dispositivos físicos ni otros motores.

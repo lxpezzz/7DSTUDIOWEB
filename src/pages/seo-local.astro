@@ -17,8 +17,9 @@ import {
   ChartNoAxesColumnIncreasing,
 } from "lucide";
 import { site } from "../data/site";
+import { seoFaqs as faqs } from "../data/serviceFaqs";
 
-const title = "SEO local en Castellón | 7D Studio";
+const title = "SEO local en Castellón | 7DStudio";
 const description =
   "Ayudamos a negocios a mejorar su presencia en Google. Descubre cómo trabajamos el SEO local y consulta nuestros planes Estándar y Premium.";
 const contactUrl = new URL(site.whatsapp);
@@ -57,80 +58,23 @@ const work = [
     text: "Analizamos las visualizaciones, interacciones y otros datos disponibles para conocer cómo evoluciona tu presencia local.",
   },
 ];
-interface FaqItem {
-  question: string;
-  answer: string | string[];
-  questionStrong: string[];
-  answerStrong: string[];
-  answerItalic?: string[];
-}
-
-const faqs: FaqItem[] = [
-  {
-    question: "¿Necesito tener una página web para contratar SEO local?",
-    answer:
-      "No necesariamente. Podemos empezar mejorando tu Perfil de Empresa en Google, aunque no tengas web. Si dispones de una, también podemos trabajar determinados aspectos para reforzar tu presencia online.",
-    questionStrong: ["página web"],
-    answerStrong: ["No necesariamente.", "Perfil de Empresa en Google"],
-  },
-  {
-    question: "¿Cuánto tiempo se tarda en notar resultados?",
-    answer: [
-      "El SEO local es una carrera de fondo, no un sprint. Algunas mejoras pueden apreciarse rápidamente, pero conseguir una presencia más sólida en Google requiere tiempo, constancia y seguimiento.",
-      "Por eso, recomendamos trabajar durante un mínimo de 6 meses, para poder evaluar la evolución y realizar los ajustes necesarios.",
-      "Los resultados dependen de cada negocio, su competencia y su situación inicial, por lo que no garantizamos posiciones ni plazos concretos.",
-    ],
-    questionStrong: ["notar resultados"],
-    answerStrong: ["tiempo, constancia y seguimiento", "mínimo de 6 meses", "no garantizamos posiciones ni plazos concretos"],
-    answerItalic: ["una carrera de fondo, no un sprint"],
-  },
-  {
-    question: "¿Qué diferencia hay entre SEO Estándar y Premium?",
-    answer:
-      "Estándar se centra en mantener y mejorar tu presencia local en Google. Premium incluye todo lo anterior y amplía el trabajo con SEO On-Page mensual, directorios profesionales, análisis de competencia y un seguimiento más detallado.",
-    questionStrong: ["SEO Estándar y Premium"],
-    answerStrong: ["Estándar", "Premium incluye todo lo anterior", "SEO On-Page mensual"],
-  },
-  {
-    question: "¿Qué necesitáis para empezar a trabajar con mi negocio?",
-    answer:
-      "Necesitaremos acceso autorizado a tu Perfil de Empresa de Google. Para las mejoras que afecten a tu página web, también necesitaremos permisos de edición. Te explicaremos cómo concedernos acceso de forma segura.",
-    questionStrong: ["Qué necesitáis"],
-    answerStrong: ["acceso autorizado", "permisos de edición"],
-    answerItalic: ["de forma segura"],
-  },
-  {
-    question: "¿También os encargáis de responder a las reseñas de Google?",
-    answer:
-      "Sí. Nos encargamos de gestionar y preparar respuestas personalizadas a las reseñas, siguiendo el tono de tu negocio. El alcance concreto dependerá del plan contratado.",
-    questionStrong: ["responder a las reseñas de Google"],
-    answerStrong: ["Sí.", "respuestas personalizadas", "plan contratado"],
-  },
-  {
-    question: "¿Tengo que pagar a Google para que aparezca mi negocio?",
-    answer:
-      "No. Crear y gestionar un Perfil de Empresa en Google es gratuito. Lo que pagas a 7D Studio es nuestro trabajo de optimización y seguimiento. Los anuncios de Google Ads son un servicio diferente.",
-    questionStrong: ["pagar a Google"],
-    answerStrong: ["No.", "es gratuito", "trabajo de optimización y seguimiento"],
-    answerItalic: ["un servicio diferente"],
-  },
-  {
-    question: "Mi negocio ya aparece en Google. ¿Necesito SEO local?",
-    answer:
-      "Puede que sí. Aparecer es solo el primer paso. Conviene revisar si tus servicios están bien explicados, si la información está actualizada y si tu ficha ayuda a los clientes a decidirse por tu negocio.",
-    questionStrong: ["ya aparece en Google"],
-    answerStrong: ["Puede que sí.", "servicios están bien explicados", "información está actualizada"],
-  },
-];
-
 function formatFaqText(text: string, strong: string[], italic: string[] = []) {
   const phrases = [...strong, ...italic];
   if (phrases.length === 0) return [{ text, tag: "span" as const }];
-  const pattern = phrases.map(phrase => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|");
-  return text.split(new RegExp(`(${pattern})`, "g")).filter(Boolean).map(part => ({
-    text: part,
-    tag: strong.includes(part) ? "strong" as const : italic.includes(part) ? "em" as const : "span" as const,
-  }));
+  const pattern = phrases
+    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    .join("|");
+  return text
+    .split(new RegExp(`(${pattern})`, "g"))
+    .filter(Boolean)
+    .map((part) => ({
+      text: part,
+      tag: strong.includes(part)
+        ? ("strong" as const)
+        : italic.includes(part)
+          ? ("em" as const)
+          : ("span" as const),
+    }));
 }
 const structuredData = [
   {
@@ -181,7 +125,7 @@ const structuredData = [
       </nav>
       <div class="seo-hero__layout">
         <div class="seo-hero__copy">
-          <p class="seo-page__label">SEO LOCAL / 7D STUDIO</p>
+          <p class="seo-page__label">SEO LOCAL / 7DStudio</p>
           <h1 id="seo-title">
             <span class="seo-hero__statement"
               >Tus próximos clientes te están buscando en Google.</span
@@ -206,7 +150,9 @@ const structuredData = [
             >Primero, te contamos cómo funciona <span aria-hidden="true">↓</span
             ></a
           >
-          <a class="seo-hero__secondary" href="#planes">Ver planes y precios <span aria-hidden="true">↓</span></a>
+          <a class="seo-hero__secondary" href="#planes"
+            >Ver planes y precios <span aria-hidden="true">↓</span></a
+          >
         </div>
         <SearchPreview />
       </div>
@@ -219,7 +165,7 @@ const structuredData = [
     >
       <div class="seo-page__heading">
         <h2 id="journey-title">
-          El cliente necesita algo.<br />La pregunta es a quién encuentra.
+          El cliente necesita algo. <span class="heading-emphasis">La pregunta es a quién encuentra.</span>
         </h2>
         <p>
           Cuando alguien necesita un servicio, busca en Google, compara opciones
@@ -412,7 +358,7 @@ const structuredData = [
         <div class="work__intro">
           <p class="seo-page__label">CÓMO TE AYUDAMOS</p>
           <h2 id="work-title">
-            Que te encuentren.<br />Y entiendan por qué elegirte.
+            Que te encuentren. <span class="heading-aside">Y entiendan por qué elegirte.</span>
           </h2>
           <p>
             Nos ocupamos de traducir tu negocio a una presencia local clara,
@@ -456,7 +402,11 @@ const structuredData = [
 
     <SeoPlans />
 
-    <section id="preguntas-seo" class="faq container" aria-labelledby="faq-title">
+    <section
+      id="preguntas-seo"
+      class="faq container"
+      aria-labelledby="faq-title"
+    >
       <div class="faq__intro">
         <p class="seo-page__label">SIN TECNICISMOS</p>
         <h2 id="faq-title">Es normal tener preguntas.</h2>
@@ -471,13 +421,23 @@ const structuredData = [
             <details>
               <summary>
                 <span>
-                  {formatFaqText(faq.question, faq.questionStrong).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}
+                  {formatFaqText(faq.question, faq.questionStrong).map(
+                    ({ text, tag: Tag }) => (
+                      <Tag>{text}</Tag>
+                    ),
+                  )}
                 </span>
                 <span class="faq__indicator" aria-hidden="true" />
               </summary>
-              {(Array.isArray(faq.answer) ? faq.answer : [faq.answer]).map(paragraph => (
+              {faq.answer.split("\n\n").map((paragraph) => (
                 <p>
-                  {formatFaqText(paragraph, faq.answerStrong, faq.answerItalic).map(({ text, tag: Tag }) => <Tag>{text}</Tag>)}
+                  {formatFaqText(
+                    paragraph,
+                    faq.answerStrong,
+                    faq.answerItalic,
+                  ).map(({ text, tag: Tag }) => (
+                    <Tag>{text}</Tag>
+                  ))}
                 </p>
               ))}
             </details>
@@ -493,6 +453,7 @@ const structuredData = [
 
 <style>
   .seo-page {
+    --heading-accent: #59674f;
     color: var(--color-ink);
   }
   .seo-page a:focus-visible,
@@ -544,7 +505,7 @@ const structuredData = [
     max-width: 20ch;
     margin: 0;
     font-size: clamp(40px, 4.1vw, 60px);
-    font-weight: 450;
+    font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.04em;
     text-wrap: balance;
@@ -585,7 +546,7 @@ const structuredData = [
   h2 {
     margin: 0;
     font-size: clamp(30px, 3.3vw, 46px);
-    font-weight: 450;
+    font-weight: 500;
     line-height: 1.13;
     letter-spacing: -0.04em;
     text-wrap: balance;

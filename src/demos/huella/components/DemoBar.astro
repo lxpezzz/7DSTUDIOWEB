@@ -1,0 +1,49 @@
+---
+import site from '../data/site.json';
+---
+
+<div class="demo-bar" role="banner" aria-label="Barra de demo">
+  <div class="container demo-bar__inner">
+    <span class="demo-bar__badge">{site.demo.badgeText}</span>
+    <a href={site.demo.creatorUrl} class="demo-bar__link">← Volver a {site.demo.creator}</a>
+  </div>
+</div>
+
+<style>
+  .demo-bar {
+    position: relative;
+    z-index: 9000;
+    background-color: var(--bg);
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    padding-block: 0.35rem;
+  }
+
+  .demo-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm);
+  }
+
+  .demo-bar__badge {
+    text-transform: uppercase;
+  }
+
+  .demo-bar__link {
+    font-weight: 600;
+    transition: color var(--transition-fast);
+  }
+
+  .demo-bar__link:hover,
+  .demo-bar__link:focus-visible {
+    color: var(--text);
+    text-decoration: underline;
+  }
+
+  .demo-bar__link:focus-visible {
+    outline-color: var(--text);
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import { projects, getDemoUrl } from "../../data/projects";
+import { Image } from "astro:assets";
 const items = projects.filter(
   (project) => project.type === "client" || project.type === "demo",
 );
@@ -16,7 +17,7 @@ const hasBothCategories =
   <div class="web-heading">
     <p class="web-eyebrow">NUESTROS TRABAJOS</p>
     <h2 id="web-projects-title">
-      Cada negocio es diferente.<br />Tu web también debería serlo.
+      Cada negocio es diferente. <span class="heading-underline">Tu web también debería serlo.</span>
     </h2>
     <p>
       Explora algunas de las páginas que hemos diseñado y descubre diferentes
@@ -74,10 +75,13 @@ const hasBothCategories =
             rel={href ? "noopener noreferrer" : undefined}
           >
             <div class="web-project__image">
-              <img
-                src={project.image.src}
-                width={project.image.width}
-                height={project.image.height}
+              <Image
+                src={project.image}
+                width={1280}
+                widths={[320, 480, 640, 960, 1280]}
+                sizes="(min-width: 1408px) 588px, (min-width: 768px) calc(45.5vw - 52px), calc(100vw - 84px)"
+                format="webp"
+                quality={85}
                 alt={`Captura de ${project.title.trim()}: ${project.sector.toLowerCase()}`}
                 loading="lazy"
                 decoding="async"

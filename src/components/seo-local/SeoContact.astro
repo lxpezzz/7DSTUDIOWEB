@@ -1,77 +1,202 @@
 ---
-import { site } from '../../data/site';
+import { formPrivacyNotice } from "../../data/legal";
+import { site } from "../../data/site";
 
 const configured = site.formsConfigured;
 const privacyReady = site.privacyReady;
 const whatsappHref = new URL(site.whatsapp);
-whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?');
+whatsappHref.searchParams.set(
+  "text",
+  "Hola, me gustaría mejorar la visibilidad local de mi negocio. ¿Podemos hablar?",
+);
 ---
 
-<section id="contacto-seo" class="seo-contact container" aria-labelledby="seo-contact-title">
+<section
+  id="contacto-seo"
+  class="seo-contact container"
+  aria-labelledby="seo-contact-title"
+>
   <div class="seo-contact__panel">
     <div class="seo-contact__copy">
       <p class="seo-contact__eyebrow">HABLEMOS DE TU NEGOCIO</p>
-      <h2 id="seo-contact-title">¿Sabes cómo aparece tu negocio en Google?</h2>
-      <p class="seo-contact__description">Cuéntanos qué negocio tienes y te ayudamos a encontrar la mejor manera de mejorar su presencia local.</p>
-      <a class="seo-contact__whatsapp" href={whatsappHref.href} target="_blank" rel="noopener noreferrer">
-        ¿Prefieres WhatsApp? Hablemos directamente <span aria-hidden="true">↗</span>
+      <h2 id="seo-contact-title">¿Sabes cómo aparece tu negocio <span class="heading-accent">en Google?</span></h2>
+      <p class="seo-contact__description">
+        Cuéntanos qué negocio tienes y te ayudamos a encontrar la mejor manera
+        de mejorar su presencia local.
+      </p>
+      <a
+        class="seo-contact__whatsapp"
+        href={whatsappHref.href}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ¿Prefieres WhatsApp? Hablemos directamente <span aria-hidden="true"
+          >↗</span
+        >
         <span class="sr-only"> (se abre en una pestaña nueva)</span>
       </a>
     </div>
 
-    <form id="seo-contact-form" class="seo-contact__form contact__form" aria-labelledby="seo-form-title"
-      action={configured ? 'https://api.web3forms.com/submit' : site.whatsapp}
-      method={configured ? 'POST' : 'GET'} data-configured={String(configured)} data-privacy-ready={String(privacyReady)}>
+    <form
+      id="seo-contact-form"
+      class="seo-contact__form contact__form"
+      aria-labelledby="seo-form-title"
+      action={configured ? "https://api.web3forms.com/submit" : site.whatsapp}
+      method={configured ? "POST" : "GET"}
+      data-configured={String(configured)}
+      data-privacy-ready={String(privacyReady)}
+    >
       <h3 id="seo-form-title" tabindex="-1">Cuéntanos un poco más</h3>
-      {(!configured || !privacyReady) && <p class="seo-contact__availability">El formulario aún no admite envíos. Puedes hablar con nosotros por WhatsApp, sin rellenar estos campos.</p>}
-      <p class="seo-contact__selection" data-selected-plan aria-live="polite">Consulta de SEO local. No necesitas elegir un plan.</p>
-      {configured && <>
-        <input type="hidden" name="access_key" value={site.web3formsKey} />
-        <input type="hidden" name="subject" value="Consulta SEO Local · 7D Studio" />
-        <input type="hidden" name="from_name" value="7D Studio" />
-      </>}
-      <input type="hidden" name="source" value="Página SEO Local · /seo-local/" />
+      {
+        (!configured || !privacyReady) && (
+          <p class="seo-contact__availability">
+            El formulario aún no admite envíos. Puedes hablar con nosotros por
+            WhatsApp, sin rellenar estos campos.
+          </p>
+        )
+      }
+      <p class="seo-contact__selection" data-selected-plan aria-live="polite">
+        Consulta de SEO local. No necesitas elegir un plan.
+      </p>
+      {
+        configured && (
+          <>
+            <input type="hidden" name="access_key" value={site.web3formsKey} />
+            <input
+              type="hidden"
+              name="subject"
+              value="Consulta SEO Local · 7DStudio"
+            />
+            <input type="hidden" name="from_name" value="7DStudio" />
+          </>
+        )
+      }
+      <input
+        type="hidden"
+        name="source"
+        value="Página SEO Local · /seo-local/"
+      />
       <input type="hidden" name="service" value="SEO local" />
       <input type="hidden" name="plan" value="" />
       <div class="seo-contact__trap" aria-hidden="true">
         <label for="seo-website">Deja este campo vacío</label>
-        <input id="seo-website" type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+        <input
+          id="seo-website"
+          type="text"
+          name="botcheck"
+          tabindex="-1"
+          autocomplete="off"
+        />
       </div>
       <div class="seo-contact__fields">
         <div class="seo-contact__field">
-          <label for="seo-name">Nombre <span class="sr-only">(obligatorio)</span></label>
-          <input id="seo-name" name="name" autocomplete="name" required maxlength="100" />
+          <label for="seo-name"
+            >Nombre <span class="sr-only">(obligatorio)</span></label
+          >
+          <input
+            id="seo-name"
+            name="name"
+            autocomplete="name"
+            required
+            maxlength="100"
+          />
         </div>
         <div class="seo-contact__field">
-          <label for="seo-email">Correo electrónico <span class="sr-only">(obligatorio)</span></label>
-          <input id="seo-email" type="email" name="email" autocomplete="email" required maxlength="254" />
+          <label for="seo-email"
+            >Correo electrónico <span class="sr-only">(obligatorio)</span
+            ></label
+          >
+          <input
+            id="seo-email"
+            type="email"
+            name="email"
+            autocomplete="email"
+            required
+            maxlength="254"
+          />
         </div>
         <div class="seo-contact__field seo-contact__field--wide">
-          <label for="seo-business">Nombre del negocio <span class="seo-contact__optional">(opcional)</span></label>
-          <input id="seo-business" name="business" autocomplete="organization" maxlength="150" />
+          <label for="seo-business"
+            >Nombre del negocio <span class="seo-contact__optional"
+              >(opcional)</span
+            ></label
+          >
+          <input
+            id="seo-business"
+            name="business"
+            autocomplete="organization"
+            maxlength="150"
+          />
         </div>
         <div class="seo-contact__field seo-contact__field--wide">
-          <label for="seo-message">Mensaje <span class="sr-only">(obligatorio)</span></label>
-          <textarea id="seo-message" name="message" required minlength="10" maxlength="4000" rows="3"></textarea>
+          <label for="seo-message"
+            >Mensaje <span class="sr-only">(obligatorio)</span></label
+          >
+          <textarea
+            id="seo-message"
+            name="message"
+            required
+            minlength="10"
+            maxlength="4000"
+            rows="3"></textarea>
         </div>
       </div>
       <label class="seo-contact__privacy">
-        <input type="checkbox" name="privacy" value="accepted" required disabled={!privacyReady} aria-describedby={!privacyReady ? 'seo-contact-notice' : undefined} />
-        <span>He leído y acepto <a href={site.privacyPolicyUrl} target="_blank" rel="noopener noreferrer">la política de privacidad<span class="sr-only"> (se abre en una pestaña nueva)</span></a>.</span>
+        <input
+          type="checkbox"
+          name="privacy"
+          value="accepted"
+          required
+          disabled={!privacyReady}
+          aria-describedby={!privacyReady ? "seo-contact-notice" : undefined}
+        />
+        <span
+          >He leído y acepto <a
+            href={site.privacyPolicyUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            >la política de privacidad<span class="sr-only">
+              (se abre en una pestaña nueva)</span
+            ></a
+          >.</span
+        >
       </label>
       <p class="seo-contact__notice" id="seo-contact-notice">
-        {!privacyReady
-            ? 'El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp.'
-          : configured
-            ? 'Usaremos tus datos para responder a tu consulta. El envío se procesa a través de Web3Forms.'
-            : 'El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente.'}
+        {
+          !privacyReady
+            ? "El formulario está desactivado mientras completamos la configuración y revisamos la información legal. Puedes escribirnos por WhatsApp."
+            : configured
+              ? formPrivacyNotice
+              : "El envío por email aún no está disponible. Prepararemos tu mensaje para que lo revises y lo envíes por WhatsApp. No se envía automáticamente."
+        }
       </p>
-      <button class="contact__submit" type="submit" disabled={!privacyReady || !configured} aria-describedby="seo-contact-notice">
+      <button
+        class="contact__submit"
+        type="submit"
+        disabled={!privacyReady || !configured}
+        aria-describedby="seo-contact-notice"
+      >
         Enviar consulta <span aria-hidden="true">↗</span>
       </button>
-      <p class="contact__feedback" role="status" aria-live="polite" tabindex="-1"></p>
-      <a class="contact__continue" href={site.whatsapp} hidden>Abrir mi mensaje en WhatsApp ↗</a>
-      <noscript><p class="seo-contact__notice">{configured && privacyReady ? 'Puedes enviar este formulario sin JavaScript.' : 'Utiliza el enlace directo a WhatsApp para contarnos tu negocio.'}</p></noscript>
+      <p
+        class="contact__feedback"
+        role="status"
+        aria-live="polite"
+        tabindex="-1"
+      >
+      </p>
+      <a class="contact__continue" href={site.whatsapp} hidden
+        >Abrir mi mensaje en WhatsApp ↗</a
+      >
+      <noscript
+        ><p class="seo-contact__notice">
+          {
+            configured && privacyReady
+              ? "Puedes enviar este formulario sin JavaScript."
+              : "Utiliza el enlace directo a WhatsApp para contarnos tu negocio."
+          }
+        </p></noscript
+      >
     </form>
   </div>
 </section>
@@ -249,7 +374,7 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
     cursor: not-allowed;
     opacity: 0.6;
   }
-  .contact__submit[aria-busy='true'] {
+  .contact__submit[aria-busy="true"] {
     cursor: wait;
   }
   .contact__feedback {
@@ -298,41 +423,61 @@ whatsappHref.searchParams.set('text', 'Hola, me gustaría mejorar la visibilidad
 </style>
 
 <script>
-  import { initContactForm } from '../../scripts/contact-form';
+  import { initContactForm } from "../../scripts/contact-form";
 
-  const form = document.querySelector<HTMLFormElement>('#seo-contact-form');
+  const form = document.querySelector<HTMLFormElement>("#seo-contact-form");
   if (form && !form.dataset.seoInitialized) {
-    form.dataset.seoInitialized = 'true';
+    form.dataset.seoInitialized = "true";
     initContactForm(form);
 
-    const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-seo-plan]')];
+    const links = [
+      ...document.querySelectorAll<HTMLAnchorElement>("a[data-seo-plan]"),
+    ];
     const planInput = form.querySelector<HTMLInputElement>('[name="plan"]')!;
-    const serviceInput = form.querySelector<HTMLInputElement>('[name="service"]')!;
-    const selection = form.querySelector<HTMLElement>('[data-selected-plan]')!;
+    const serviceInput =
+      form.querySelector<HTMLInputElement>('[name="service"]')!;
+    const selection = form.querySelector<HTMLElement>("[data-selected-plan]")!;
 
     function showSelectedPlan(name: string) {
       planInput.value = name;
-      serviceInput.value = name ? `SEO local · ${name}` : 'SEO local';
-      selection.textContent = name ? `Plan seleccionado: ${name}` : 'Consulta de SEO local. No necesitas elegir un plan.';
+      serviceInput.value = name ? `SEO local · ${name}` : "SEO local";
+      selection.textContent = name
+        ? `Plan seleccionado: ${name}`
+        : "Consulta de SEO local. No necesitas elegir un plan.";
     }
 
     function syncPlanFromUrl() {
-      const id = new URL(window.location.href).searchParams.get('plan');
-      const link = links.find(link => link.dataset.seoPlan === id);
-      showSelectedPlan(link?.dataset.seoPlanName || '');
+      const id = new URL(window.location.href).searchParams.get("plan");
+      const link = links.find((link) => link.dataset.seoPlan === id);
+      showSelectedPlan(link?.dataset.seoPlanName || "");
     }
 
     syncPlanFromUrl();
-    window.addEventListener('popstate', syncPlanFromUrl);
-    form.addEventListener('reset', () => queueMicrotask(() => showSelectedPlan('')));
+    window.addEventListener("popstate", syncPlanFromUrl);
+    form.addEventListener("reset", () =>
+      queueMicrotask(() => showSelectedPlan("")),
+    );
 
-    links.forEach(link => link.addEventListener('click', event => {
-      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-      event.preventDefault();
-      window.history.pushState(null, '', link.href);
-      syncPlanFromUrl();
-      document.querySelector('#contacto-seo')?.scrollIntoView({ block: 'start', behavior: 'instant' });
-      form.querySelector<HTMLElement>('#seo-form-title')?.focus({ preventScroll: true });
-    }));
+    links.forEach((link) =>
+      link.addEventListener("click", (event) => {
+        if (
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        )
+          return;
+        event.preventDefault();
+        window.history.pushState(null, "", link.href);
+        syncPlanFromUrl();
+        document
+          .querySelector("#contacto-seo")
+          ?.scrollIntoView({ block: "start", behavior: "instant" });
+        form
+          .querySelector<HTMLElement>("#seo-form-title")
+          ?.focus({ preventScroll: true });
+      }),
+    );
   }
 </script>

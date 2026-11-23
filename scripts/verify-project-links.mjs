@@ -3,12 +3,13 @@ import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createQAContext } from './qa-browser.mjs';
 const { chromium } = await import(pathToFileURL(join(resolve(process.argv[2]), 'playwright/index.mjs')));
 const browser = await chromium.launch();
 await mkdir('.impeccable/review/project-links', { recursive: true });
 try {
   for (const width of [390, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: 1000 }, hasTouch: width < 768 });
+    const context = await createQAContext(browser, { viewport: { width, height: 1000 }, hasTouch: width < 768 });
     // Intercepta los destinos: comprueba el enlace, sin visitar ni enviar datos a las demos.
     await context.route(/^https?:\/\/(?!127\.0\.0\.1|localhost)/, route => route.fulfill({ contentType: 'text/html', body: '<title>Destino de prueba QA</title>' }));
     const page = await context.newPage();

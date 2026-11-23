@@ -1,0 +1,636 @@
+---
+import SectionCta from '../ui/SectionCta.astro';
+import { MapPin, PanelsTopLeft, Phone, Nfc, Check } from 'lucide';
+
+const connections = [
+  {
+    scene: 'local',
+    icon: MapPin,
+    service: 'SEO LOCAL',
+    title: 'Que te encuentren',
+    features: [
+      'Ficha de Google optimizada.',
+      'Información actualizada.',
+      'Reseñas y seguimiento.',
+    ],
+  },
+  {
+    scene: 'web',
+    icon: PanelsTopLeft,
+    service: 'DISEÑO WEB',
+    title: 'Que te conozcan',
+    features: [
+      'Diseño adaptado al móvil.',
+      'Servicios bien explicados.',
+      'Contacto fácil y visible.',
+    ],
+  },
+  {
+    scene: 'contact',
+    icon: Phone,
+    service: 'CONTACTO',
+    title: 'Que te contacten',
+    features: [
+      'Botones de llamada.',
+      'Acceso a WhatsApp.',
+      'Formularios sencillos.',
+    ],
+  },
+  {
+    scene: 'nfc',
+    icon: Nfc,
+    service: 'PRODUCTOS QR + NFC',
+    title: 'Conecta en persona',
+    features: [
+      'Tarjetas NFC y QR.',
+      'Expositores personalizados.',
+      'Enlaces configurados.',
+    ],
+  },
+];
+---
+
+<section class="connections section" aria-labelledby="connections-title">
+  <div class="container">
+    <header class="connections__heading">
+      <p class="section-label">CONECTAMOS TU NEGOCIO</p>
+      <h2 class="section-title connections__title" id="connections-title">
+        Que te encuentren <span class="connections__title-accent">es solo el principio.</span>
+      </h2>
+      <p class="connections__intro">
+        Diseño web, SEO Local y productos QR/NFC para que tus clientes descubran
+        tu negocio, conozcan lo que haces y puedan contactar contigo.
+      </p>
+    </header>
+
+    <div class="connections__grid">
+      {connections.map((connection, index) => (
+        <article class:list={['connections__item', `connections__item--${connection.scene}`]}>
+          <div class:list={['connections__scene', `connections__scene--${connection.scene}`]} aria-hidden="true">
+            <svg viewBox="0 0 280 200" width="280" height="200" focusable="false">
+              {connection.scene === 'local' && (
+                <>
+                  <g class="connections__early">
+                    <rect class="connections__sheet" x="25" y="27" width="230" height="37" rx="5" />
+                    <circle cx="43" cy="45" r="5" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    <path d="m47 49 4 4" fill="none" stroke="currentColor" stroke-width="1.5" />
+                    <text x="61" y="49" class="connections__query">negocios cerca de mí</text>
+                  </g>
+                  <g class="connections__middle">
+                    <rect class="connections__sheet" x="38" y="76" width="204" height="96" rx="5" />
+                    <rect x="50" y="88" width="43" height="43" rx="3" class="connections__tint" />
+                    <path d="M58 105h27l-3-9H61Zm2 1v17h22v-17m-15 17v-11h8v11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+                    <text x="104" y="103" class="connections__strong">Tu negocio</text>
+                    <text x="104" y="119" class="connections__small">Ubicación: tu zona</text>
+                    <path d="M51 146h75m-75 10h49" class="connections__line" />
+                    <g class="connections__late">
+                      <rect x="155" y="140" width="73" height="22" rx="3" class="connections__solid" />
+                      <text x="191.5" y="154" text-anchor="middle" class="connections__small" fill="#fff">Contactar</text>
+                    </g>
+                  </g>
+                  <g class="connections__late">
+                    <g class="connections__marker">
+                      <circle cx="225" cy="87" r="19" class="connections__solid" />
+                      <path d="M225 76a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7Z" fill="none" stroke="#fff" stroke-width="1.5" />
+                      <circle cx="225" cy="83" r="2" fill="none" stroke="#fff" stroke-width="1.5" />
+                    </g>
+                  </g>
+                </>
+              )}
+              {connection.scene === 'web' && (
+                <g class="connections__early">
+                  <rect class="connections__sheet" x="28" y="24" width="224" height="153" rx="5" />
+                  <path d="M28 46h224" class="connections__rule" />
+                  <circle cx="40" cy="35" r="2" fill="currentColor" />
+                  <circle cx="48" cy="35" r="2" fill="currentColor" opacity=".45" />
+                  <text x="140" y="38" text-anchor="middle" class="connections__small">tu-negocio.web</text>
+                  <text x="43" y="65" class="connections__small">TU NEGOCIO /</text>
+                  <g class="connections__middle">
+                    <text x="43" y="87" class="connections__headline">Lo que haces,</text>
+                    <text x="43" y="105" class="connections__headline">bien contado.</text>
+                    <text x="43" y="122" class="connections__small">Un espacio para conectar.</text>
+                  </g>
+                  <g class="connections__visual">
+                    <rect x="174" y="61" width="63" height="91" rx="2" class="connections__tint" />
+                    <path d="M185 139V99a20 20 0 0 1 40 0v40Z" class="connections__solid" />
+                    <circle cx="205" cy="86" r="10" fill="#f4e9dd" />
+                    <path d="M184 139h43" fill="none" stroke="#f4e9dd" stroke-width="1.5" />
+                  </g>
+                  <g class="connections__late">
+                    <rect x="43" y="136" width="99" height="24" rx="3" class="connections__solid" />
+                    <text x="55" y="151" class="connections__small" fill="#fff">Hablemos</text>
+                    <path class="connections__web-detail" d="m122 151 7-7m-7 0h7v7" fill="none" stroke="#fff" stroke-width="1.2" />
+                  </g>
+                </g>
+              )}
+              {connection.scene === 'contact' && (
+                <>
+                  <g class="connections__early">
+                    <rect class="connections__sheet" x="34" y="39" width="212" height="126" rx="5" />
+                    <rect x="49" y="54" width="32" height="32" rx="4" class="connections__tint" />
+                    <text x="65" y="75" text-anchor="middle" class="connections__strong">N</text>
+                    <text x="92" y="66" class="connections__strong">Tu negocio</text>
+                    <text x="92" y="82" class="connections__small">Hablemos de lo que necesitas.</text>
+                    <path d="M49 99h182" class="connections__rule" />
+                    <g class="connections__press">
+                      <rect x="49" y="115" width="86" height="32" rx="3" class="connections__solid" />
+                      <path d="m61 124 4-1 3 5-2 2 4 4 2-2 5 3-1 4c-8 0-15-7-15-15Z" fill="none" stroke="#fff" stroke-width="1.2" stroke-linejoin="round" />
+                      <text x="84" y="135" class="connections__small" fill="#fff">Llamar</text>
+                    </g>
+                    <rect x="143" y="115" width="88" height="32" rx="3" class="connections__sheet" />
+                    <text x="187" y="135" text-anchor="middle" class="connections__small">Contactar</text>
+                  </g>
+                  <g class="connections__feedback">
+                    <rect x="174" y="24" width="72" height="29" rx="4" class="connections__solid" />
+                    <path d="M187 33h13v9h-8l-4 3v-3h-1Z" fill="none" stroke="#fff" stroke-width="1.2" />
+                    <g class="connections__indicator">
+                      <circle cx="210" cy="38" r="1.5" fill="#fff" />
+                      <circle cx="217" cy="38" r="1.5" fill="#fff" />
+                      <circle cx="224" cy="38" r="1.5" fill="#fff" />
+                    </g>
+                  </g>
+                </>
+              )}
+              {connection.scene === 'nfc' && (
+                <>
+                  <g class="connections__early">
+                    <rect x="30" y="72" width="120" height="77" rx="5" class="connections__sheet" />
+                    <text x="43" y="93" class="connections__strong">Tu negocio</text>
+                    <text x="43" y="134" class="connections__small">ACERCA Y CONECTA</text>
+                    <path d="M126 88q7 6 0 12m-5-9q4 3 0 6m10-12q10 9 0 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  </g>
+                  <g class="connections__phone">
+                    <g class="connections__phone-motion">
+                      <rect x="168" y="24" width="81" height="153" rx="12" class="connections__sheet" />
+                      <rect x="174" y="31" width="69" height="139" rx="8" class="connections__tint" />
+                      <path d="M199 36h19m-15 127h11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+                      <g class="connections__late">
+                        <rect x="180" y="64" width="57" height="76" rx="4" class="connections__sheet" />
+                        <circle cx="208" cy="81" r="9" class="connections__solid" />
+                        <text x="208" y="84" text-anchor="middle" class="connections__small" fill="#fff">N</text>
+                        <text x="208" y="103" text-anchor="middle" class="connections__small">Tu negocio</text>
+                        <path d="M192 111h32" class="connections__line" />
+                        <rect x="190" y="120" width="37" height="9" rx="2" class="connections__solid connections__screen-detail" />
+                      </g>
+                    </g>
+                  </g>
+                  <g class="connections__waves" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M149 92q6 8 0 16m6-21q10 13 0 26" />
+                  </g>
+                </>
+              )}
+            </svg>
+          </div>
+          <p class="connections__meta">
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            {connection.service}
+          </p>
+          <h3>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              focusable="false"
+            >{connection.icon.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg>
+            <span>{connection.title}</span>
+          </h3>
+          <ul class="connections__features" role="list">
+            {connection.features.map(feature => (
+              <li>
+                <span class="connections__check" aria-hidden="true">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    focusable="false"
+                  >{Check.map(([Tag, attributes]) => <Tag {...attributes} />)}</svg>
+                </span>
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+    <SectionCta label="Cuéntanos tu proyecto" href="/contacto/" variant="button" />
+  </div>
+</section>
+
+<style>
+  .connections {
+    background: var(--color-paper);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .connections__heading {
+    max-width: 850px;
+    margin: 0 0 48px;
+    text-align: left;
+  }
+
+  .connections__title {
+    color: #000;
+    font-size: clamp(32px, 4.4vw, 60px);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -.04em;
+  }
+
+  .connections__title-accent {
+    display: block;
+    color: #965e4e;
+  }
+
+  .connections__heading .section-label {
+    margin: 0 0 18px;
+    color: var(--color-muted);
+  }
+
+  .connections__intro {
+    max-width: 610px;
+    margin: 24px 0 0;
+    color: var(--color-muted);
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .connections__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .connections__item {
+    min-width: 0;
+  }
+
+  .connections__scene {
+    display: grid;
+    place-items: center;
+    height: 200px;
+    overflow: hidden;
+    border: 1px solid var(--scene-line);
+    border-radius: 6px;
+    background: var(--scene-paper);
+    color: var(--scene-ink);
+    pointer-events: none;
+  }
+
+  .connections__item--local {
+    --scene-paper: #e9ede3;
+    --scene-line: #cdd5c4;
+    --scene-ink: #596548;
+    --scene-tint: #d8e0cc;
+  }
+
+  .connections__item--web {
+    --scene-paper: #f1e5da;
+    --scene-line: #dfcbbc;
+    --scene-ink: #945d46;
+    --scene-tint: #e4c8b6;
+  }
+
+  .connections__item--contact {
+    --scene-paper: #eeebe4;
+    --scene-line: #d7d1c5;
+    --scene-ink: #686052;
+    --scene-tint: #e1dbce;
+  }
+
+  .connections__item--nfc {
+    --scene-paper: #eae1e8;
+    --scene-line: #d8cdd5;
+    --scene-ink: #554555;
+    --scene-tint: #d9ccd7;
+  }
+
+  .connections__scene svg {
+    width: 100%;
+    max-width: 300px;
+    height: 100%;
+  }
+
+  .connections__sheet {
+    fill: #fcfbf8;
+    stroke: var(--scene-line);
+    stroke-width: 1;
+  }
+
+  .connections__tint {
+    fill: var(--scene-tint);
+  }
+
+  .connections__solid {
+    fill: var(--scene-ink);
+  }
+
+  .connections__rule {
+    stroke: var(--scene-line);
+    stroke-width: 1;
+  }
+
+  .connections__line {
+    fill: none;
+    stroke: var(--scene-line);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .connections__scene text {
+    font-family: var(--font-sans);
+    fill: currentColor;
+  }
+
+  .connections__scene text[fill="#fff"] {
+    fill: #fff;
+  }
+
+  .connections__small {
+    font-size: 8px;
+  }
+
+  .connections__query,
+  .connections__strong {
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .connections__headline {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -.03em;
+  }
+
+  .connections__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 22px 0 12px;
+    color: var(--color-muted);
+    font-size: 10px;
+    font-weight: 550;
+    letter-spacing: .06em;
+    line-height: 1.5;
+  }
+
+  .connections__meta span {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .connections__item h3 {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 22ch;
+    margin: 0;
+    font-size: 21px;
+    font-weight: 550;
+    line-height: 1.3;
+    letter-spacing: -.03em;
+    text-wrap: balance;
+  }
+
+  .connections__item h3 svg {
+    margin-top: 3px;
+  }
+
+  .connections__features {
+    display: grid;
+    gap: 11px;
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-muted);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .connections__features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .connections__check {
+    display: grid;
+    flex: 0 0 22px;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--scene-paper);
+    color: var(--scene-ink);
+  }
+
+  /* Sin JavaScript y con movimiento reducido, cada escena muestra su resultado. */
+  @media (prefers-reduced-motion: no-preference) {
+    /* La entrada se ejecuta una sola vez y conserva su último fotograma. */
+    .connections__scene--enhanced :is(
+      .connections__early, .connections__middle, .connections__visual,
+      .connections__late, .connections__phone, .connections__feedback
+    ) {
+      animation-name: connection-enter;
+      animation-duration: 650ms;
+      animation-timing-function: cubic-bezier(.22, .61, .36, 1);
+      animation-iteration-count: 1;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+    }
+
+    .connections__scene--enhanced .connections__middle {
+      animation-delay: 250ms;
+    }
+
+    .connections__scene--enhanced .connections__visual {
+      animation-delay: 500ms;
+    }
+
+    .connections__scene--enhanced :is(.connections__late, .connections__feedback) {
+      animation-delay: 1s;
+    }
+
+    .connections__scene--enhanced .connections__phone {
+      animation-delay: 200ms;
+    }
+
+    /* Solo estos detalles internos tienen un bucle; nunca la interfaz completa. */
+    .connections__scene--enhanced :is(
+      .connections__marker, .connections__web-detail, .connections__press,
+      .connections__indicator, .connections__phone-motion,
+      .connections__screen-detail, .connections__waves
+    ) {
+      animation-duration: 5.6s;
+      animation-delay: 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
+      animation-play-state: paused;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .connections__scene--enhanced .connections__marker {
+      animation-name: connection-marker;
+    }
+
+    .connections__scene--enhanced .connections__web-detail {
+      animation-name: connection-web-detail;
+    }
+
+    .connections__scene--enhanced .connections__waves {
+      animation-name: connection-waves;
+    }
+
+    .connections__scene--enhanced .connections__press {
+      animation-name: connection-press;
+    }
+
+    .connections__scene--enhanced .connections__indicator {
+      animation-name: connection-indicator;
+    }
+
+    .connections__scene--enhanced .connections__phone-motion {
+      animation-name: connection-phone-motion;
+    }
+
+    .connections__scene--enhanced .connections__screen-detail {
+      animation-name: connection-screen-detail;
+    }
+
+    .connections__scene--running :is(
+      .connections__early, .connections__middle, .connections__visual,
+      .connections__late, .connections__phone, .connections__feedback,
+      .connections__marker, .connections__web-detail, .connections__press,
+      .connections__indicator, .connections__phone-motion,
+      .connections__screen-detail, .connections__waves
+    ) {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes connection-enter {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes connection-marker {
+    0%, 18%, 54%, 100% { transform: translateY(0); }
+    34% { transform: translateY(-8px); }
+  }
+
+  @keyframes connection-web-detail {
+    0%, 24%, 62%, 100% { transform: translate(0, 0); }
+    42% { transform: translate(6px, -6px); }
+  }
+
+  @keyframes connection-press {
+    0%, 18%, 40%, 100% { transform: scale(1); }
+    28% { transform: scale(.9); }
+  }
+
+  @keyframes connection-indicator {
+    0%, 24%, 64%, 100% { opacity: .5; transform: translateY(0); }
+    38%, 48% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  @keyframes connection-phone-motion {
+    0%, 10%, 76%, 100% { transform: translateX(0); }
+    28%, 52% { transform: translateX(-12px); }
+  }
+
+  @keyframes connection-screen-detail {
+    0%, 24%, 76%, 100% { opacity: .75; }
+    40%, 56% { opacity: 1; }
+  }
+
+  @keyframes connection-waves {
+    0%, 18%, 68%, 100% { opacity: 0; transform: translateX(0); }
+    30%, 44% { opacity: .8; transform: translateX(3px); }
+  }
+
+  @media (max-width: 1099px) {
+    .connections__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 36px 24px;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .connections__heading {
+      margin-bottom: 36px;
+    }
+
+    .connections__title {
+      font-size: clamp(28px, 7.4vw, 42px);
+    }
+
+    .connections__intro {
+      font-size: 15px;
+    }
+
+    .connections__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 30px;
+    }
+
+    .connections__scene {
+      height: 170px;
+    }
+
+    .connections__meta {
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+
+    .connections__item h3 {
+      max-width: none;
+      font-size: 20px;
+    }
+
+    .connections__features {
+      margin-top: 8px;
+    }
+  }
+</style>
+
+<script>
+  const scenes = document.querySelectorAll<HTMLElement>('.connections__scene');
+
+  if ('IntersectionObserver' in window) {
+    const visibleScenes = new Set<Element>();
+    const updatePlayback = () => {
+      for (const scene of scenes) {
+        scene.classList.toggle(
+          'connections__scene--running',
+          visibleScenes.has(scene) && !document.hidden,
+        );
+      }
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) visibleScenes.add(entry.target);
+        else visibleScenes.delete(entry.target);
+      }
+      updatePlayback();
+    });
+
+    for (const scene of scenes) {
+      scene.classList.add('connections__scene--enhanced');
+      observer.observe(scene);
+    }
+
+    document.addEventListener('visibilitychange', updatePlayback);
+  }
+</script>

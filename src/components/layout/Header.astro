@@ -1,80 +1,134 @@
 ---
 import { site, getNavigation } from "../../data/site";
-import { Menu, Phone, X } from 'lucide';
-import logo from "../../images/branding/logo-7dstudio.webp";
+import { Menu, Phone, X } from "lucide";
+import { brand } from "../../data/brand";
 const navigation = getNavigation(Astro.url.pathname);
-const mobileNavigation = [
-  { label: 'Inicio', href: '/' },
-  ...navigation.map(item => ({
-    ...item,
-    label: item.label === 'Cómo trabajamos' ? 'Quiénes somos' : item.label === 'Seo Local' ? 'SEO Local' : item.label,
-  })),
-];
-const contactHref = navigation.find(item => item.label === 'Contacto')!.href;
+const mobileNavigation = navigation.map((item) => ({
+  ...item,
+  label:
+    item.label === "Cómo trabajamos"
+      ? "Quiénes somos"
+      : item.label === "Seo Local"
+        ? "SEO Local"
+        : item.label,
+}));
+const contactHref = navigation.find((item) => item.label === "Contacto")!.href;
 ---
 
 <header class="header">
   <div class="header__inner container">
-  <a class="brand" href="/" aria-label="7D Studio, inicio">
-    <img src={logo.src} width={logo.width} height={logo.height} alt="7DStudio" decoding="async" />
-  </a>
-  <a class="header__phone" href={site.phoneHref} aria-label={`Llamar a 7D Studio: ${site.phone}`}>
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      {Phone.map(([Tag, attributes]) => <Tag {...attributes} />)}
-    </svg>
-  </a>
-  <button
-    class="menu-toggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="mobile-menu"
-    aria-haspopup="dialog"
-    aria-label="Abrir navegación"
-    hidden
-  >
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      {Menu.map(([Tag, attributes]) => <Tag {...attributes} />)}
-    </svg>
-  </button>
-  <nav id="main-nav" class="nav" aria-label="Navegación principal">
-    {
-      navigation.map((item) => (
-        <a href={item.href}>
-          {item.label}
-          {item.label === "Contacto" && (
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <path d="M5 19 19 5M5 5h14v14" />
-            </svg>
-          )}
-        </a>
-      ))
-    }
-  </nav>
+    <a class="brand" href="/" aria-label="7DStudio, inicio">
+      <img
+        src={brand.logo}
+        width="990"
+        height="215"
+        alt="7DStudio"
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+    <a
+      class="header__phone"
+      href={site.phoneHref}
+      aria-label={`Llamar a 7DStudio: ${site.phone}`}
+    >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        {Phone.map(([Tag, attributes]) => <Tag {...attributes} />)}
+      </svg>
+    </a>
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      aria-haspopup="dialog"
+      aria-label="Abrir navegación"
+      hidden
+    >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        {Menu.map(([Tag, attributes]) => <Tag {...attributes} />)}
+      </svg>
+    </button>
+    <nav id="main-nav" class="nav" aria-label="Navegación principal">
+      {
+        navigation.map((item) => (
+          <a href={item.href}>
+            {item.label}
+            {item.label === "Contacto" && (
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+              >
+                <path d="M5 19 19 5M5 5h14v14" />
+              </svg>
+            )}
+          </a>
+        ))
+      }
+    </nav>
   </div>
 </header>
 
-<dialog id="mobile-menu" class="mobile-menu" aria-labelledby="mobile-menu-title">
+<dialog
+  id="mobile-menu"
+  class="mobile-menu"
+  aria-labelledby="mobile-menu-title"
+>
   <div class="mobile-menu__heading">
-    <h2 id="mobile-menu-title">7D Studio</h2>
-    <button class="mobile-menu__close" type="button" aria-label="Cerrar navegación" autofocus>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <h2 id="mobile-menu-title">7DStudio</h2>
+    <button
+      class="mobile-menu__close"
+      type="button"
+      aria-label="Cerrar navegación"
+      autofocus
+    >
+      <svg
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
         {X.map(([Tag, attributes]) => <Tag {...attributes} />)}
       </svg>
     </button>
   </div>
   <nav class="mobile-menu__links" aria-label="Navegación móvil">
-    {mobileNavigation.map(item => <a href={item.href}>{item.label}</a>)}
+    {mobileNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
   </nav>
   <div class="mobile-menu__footer">
-    <a class="button" href={contactHref}>Cuéntanos tu proyecto <span aria-hidden="true">↗</span></a>
+    <a class="button" href={contactHref}
+      >Cuéntanos tu proyecto <span aria-hidden="true">↗</span></a
+    >
   </div>
 </dialog>
 <style>
@@ -127,6 +181,10 @@ const contactHref = navigation.find(item => item.label === 'Contacto')!.href;
     display: none;
   }
   @media (max-width: 1023px) {
+    /* El menú fallback reserva su altura real sin depender de JavaScript. */
+    .header:not(.header--enhanced) {
+      position: static;
+    }
     .header__inner {
       min-height: 84px;
       flex-wrap: wrap;
@@ -251,66 +309,91 @@ const contactHref = navigation.find(item => item.label === 'Contacto')!.href;
       outline-offset: -3px;
     }
     @keyframes mobile-menu-enter {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
     }
     @media (prefers-reduced-motion: reduce) {
-      .mobile-menu[open] { animation: none; }
+      .mobile-menu[open] {
+        animation: none;
+      }
     }
   }
 </style>
 <script>
   const header = document.querySelector<HTMLElement>(".header");
   const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
-  const dialog = document.querySelector<HTMLDialogElement>('#mobile-menu');
+  const dialog = document.querySelector<HTMLDialogElement>("#mobile-menu");
   if (header && toggle && dialog) {
     header.classList.add("header--enhanced");
     toggle.hidden = false;
     const syncHeight = () => {
-      document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+      document.documentElement.style.setProperty(
+        "--header-height",
+        `${header.getBoundingClientRect().height}px`,
+      );
     };
     new ResizeObserver(syncHeight).observe(header);
     syncHeight();
-    const syncScroll = () => header.classList.toggle("header--scrolled", window.scrollY > 8);
+    const syncScroll = () =>
+      header.classList.toggle("header--scrolled", window.scrollY > 8);
     window.addEventListener("scroll", syncScroll, { passive: true });
     syncScroll();
     let savedScrollY = 0;
-    let savedBodyStyles: { position: string; top: string; width: string } | null = null;
-    let savedOverflow = '';
+    let savedBodyStyles: {
+      position: string;
+      top: string;
+      width: string;
+    } | null = null;
+    let savedOverflow = "";
     const close = () => {
       if (!dialog.open) return;
       dialog.close();
     };
-    dialog.addEventListener('close', () => {
+    dialog.addEventListener("close", () => {
       toggle.setAttribute("aria-expanded", "false");
       if (savedBodyStyles) {
         Object.assign(document.body.style, savedBodyStyles);
         document.documentElement.style.overflow = savedOverflow;
-        window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+        window.scrollTo({ top: savedScrollY, behavior: "instant" });
         savedBodyStyles = null;
       }
-      if (matchMedia('(max-width: 1023px)').matches) toggle.focus({ preventScroll: true });
+      if (matchMedia("(max-width: 1023px)").matches)
+        toggle.focus({ preventScroll: true });
     });
     toggle.addEventListener("click", () => {
       if (dialog.open) return;
       savedScrollY = window.scrollY;
-      savedBodyStyles = { position: document.body.style.position, top: document.body.style.top, width: document.body.style.width };
+      savedBodyStyles = {
+        position: document.body.style.position,
+        top: document.body.style.top,
+        width: document.body.style.width,
+      };
       savedOverflow = document.documentElement.style.overflow;
-      document.body.style.position = 'fixed';
+      document.body.style.position = "fixed";
       document.body.style.top = `-${savedScrollY}px`;
-      document.body.style.width = '100%';
-      document.documentElement.style.overflow = 'hidden';
+      document.body.style.width = "100%";
+      document.documentElement.style.overflow = "hidden";
       dialog.showModal();
-      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute("aria-expanded", "true");
     });
-    dialog.querySelector('.mobile-menu__close')?.addEventListener('click', close);
-    dialog.addEventListener('cancel', event => {
+    dialog
+      .querySelector(".mobile-menu__close")
+      ?.addEventListener("click", close);
+    dialog.addEventListener("cancel", (event) => {
       event.preventDefault();
       close();
     });
-    dialog.addEventListener('keydown', event => {
-      if (event.key !== 'Tab') return;
-      const focusable = [...dialog.querySelectorAll<HTMLElement>('button:not([disabled]), a[href]')];
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key !== "Tab") return;
+      const focusable = [
+        ...dialog.querySelectorAll<HTMLElement>(
+          "button:not([disabled]), a[href]",
+        ),
+      ];
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       if (event.shiftKey && document.activeElement === first) {
@@ -321,33 +404,58 @@ const contactHref = navigation.find(item => item.label === 'Contacto')!.href;
         first.focus();
       }
     });
-    dialog.addEventListener('click', event => {
-      if ((event.target as Element).closest('a')) {
-        const link = (event.target as Element).closest<HTMLAnchorElement>('a')!;
+    dialog.addEventListener("click", (event) => {
+      if ((event.target as Element).closest("a")) {
+        const link = (event.target as Element).closest<HTMLAnchorElement>("a")!;
         const target = new URL(link.href);
-        if (target.origin === location.origin && target.pathname === location.pathname && target.hash) {
+        if (
+          target.origin === location.origin &&
+          target.pathname === location.pathname &&
+          target.hash
+        ) {
           event.preventDefault();
           close();
-          dialog.addEventListener('close', () => {
-            location.hash = target.hash;
-            document.getElementById(decodeURIComponent(target.hash.slice(1)))?.scrollIntoView({ block: 'start', behavior: 'instant' });
-          }, { once: true });
+          dialog.addEventListener(
+            "close",
+            () => {
+              location.hash = target.hash;
+              document
+                .getElementById(decodeURIComponent(target.hash.slice(1)))
+                ?.scrollIntoView({ block: "start", behavior: "instant" });
+            },
+            { once: true },
+          );
         } else close();
       } else if (event.target === dialog) {
         const bounds = dialog.getBoundingClientRect();
-        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) close();
+        if (
+          event.clientX < bounds.left ||
+          event.clientX > bounds.right ||
+          event.clientY < bounds.top ||
+          event.clientY > bounds.bottom
+        )
+          close();
       }
     });
     const syncActive = () => {
-      const links = [...dialog.querySelectorAll<HTMLAnchorElement>('.mobile-menu__links a')];
-      const active = links.find(link => link.pathname === location.pathname && link.hash && link.hash === location.hash)
-        || links.find(link => link.pathname === location.pathname && !link.hash);
-      links.forEach(link => {
-        if (link === active) link.setAttribute('aria-current', link.hash ? 'location' : 'page');
-        else link.removeAttribute('aria-current');
+      const links = [
+        ...dialog.querySelectorAll<HTMLAnchorElement>(".mobile-menu__links a"),
+      ];
+      const active =
+        links.find(
+          (link) =>
+            link.pathname === location.pathname &&
+            link.hash &&
+            link.hash === location.hash,
+        ) ||
+        links.find((link) => link.pathname === location.pathname && !link.hash);
+      links.forEach((link) => {
+        if (link === active)
+          link.setAttribute("aria-current", link.hash ? "location" : "page");
+        else link.removeAttribute("aria-current");
       });
     };
-    window.addEventListener('hashchange', syncActive);
+    window.addEventListener("hashchange", syncActive);
     syncActive();
     matchMedia("(min-width: 1024px)").addEventListener("change", close);
   }

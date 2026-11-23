@@ -1,0 +1,101 @@
+---
+import site from '../data/site.json';
+---
+
+<section class="section section-green process" aria-labelledby="process-title">
+  <div class="container">
+    <div class="process__header reveal">
+      <p class="text-label process__eyebrow">Cómo funciona</p>
+      <h2 id="process-title" class="text-display process__title">Tu primera visita</h2>
+    </div>
+
+    <ol class="process__list" role="list">
+      {site.process.map((item) => (
+        <li class="process__item reveal">
+          <article class="process__card">
+            <span class="process__step">{item.step}</span>
+            <div class="process__info">
+              <h3 class="process__name">{item.title}</h3>
+              <p class="process__desc">{item.description}</p>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process__header {
+    margin-bottom: var(--space-xl);
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .process__eyebrow {
+    color: var(--caramel-light);
+    opacity: 0.9;
+  }
+
+  .process__title {
+    font-size: var(--text-xl);
+  }
+
+  .process__list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+
+  .process__card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    align-items: start;
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .process__item:last-child .process__card {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .process__step {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: 1;
+    color: var(--caramel-light);
+    opacity: 0.7;
+    min-width: 3.5rem;
+  }
+
+  .process__info {
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  .process__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 500;
+  }
+
+  .process__desc {
+    font-size: var(--text-base);
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
+    max-width: 50ch;
+  }
+
+  @media (min-width: 768px) {
+    .process__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-lg) var(--space-xl);
+    }
+
+    .process__card {
+      padding-bottom: var(--space-lg);
+    }
+  }
+</style>

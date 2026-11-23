@@ -1,38 +1,108 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-10-28T00:00:00Z",
-  "title": "Design System: 7D Studio",
+  "title": "Design System: 7DStudio",
   "extensions": {
     "colorMeta": {
-      "paper": { "role": "neutral", "displayName": "Papel" },
-      "ink": { "role": "neutral", "displayName": "Tinta" },
-      "muted": { "role": "neutral", "displayName": "Gris editorial" },
-      "line": { "role": "neutral", "displayName": "Filete" },
-      "accent": { "role": "primary", "displayName": "Azul puntual" }
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Gris editorial"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Filete"
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Azul puntual"
+      }
     },
     "typographyMeta": {
-      "display": { "displayName": "Display del hero", "purpose": "Titular exclusivo del hero cinematográfico; no sustituye la rampa global." },
-      "hero-display-tablet": { "displayName": "Display del hero en tablet", "purpose": "768–1023px o desde 1024px con aspecto máximo 1:1." },
-      "hero-display-mobile": { "displayName": "Display del hero móvil", "purpose": "Hasta 767px, contenido en flujo; última frase al 78%." },
-      "hero-description": { "displayName": "Descripción del hero", "purpose": "Copia local de hasta 330px de ancho." },
-      "hero-description-mobile": { "displayName": "Descripción del hero móvil", "purpose": "Hasta 767px; no modifica body global." },
-      "hero-eyebrow": { "displayName": "Eyebrow del hero", "purpose": "Identificación del estudio; interlínea móvil 1.7, sin punto azul." },
-      "hero-scroll": { "displayName": "Scroll exploratorio", "purpose": "Enlace nativo a Servicios con área mínima de 44px." }
+      "display": {
+        "displayName": "Display del hero",
+        "purpose": "Titular exclusivo del hero cinematográfico; no sustituye la rampa global."
+      },
+      "hero-display-tablet": {
+        "displayName": "Display del hero en tablet",
+        "purpose": "768–1023px o desde 1024px con aspecto máximo 1:1."
+      },
+      "hero-display-mobile": {
+        "displayName": "Display del hero móvil",
+        "purpose": "Hasta 767px, contenido en flujo; última frase al 78%."
+      },
+      "hero-description": {
+        "displayName": "Descripción del hero",
+        "purpose": "Copia local de hasta 330px de ancho."
+      },
+      "hero-description-mobile": {
+        "displayName": "Descripción del hero móvil",
+        "purpose": "Hasta 767px; no modifica body global."
+      },
+      "hero-eyebrow": {
+        "displayName": "Eyebrow del hero",
+        "purpose": "Identificación del estudio; interlínea móvil 1.7, sin punto azul."
+      },
+      "hero-scroll": {
+        "displayName": "Scroll exploratorio",
+        "purpose": "Enlace nativo a Servicios con área mínima de 44px."
+      }
     },
     "shadows": [],
     "motion": [
-      { "name": "interaction-color", "value": ".25s ease", "purpose": "Fondo, color y subrayado en botones y enlaces." },
-      { "name": "arrow", "value": "transform .3s ease", "purpose": "Flecha al hover: translate(3px, -3px)." },
-      { "name": "cinematic-scroll", "value": "scrub: 1; end: 2 × stage height; ease: none", "purpose": "GSAP y ScrollTrigger diferidos solo desde 768px sin movimiento reducido; acercamiento y enderezado con homografía común para foto, primer plano y pantalla HTML, hasta la entrega a Servicios nativos." },
-      { "name": "cinematic-static", "value": "ResizeObserver", "purpose": "Proyección HTML estática en móvil o movimiento reducido, sin pin ni descarga inicial de GSAP; sin JavaScript quedan foto y contenido normal." }
+      {
+        "name": "interaction-color",
+        "value": ".25s ease",
+        "purpose": "Fondo, color y subrayado en botones y enlaces."
+      },
+      {
+        "name": "arrow",
+        "value": "transform .3s ease",
+        "purpose": "Flecha al hover: translate(3px, -3px)."
+      },
+      {
+        "name": "cinematic-scroll",
+        "value": "scrub: 1; end: 2 × stage height; ease: none",
+        "purpose": "GSAP y ScrollTrigger diferidos solo desde 768px sin movimiento reducido; acercamiento y enderezado con homografía común para foto, primer plano y pantalla HTML, hasta la entrega a Servicios nativos."
+      },
+      {
+        "name": "cinematic-static",
+        "value": "ResizeObserver",
+        "purpose": "Proyección HTML estática en móvil o movimiento reducido, sin pin ni descarga inicial de GSAP; sin JavaScript quedan foto y contenido normal."
+      }
     ],
     "breakpoints": [
-      { "name": "mobile-nav-max", "value": "640px" },
-      { "name": "stacked-layout-max", "value": "767px" },
-      { "name": "cinematic-motion-min", "value": "768px" },
-      { "name": "hero-tablet-max", "value": "1023px" },
-      { "name": "hero-landscape-left-crop", "value": "1024–1279px, min-aspect-ratio: 1/1" },
-      { "name": "hero-portrait-desktop", "value": "min-width: 1024px, max-aspect-ratio: 1/1" }
+      {
+        "name": "mobile-nav-max",
+        "value": "640px"
+      },
+      {
+        "name": "stacked-layout-max",
+        "value": "767px"
+      },
+      {
+        "name": "cinematic-motion-min",
+        "value": "768px"
+      },
+      {
+        "name": "hero-tablet-max",
+        "value": "1023px"
+      },
+      {
+        "name": "hero-landscape-left-crop",
+        "value": "1024–1279px, min-aspect-ratio: 1/1"
+      },
+      {
+        "name": "hero-portrait-desktop",
+        "value": "min-width: 1024px, max-aspect-ratio: 1/1"
+      }
     ]
   },
   "components": [
@@ -86,7 +156,11 @@
       "Numeración de secciones, eyebrow y marca tipográfica con ® exigidos por el brief."
     ],
     "rules": [
-      { "name": "The Accent Rule", "body": "El azul señala y responde; no sustituye los grandes fondos de papel y carbón que existen en la home.", "section": "colors" }
+      {
+        "name": "The Accent Rule",
+        "body": "El azul señala y responde; no sustituye los grandes fondos de papel y carbón que existen en la home.",
+        "section": "colors"
+      }
     ],
     "dos": [
       "**Do** conservar Geist, papel, tinta, gris, filetes y azul puntual.",

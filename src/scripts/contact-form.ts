@@ -1,6 +1,8 @@
 // Shared Web3Forms behavior. WhatsApp remains an independent, explicit contact link.
 // No credentials or submitted data are logged or persisted in the browser.
 export function initContactForm(form: HTMLFormElement) {
+  if (form.dataset.contactInitialized === 'true') return;
+  form.dataset.contactInitialized = 'true';
   const feedback = form.querySelector<HTMLElement>('.contact__feedback')!;
   const button = form.querySelector<HTMLButtonElement>('.contact__submit')!;
   const continueLink = form.querySelector<HTMLAnchorElement>('.contact__continue')!;
@@ -21,10 +23,13 @@ export function initContactForm(form: HTMLFormElement) {
     feedback.textContent = 'Enviando tu consulta…';
     try {
       const response = await fetch(form.action, {
-        method: 'POST', body: data, signal: AbortSignal.timeout(20000),
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body: data,
+        signal: AbortSignal.timeout(20000),
       });
       const result: { success?: boolean } = await response.json();
-      if (!response.ok || !result.success) throw new Error('Submission failed');
+      if (!response.ok || result.success !== true) throw new Error('Submission failed');
       feedback.textContent = 'Tu consulta se ha enviado. Gracias por contarnos tu proyecto.';
       form.reset();
     } catch {

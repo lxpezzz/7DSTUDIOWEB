@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { createQAContext } from './qa-browser.mjs';
 const { chromium } = await import(pathToFileURL(join(resolve(process.argv[2]), 'playwright/index.mjs')));
 const url = process.argv[3] || 'http://127.0.0.1:4330';
 const output = '.impeccable/review/services-glow';
@@ -18,7 +19,8 @@ const state = card => card.evaluate(el => {
 });
 try {
   for (const [width, touch] of [[1440, false], [1024, false], [390, true], [360, true]]) {
-    const page = await browser.newPage({ viewport: { width, height: 1100 }, hasTouch: touch, isMobile: touch });
+    const context = await createQAContext(browser, { viewport: { width, height: 1100 }, hasTouch: touch, isMobile: touch });
+    const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url, { waitUntil: 'networkidle' });
@@ -60,7 +62,7 @@ try {
         assert.equal(await page.evaluate(() => matchMedia('(hover: hover) and (pointer: fine)').matches), false);
         await card.tap({ position: { x: 12, y: 12 } });
         await page.waitForTimeout(900);
-        if (new URL(page.url()).pathname === '/seo-local/') {
+        if (['/diseno-web/', '/seo-local/', '/productos/'].includes(new URL(page.url()).pathname)) {
           await page.goto(url, { waitUntil: 'networkidle' });
         } else assert.equal(new URL(page.url()).hash, '#contacto');
         assert.equal((await state(card)).shadow, before.shadow, 'Sin hover permanente en pantalla táctil');
@@ -84,15 +86,16 @@ try {
     await page.screenshot({ path: `${output}/${width}-keyboard.png` });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth), width);
     assert.deepEqual(errors, []);
-    await page.close();
+    await context.close();
   }
-  const reduced = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+  const reducedContext = await createQAContext(browser, { viewport: { width: 1440, height: 1000 }, reducedMotion: 'reduce' });
+  const reduced = await reducedContext.newPage();
   await reduced.goto(url, { waitUntil: 'networkidle' });
   const card = reduced.locator('#servicios .service-card').first();
   await card.hover();
   assert.equal((await state(card)).transition, '0s');
   assert.equal((await state(card)).transform, 'none');
-  await reduced.close();
+  await reducedContext.close();
   await writeFile(`${output}/qa.json`, JSON.stringify({ results, keyboard: 'pass', reducedMotion: 'pass', errors: [] }, null, 2));
   console.log(JSON.stringify({ results, keyboard: 'pass', reducedMotion: 'pass', errors: [] }, null, 2));
 } finally { await browser.close(); }

@@ -1,6 +1,7 @@
 ---
 import { projects, getDemoUrl } from '../../data/projects';
 import { ArrowUpRight } from 'lucide';
+import { Image } from 'astro:assets';
 
 const items = projects.filter(project => project.type === 'client' || project.type === 'demo');
 ---
@@ -11,10 +12,13 @@ const items = projects.filter(project => project.type === 'client' || project.ty
     return (
       <article class="about-project" aria-labelledby={`about-project-${project.id}`}>
         <div class="about-project__image">
-          <img
-            src={project.image.src}
-            width={project.image.width}
-            height={project.image.height}
+          <Image
+            src={project.image}
+            width={1280}
+            widths={[320, 480, 640, 960, 1280]}
+            sizes="(max-width: 599px) calc(100vw - 74px), (max-width: 899px) 44vw, (min-width: 1408px) 374px, 29vw"
+            format="webp"
+            quality={85}
             alt={`Captura de la web ${project.title.trim()}`}
             loading="lazy"
             decoding="async"

@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { services, getServiceHref } from '../src/data/services.ts';
+import { createQAContext } from './qa-browser.mjs';
 const { chromium } = await import(pathToFileURL(join(resolve(process.argv[2]), 'playwright/index.mjs')));
 const url = process.argv[3] || 'http://127.0.0.1:4330';
 const output = '.impeccable/review/service-links';
@@ -19,7 +20,8 @@ const browser = await chromium.launch();
 const results = [];
 try {
   for (const width of [390, 1440]) {
-    const page = await browser.newPage({ viewport: { width, height: 1000 }, reducedMotion: 'no-preference' });
+    const context = await createQAContext(browser, { viewport: { width, height: 1000 }, reducedMotion: 'no-preference' });
+    const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url, { waitUntil: 'networkidle' });
@@ -35,7 +37,7 @@ try {
       assert.equal(await card.evaluate(el => el.tagName), 'A');
       assert.equal(await card.getAttribute('href'), services[index].published ? services[index].route : '#contacto');
       assert.equal(await card.locator('a, button, input, [tabindex]').count(), 0);
-      assert.equal(await card.locator('.service-card__cta').textContent().then(text => text.trim()), ['Consultar diseño web', 'Ver SEO local', 'Consultar productos'][index]);
+      assert.equal(await card.locator('.service-card__cta').textContent().then(text => text.trim()), `${services[index].published ? 'Ver' : 'Consultar'} ${['diseño web', 'SEO local', 'productos'][index]}`);
       assert.equal(await card.evaluate(el => getComputedStyle(el).cursor), 'pointer');
       assert.equal(await card.evaluate(el => !!el.closest('[inert]')), false);
       for (const selector of ['.service-card__scene', 'h3', '.service-card__description', '.service-card__tags', '.service-card__cta', null]) {
@@ -82,11 +84,12 @@ try {
     }), 'El foco de la tarjeta debe verse en la sección real, no detrás de la proyección');
     await page.screenshot({ path: `${output}/${width}-focus.png` });
     await page.keyboard.press('Enter');
-    assert.equal(new URL(page.url()).hash, '#contacto');
+    await page.waitForURL(`**${services[0].route}`);
+    await page.goto(url, { waitUntil: 'networkidle' });
     assert.equal(await page.locator('.cinematic-hero__projection a, .cinematic-hero__projection button').count(), 0);
     assert.deepEqual(errors, []);
     results.push({ width, wholeCardZones: 'scene, title, description, tags, CTA, padding', keyboard: 'pass', nestedControls: 0, errors });
-    await page.close();
+    await context.close();
   }
   await writeFile(`${output}/qa.json`, JSON.stringify(results, null, 2));
   console.log(JSON.stringify(results, null, 2));

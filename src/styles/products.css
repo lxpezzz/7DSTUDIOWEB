@@ -3,6 +3,7 @@
   --products-light: #eae1e8;
   --products-accent: #826d80;
   --products-dark: #554555;
+  --heading-accent: var(--products-dark);
   --products-ink: #191919;
   --products-muted: #665c64;
   --products-line: #d8cdd5;
@@ -17,8 +18,8 @@
 .products-page ::selection { background: var(--products-dark); color: white; }
 .products-page :is(input,textarea,select) { caret-color: var(--products-dark); accent-color: var(--products-dark); }
 .products-page :is(section,select) { scroll-margin-top: calc(var(--header-height) + 24px); }
-.products-page h1 { max-width: 14ch; font-size: clamp(40px, 4.25vw, 64px); line-height: 1.08; font-weight: 480; letter-spacing: -.04em; }
-.products-page h2 { font-size: clamp(32px, 3.2vw, 46px); line-height: 1.15; font-weight: 480; letter-spacing: -.035em; }
+.products-page h1 { max-width: 14ch; font-size: clamp(40px, 4.25vw, 64px); line-height: 1.08; font-weight: 500; letter-spacing: -.04em; }
+.products-page h2 { font-size: clamp(32px, 3.2vw, 46px); line-height: 1.15; font-weight: 500; letter-spacing: -.035em; }
 .products-page h3 { font-size: 21px; line-height: 1.35; font-weight: 550; letter-spacing: -.02em; }
 .products-breadcrumb { display: flex; gap: 12px; padding-top: 26px; font-size: 12px; color: var(--products-muted); }
 .products-breadcrumb a:hover { text-decoration: underline; }
@@ -75,7 +76,7 @@
 .products-uses li p { margin-top: 6px; font-size: 12px; line-height: 1.6; }
 .products-process { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 40px; padding: 0; margin: 0; list-style: none; }
 .products-process li { border-top: 1px solid var(--products-line); padding-top: 20px; }
-.products-process__number { display: block; margin-bottom: 24px; color: var(--products-accent); font-size: 28px; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.products-process__icon { display: flex; margin-bottom: 24px; color: var(--products-accent); }
 .products-process p { margin-top: 14px; color: var(--products-muted); font-size: 14px; line-height: 1.8; }
 .products-faq { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 70px; border-top: 1px solid var(--products-line); }
 .products-faq .products-link { margin-top: 24px; }
@@ -159,7 +160,7 @@
   .products-uses li { gap: 10px; }
   .products-uses li h3 { font-size: 14px; }
   .products-process { gap: 28px; }
-  .products-process__number { margin-bottom: 14px; }
+  .products-process__icon { margin-bottom: 14px; }
   .products-faq { gap: 22px; }
   .products-faq summary { font-size: 15px; }
   .product-contact { padding: 26px 16px; gap: 26px; }

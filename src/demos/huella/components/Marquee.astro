@@ -1,0 +1,81 @@
+---
+const words = [
+  "BAÑO",
+  "CORTE",
+  "CUIDADO",
+  "MIMOS",
+  "DESLANADO",
+  "HUELLAS FELICES",
+];
+---
+
+<div class="marquee" aria-label="Palabras clave de la peluquería">
+  <div class="marquee__track">
+    {words.map((word) => <span class="marquee__item">{word}</span>)}
+    {
+      words.map((word) => (
+        <span class="marquee__item" aria-hidden="true">
+          {word}
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    padding-block: var(--space-sm);
+    background-color: var(--bg-warm);
+    color: var(--text-muted);
+    overflow: hidden;
+    border-block: 1px solid var(--border);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    gap: var(--space-md);
+    animation: marquee 45s linear infinite;
+  }
+
+  .marquee.is-paused .marquee__track {
+    animation-play-state: paused;
+  }
+
+  .marquee__item {
+    font-family: var(--font-display);
+    font-size: var(--text-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .marquee__item::after {
+    content: "—";
+    opacity: 0.5;
+  }
+
+  .marquee__item:last-child::after {
+    content: none;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+      width: auto;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

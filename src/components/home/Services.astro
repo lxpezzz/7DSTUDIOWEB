@@ -58,14 +58,21 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
   .services-surface {
     position: relative;
     isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     min-height: 100svh;
+    padding-top: 76px;
     overflow-x: clip;
     background: #f4f1eb;
     color: #171717;
   }
   .services {
     width: min(100% - var(--gutter) * 2, 1220px);
-    padding-block: 92px 80px;
+    padding-block: 32px 36px;
+  }
+  .services :global(.section-cta) {
+    margin-top: 32px;
   }
   .services__heading {
     display: grid;
@@ -145,6 +152,10 @@ const scenes = { web: WebScene, local: LocalScene, digital: DigitalScene };
     }
   }
   @media (max-width: 767px) {
+    .services-surface {
+      display: block;
+      padding-top: 0;
+    }
     .services {
       padding-block: 72px;
     }

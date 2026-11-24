@@ -66,8 +66,8 @@ Evidencia en `.impeccable/review/` (local, ignorada en Git). Scripts reproducibl
 
 Conversión reproducible: `ffmpeg -y -i src/images/hero/hero-7dstudio.png -c:v libwebp -quality 86 src/images/hero/hero-7dstudio.webp`.
 
-`src/images/branding/` contiene el logo completo y el símbolo metálico en WebP, importados desde los componentes. Las imágenes utilizadas por la interfaz se importan desde `src/images` para que Astro genere sus URL de producción.
+`brand-v2/brand/` contiene la identidad actual aportada por el usuario. `src/data/brand.ts` centraliza los logos e isotipos SVG y las tarjetas sociales WebP; Vite publica los recursos importados con hash para renovar la caché.
 
-`public/og.png` es una composición tipográfica de la marca, generada localmente desde la propia home; no representa un proyecto ni un cliente. Se conserva en `public` para mantener su URL estable al compartir la web. `public/favicon.svg` es un monograma vectorial de 7D, no un logotipo gráfico recuperado.
+`public/favicon.svg` y `public/favicon.ico` son copias de los originales de `brand-v2/brand/svg/` y `brand-v2/brand/favicons/`. Tras compilar, `node scripts/verify-brand.mjs` comprueba que los recursos publicados coinciden con los nuevos originales en todas las páginas de 7DStudio. La demo Huella conserva su identidad propia.
 
 La licencia de Geist se distribuye en `public/geist-OFL.txt`.

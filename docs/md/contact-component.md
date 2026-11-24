@@ -4,7 +4,7 @@
 
 ## Identidad
 
-Utiliza el isotipo SVG original de `brand/svg/7dstudio-isotipo.svg`, centralizado en `src/data/brand.ts`. Es decorativo, `aria-hidden`, sin eventos de puntero. WhatsApp conserva `site.whatsapp`, sin números inventados.
+Utiliza el isotipo SVG original de `brand-v2/brand/svg/7dstudio-isotipo.svg`, centralizado en `src/data/brand.ts`. Es decorativo, `aria-hidden`, sin eventos de puntero. WhatsApp conserva `site.whatsapp`, sin números inventados.
 
 ## Configuración y privacidad
 

@@ -526,6 +526,18 @@
   margin-top: 20px;
 }
 
+.web-page .web-faq__links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-top: 20px;
+}
+
+.web-page .web-faq__links .web-text-link {
+  margin-top: 0;
+}
+
 .web-page .web-faq details {
   border-bottom: 1px solid var(--web-border);
 }

@@ -30,7 +30,8 @@ const advantages = [
   {
     title: "Aparece cuando te buscan en Google",
     description:
-      "Una web optimizada puede ayudarte a ganar visibilidad cuando alguien busca negocios como el tuyo.",
+      "Una web rápida y bien estructurada sienta la base técnica para ganar visibilidad en búsquedas locales y complementar tu",
+    link: { href: "/seo-local/", label: "estrategia de SEO local en Castellón" },
     icon: Search,
   },
   {
@@ -87,7 +88,18 @@ const advantages = [
             </div>
             <div class="web-advantages__content">
               <h3>{advantage.title}</h3>
-              <p>{advantage.description}</p>
+              <p>
+                {advantage.description}
+                {advantage.link && (
+                  <>
+                    {" "}
+                    <a class="web-advantages__link" href={advantage.link.href}>
+                      {advantage.link.label}
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
             </div>
           </li>
         ))
@@ -179,6 +191,16 @@ const advantages = [
     color: var(--web-muted);
     font-size: 15px;
     line-height: 1.75;
+  }
+
+  .web-advantages__link {
+    color: var(--web-accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .web-advantages__link:hover {
+    color: var(--web-ink);
   }
 
   @media (hover: hover) and (pointer: fine) {

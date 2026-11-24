@@ -37,8 +37,8 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title="Preguntas frecuentes sobre web, SEO Local y QR/NFC | 7DStudio"
-  description="Resuelve tus dudas sobre diseño web, SEO Local, productos QR/NFC, precios y contratación. Respuestas claras para elegir lo que necesita tu negocio."
+  title="Preguntas frecuentes: diseño web, SEO local y NFC | 7DStudio"
+  description="Dudas sobre precios de páginas web, mantenimiento, SEO local en Google Maps y productos QR/NFC en Castellón. Respuestas claras antes de contratar."
   structuredData={structuredData}
 >
   <Header />
@@ -52,8 +52,9 @@ const structuredData = [
       <p class="faq-hero__label">PREGUNTAS FRECUENTES / 7DStudio</p>
       <h1 id="faq-title">Preguntas <span class="heading-quiet">frecuentes.</span></h1>
       <p class="faq-hero__description">
-        Todo lo que necesitas saber sobre nuestras páginas web, el SEO Local y
-        los productos QR/NFC. Sin complicaciones ni tecnicismos.
+        Respuestas claras sobre diseño web, SEO local en Google Maps, productos
+        QR/NFC y condiciones de trabajo desde Castellón de la Plana. Sin
+        complicaciones ni tecnicismos.
       </p>
     </section>
 
@@ -146,6 +147,14 @@ const structuredData = [
                   </div>
                 </details>
               ))}
+              {category.categoryLink && (
+                <div class="faq-category__footer">
+                  <a class="faq-text-link" href={category.categoryLink.href}>
+                    {category.categoryLink.label}
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              )}
             </section>
           ))
         }
@@ -391,6 +400,10 @@ const structuredData = [
 
   .faq-item__answer .faq-text-link {
     margin-top: 12px;
+  }
+
+  .faq-category__footer {
+    margin-top: 14px;
   }
 
   @media (min-width: 1024px) and (min-height: 700px) {

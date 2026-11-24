@@ -6,8 +6,8 @@ const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY?.trim() || '4b3c35fa-8
 export const site = {
   name: '7DStudio',
   url: 'https://7dstudio.es',
-  title: '7DStudio | Diseño web, SEO local y soluciones digitales',
-  description: 'Diseñamos páginas web, mejoramos tu SEO local y creamos soluciones digitales para empresas y negocios. Estudio digital en Castellón.',
+  title: 'Diseño web y SEO local en Castellón | 7DStudio',
+  description: 'Estudio de diseño web, SEO local y productos QR/NFC en Castellón. Webs rápidas a medida, Google Maps y soportes para negocios. Calcula tu presupuesto.',
   phone: '621 200 800',
   phoneHref: 'tel:+34621200800',
   whatsapp: 'https://wa.me/34621200800',

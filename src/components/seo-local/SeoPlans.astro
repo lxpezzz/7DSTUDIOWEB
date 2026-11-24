@@ -16,8 +16,8 @@ helpHref.searchParams.set('text', 'Hola, no sé qué plan de SEO local elegir pa
 <section id="planes" class="plans container" aria-labelledby="plans-title">
   <div class="plans__heading">
     <p class="plans__label">PLANES SEO LOCAL</p>
-    <h2 id="plans-title">Elige cómo mejorar tu presencia en Google.</h2>
-    <p>Dos planes para negocios con diferentes necesidades. Te ayudamos a encontrar el más adecuado.</p>
+    <h2 id="plans-title">Planes y precios de SEO local en Castellón.</h2>
+    <p>Dos planes transparentes para negocios locales en Castellón y provincia. Te ayudamos a encontrar el más adecuado.</p>
   </div>
   <div class="plans__quick-compare" aria-label="Diferencias principales entre planes">
     {plans.map(plan => <div>
@@ -84,6 +84,9 @@ helpHref.searchParams.set('text', 'Hola, no sé qué plan de SEO local elegir pa
       <h3 id="plans-access-title">{seoPlanNotes.webAccess.title}</h3>
       <p class="plans__condition-text">{seoPlanNotes.webAccess.text}</p>
       <p class="plans__condition-clarification">{seoPlanNotes.webAccess.clarification}</p>
+      <a class="plans__condition-link" href="/diseno-web/">
+        ¿Necesitas web nueva o renovarla? Ver diseño web <span aria-hidden="true">↗</span>
+      </a>
     </article>
     <article class="plans__condition" aria-labelledby="plans-onpage-title">
       <div class="plans__condition-heading">
@@ -333,6 +336,22 @@ helpHref.searchParams.set('text', 'Hola, no sé qué plan de SEO local elegir pa
     color: #626158;
     font-size: 12px;
     line-height: 1.5;
+  }
+  .plans__condition-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    margin-top: 8px;
+    color: #47563e;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .plans__condition-link:hover {
+    color: var(--color-ink);
   }
   .plans__chips {
     display: flex;

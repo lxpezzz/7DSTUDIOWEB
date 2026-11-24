@@ -38,11 +38,14 @@ const schema = {
     addressRegion: "Castellón",
     addressCountry: "ES",
   },
-  areaServed: { "@type": "Place", name: "Castellón de la Plana, España" },
+  areaServed: [
+    { "@type": "City", name: "Castellón de la Plana" },
+    { "@type": "AdministrativeArea", name: "Provincia de Castellón" },
+  ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Servicios digitales",
-    itemListElement: ["Diseño web", "SEO local", "Soluciones digitales"].map(
+    itemListElement: ["Diseño web", "SEO local", "Productos QR y NFC"].map(
       (name) => ({
         "@type": "Offer",
         itemOffered: { "@type": "Service", name },

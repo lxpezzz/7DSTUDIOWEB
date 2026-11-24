@@ -20,9 +20,9 @@ import { site } from "../data/site";
 import { seoFaqs as faqs } from "../data/serviceFaqs";
 import { formatEmphasizedText } from "../utils/format-text";
 
-const title = "SEO local en Castellón | 7DStudio";
+const title = "SEO local en Castellón y Google Maps desde 129 € | 7DStudio";
 const description =
-  "Ayudamos a negocios a mejorar su presencia en Google. Descubre cómo trabajamos el SEO local y consulta nuestros planes Estándar y Premium.";
+  "Posicionamiento SEO local en Castellón y optimización del Perfil de Empresa en Google Maps. Gestión de reseñas y planes claros de 129 € y 179 €/mes.";
 const contactUrl = new URL(site.whatsapp);
 contactUrl.searchParams.set(
   "text",
@@ -50,6 +50,10 @@ const work = [
     label: "CONFIANZA Y REPUTACIÓN",
     title: "Cuidamos tus reseñas",
     text: "Respondemos a las reseñas de Google de forma profesional y personalizada, cuidando la imagen de tu negocio.",
+    link: {
+      href: "/productos/",
+      label: "Placas NFC y QR para conseguir reseñas de Google",
+    },
   },
   {
     id: "tracking",
@@ -115,7 +119,7 @@ const structuredData = [
       </nav>
       <div class="seo-hero__layout">
         <div class="seo-hero__copy">
-          <p class="seo-page__label">SEO LOCAL / 7DStudio</p>
+          <p class="seo-page__label">SEO LOCAL EN CASTELLÓN / 7DStudio</p>
           <h1 id="seo-title">
             <span class="seo-hero__statement"
               >Tus próximos clientes te están buscando en Google.</span
@@ -123,8 +127,9 @@ const structuredData = [
             <span class="seo-hero__question">¿Te encuentran a ti?</span>
           </h1>
           <p class="seo-hero__description">
-            Trabajamos tu presencia local para ayudarte a aparecer en búsquedas
-            relevantes y transmitir confianza.
+            Servicio de SEO local en Castellón y provincia para optimizar tu
+            Perfil de Empresa en Google Maps, cuidar tus reseñas y atraer
+            clientes cercanos.
           </p>
           <a
             class="button"
@@ -379,6 +384,11 @@ const structuredData = [
                 <p class="work__label">{item.label}</p>
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
+                {item.link && (
+                  <a class="work__link" href={item.link.href}>
+                    {item.link.label} <span aria-hidden="true">↗</span>
+                  </a>
+                )}
               </article>
             ))
           }
@@ -402,8 +412,19 @@ const structuredData = [
         <h2 id="faq-title">Es normal tener preguntas.</h2>
         <p>
           Estas son algunas de las primeras que suelen surgir al hablar de
-          visibilidad local.
+          visibilidad local y Google Maps en Castellón.
         </p>
+        <div class="faq__links">
+          <a class="seo-hero__secondary" href="/diseno-web/"
+            >¿También necesitas una página web en Castellón? <span
+              aria-hidden="true">↗</span
+            ></a
+          >
+          <a class="seo-hero__secondary" href="/preguntas-frecuentes/"
+            >Ver todas las preguntas frecuentes <span aria-hidden="true">↗</span
+            ></a
+          >
+        </div>
       </div>
       <div class="faq__list">
         {
@@ -717,11 +738,27 @@ const structuredData = [
     letter-spacing: -0.025em;
     line-height: 1.25;
   }
-  .work__module > p:last-child {
+  .work__module > p:not(.work__label) {
     margin: 0;
     color: #59674f;
     font-size: 14px;
     line-height: 1.7;
+  }
+  .work__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 8px;
+    color: #47563e;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .work__link:hover {
+    color: var(--color-ink);
   }
   .work__scope {
     grid-column: 1 / -1;
@@ -738,12 +775,15 @@ const structuredData = [
     padding-block: 80px;
     border-top: 1px solid var(--color-line);
   }
-  .faq__intro > p:last-child {
+  .faq__intro > p:not(.seo-page__label) {
     max-width: 35ch;
     margin: 24px 0 0;
     color: var(--color-muted);
     font-size: 16px;
     line-height: 1.7;
+  }
+  .faq__links {
+    margin-top: 16px;
   }
   .faq details {
     border-bottom: 1px solid var(--color-line);

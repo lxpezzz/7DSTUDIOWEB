@@ -89,7 +89,7 @@ export const webPricing = {
     { id: 'bookings', name: 'Integración con reservas externas', description: 'Conexión con una herramienta existente, no un motor de reservas a medida.', unitCents: 7500, quantity: false, compatibleWith: ['one-page', 'corporate'] },
     { id: 'logo', name: 'Diseño de logotipo', description: 'Creamos un logotipo personalizado para representar tu negocio.', unitCents: 5000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
     { id: 'optimization-photos', name: 'Mejora de fotografías para tu web', description: 'Retocamos y preparamos hasta 10 fotografías que nos proporciones para que tu negocio tenga una imagen más cuidada.', unitCents: 5000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
-    { id: 'profesional-photos', name: 'Fotografías profesionales para tu web', description: 'Imágenes de tu local, instalaciones, equipo o productos para mostrar tu negocio tal y como es.', unitCents: 15000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
+    { id: 'profesional-photos', name: 'Fotografías profesionales para tu web', description: 'Imágenes de tu local, instalaciones, equipo o productos en Castellón y alrededores para mostrar tu negocio tal y como es.', unitCents: 15000, quantity: false, compatibleWith: ['one-page', 'corporate'] },
 
 
   ] satisfies WebExtra[],

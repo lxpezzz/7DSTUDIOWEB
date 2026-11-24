@@ -9,10 +9,10 @@ const structuredData = [
   {
     "@context": "https://schema.org",
     "@type": "ContactPage",
-    name: "Contacto · 7DStudio",
+    name: "Contacto en Castellón · 7DStudio",
     url: `${site.url}/contacto/`,
     description:
-      "Consulta tu proyecto de diseño web, SEO Local o productos QR/NFC con 7DStudio. Contacto por teléfono, WhatsApp y formulario.",
+      "Contacta con 7DStudio en Castellón de la Plana. Pide presupuesto sin compromiso para diseño web, SEO local o placas QR/NFC por formulario o WhatsApp.",
     about: { "@id": `${site.url}/#business` },
   },
   {
@@ -32,8 +32,8 @@ const structuredData = [
 ---
 
 <BaseLayout
-  title="Contacto | Hablemos de tu proyecto · 7DStudio"
-  description="Consulta tu proyecto de diseño web, SEO Local o productos QR/NFC con 7DStudio. Contacto por teléfono, WhatsApp y formulario."
+  title="Contacto en Castellón | Presupuesto web y SEO · 7DStudio"
+  description="Contacta con 7DStudio en Castellón de la Plana. Pide presupuesto sin compromiso para diseño web, SEO local o placas QR/NFC por formulario o WhatsApp."
   structuredData={structuredData}
 >
   <Header />
@@ -46,12 +46,19 @@ const structuredData = [
         <a href="/">Inicio</a><span aria-hidden="true">/</span><span
           aria-current="page">Contacto</span>
       </nav>
-      <p class="contact-hero__label">CONTACTO / 7DStudio</p>
+      <p class="contact-hero__label">CONTACTO EN CASTELLÓN / 7DStudio</p>
       <h1 id="contact-page-title">Hablemos de <span class="heading-emphasis">tu proyecto.</span></h1>
       <p class="contact-hero__description">
-        ¿Necesitas una página web, mejorar tu presencia en Google o información
-        sobre nuestros productos? Cuéntanos qué tienes en mente.
+        Trabajamos desde Castellón de la Plana con autónomos, comercios y pymes
+        de toda la provincia y en remoto. Cuéntanos si necesitas una página web,
+        mejorar tu visibilidad en Google Maps o preparar productos QR/NFC.
       </p>
+      <nav class="contact-shortcuts" aria-label="Accesos rápidos antes de escribir">
+        <a href="/diseno-web/#presupuesto">Calcular presupuesto web <span aria-hidden="true">↗</span></a>
+        <a href="/seo-local/#planes">Ver planes de SEO local <span aria-hidden="true">↗</span></a>
+        <a href="/productos/">Explorar productos QR y NFC <span aria-hidden="true">↗</span></a>
+        <a href="/preguntas-frecuentes/">Preguntas frecuentes <span aria-hidden="true">↗</span></a>
+      </nav>
     </section>
     <Contact
       mode="contact"
@@ -107,6 +114,29 @@ const structuredData = [
     color: #655f58;
     font-size: 17px;
     line-height: 1.8;
+  }
+  .contact-shortcuts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 22px;
+  }
+  .contact-shortcuts a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    color: #554d46;
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: #c2b8ae;
+    text-underline-offset: 4px;
+  }
+  .contact-shortcuts a:hover {
+    color: #191919;
+    text-decoration-color: currentColor;
   }
   @media (max-width: 599px) {
     .contact-hero {

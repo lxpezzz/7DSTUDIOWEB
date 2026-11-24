@@ -12,6 +12,7 @@ interface Faq {
 interface FaqCategory {
   id: string;
   title: string;
+  categoryLink?: { href: string; label: string };
   questions: readonly Faq[];
 }
 
@@ -19,6 +20,7 @@ export const faqCategories: readonly FaqCategory[] = [
   {
     id: 'general',
     title: 'General',
+    categoryLink: { href: '/quienes-somos/', label: 'Conoce cómo trabajamos en Castellón' },
     questions: [
       {
         question: '¿Qué servicios ofrece 7DStudio?',
@@ -26,9 +28,19 @@ export const faqCategories: readonly FaqCategory[] = [
         highlight: ['páginas web', 'SEO Local', 'productos físicos QR y NFC personalizados'],
       },
       {
+        question: '¿Trabajáis solo en Castellón o también con negocios de fuera?',
+        answer: 'Nuestra base está en Castellón de la Plana y trabajamos habitualmente con negocios de toda la provincia —como Vila-real, Almassora, Benicàssim, Burriana u Onda— y también en remoto con clientes de otras zonas. Servicios presenciales como la fotografía del local o entregas locales se coordinan en Castellón y alrededores.',
+        highlight: ['Castellón de la Plana', 'toda la provincia', 'en remoto'],
+      },
+      {
         question: '¿Trabajáis con cualquier tipo de negocio?',
         answer: 'Trabajamos con empresas, profesionales y negocios locales. Antes de aceptar un proyecto, revisamos qué necesitas y si nuestros servicios encajan con tu actividad y tus objetivos. No todas las soluciones son adecuadas para todos los casos; te explicaremos qué podemos abordar y qué habría que valorar por separado.',
         highlight: ['empresas, profesionales y negocios locales', 'si nuestros servicios encajan'],
+      },
+      {
+        question: '¿Se pueden combinar diseño web, SEO local y placas QR/NFC?',
+        answer: 'Sí, los tres servicios están pensados para complementarse con presupuestos claros e independientes: la página web presenta tus servicios con profesionalidad, el SEO local mejora tu visibilidad en Google Maps y los productos QR/NFC facilitan el acceso directo o las reseñas de Google desde tu local.',
+        highlight: ['presupuestos claros e independientes', 'SEO local', 'productos QR/NFC'],
       },
       {
         question: '¿Qué ocurre si no sé qué servicio necesito?',
@@ -40,12 +52,12 @@ export const faqCategories: readonly FaqCategory[] = [
   {
     id: 'diseno-web',
     title: 'Diseño Web',
+    categoryLink: { href: '/diseno-web/#presupuesto', label: 'Calcular presupuesto de página web en Castellón' },
     questions: [
       ...webFaqs.map(faq => ({
         question: faq.question,
         answer: faq.answer,
         highlight: faq.answerStrong,
-        link: { href: '/diseno-web/#presupuesto', label: 'Calcular el presupuesto de mi web' },
       })),
       {
         question: '¿Cuánto tardáis en tener lista una web?',
@@ -62,48 +74,46 @@ export const faqCategories: readonly FaqCategory[] = [
   {
     id: 'seo-local',
     title: 'SEO Local',
+    categoryLink: { href: '/seo-local/#planes', label: 'Ver planes y precios de SEO local en Google Maps' },
     questions: [
       ...seoFaqs.map(faq => ({
         question: faq.question,
         answer: faq.answer,
         highlight: faq.answerStrong,
-        link: { href: '/seo-local/', label: 'Conocer el servicio de SEO local' },
       })),
       {
         question: '¿Qué es el SEO Local y para qué sirve?',
         answer: 'Es el trabajo de mejorar cómo se presenta tu negocio en las búsquedas locales de Google. Revisamos tu Perfil de Empresa, la información, las reseñas y otros aspectos según el plan. Sirve para que quienes buscan tus servicios en tu zona encuentren información útil y actualizada, sin garantizar posiciones ni ventas.',
         highlight: ['las búsquedas locales de Google', 'información útil y actualizada', 'sin garantizar posiciones ni ventas'],
-        link: { href: '/seo-local/', label: 'Entender cómo trabajamos el SEO Local' },
       },
     ],
   },
   {
     id: 'productos-qr-nfc',
     title: 'Productos QR y NFC',
+    categoryLink: { href: '/productos/#catalogo-productos', label: 'Ver tarjetas NFC, expositores QR y placas de reseñas' },
     questions: [
       ...productFaqs.map((faq, index) => ({
         question: faq.question,
         answer: faq.answer,
         highlight: productFaqEmphasis[index].answer,
-        link: { href: '/productos/', label: 'Explorar los productos QR y NFC' },
       })),
       {
         question: '¿Qué información puedo compartir con estos productos?',
         answer: 'Puedes dirigir a tus clientes a tu contacto, web, WhatsApp, reseñas, redes sociales, reservas o catálogo. Acordamos el destino y la configuración según el formato y su compatibilidad. El producto facilita el acceso; no incluye por sí solo crear una web, un catálogo o una herramienta de reservas.',
         highlight: ['Acordamos el destino y la configuración', 'El producto facilita el acceso'],
-        link: { href: '/productos/', label: 'Explorar los productos QR y NFC' },
       },
     ],
   },
   {
     id: 'presupuestos-contratacion',
     title: 'Presupuestos y contratación',
+    categoryLink: { href: '/contacto/', label: 'Pedir presupuesto sin compromiso a 7DStudio' },
     questions: [
       {
         question: '¿Cómo puedo solicitar un presupuesto?',
         answer: 'Cuéntanos qué negocio tienes, qué servicio te interesa y qué te gustaría conseguir. Puedes escribirnos por WhatsApp o utilizar el formulario de contacto cuando esté disponible. Si buscas una web, la calculadora te ayuda a preparar una orientación inicial; el presupuesto definitivo se confirma después de revisar los detalles.',
         highlight: ['qué servicio te interesa', 'el presupuesto definitivo se confirma después'],
-        link: { href: '/preguntas-frecuentes/#contacto', label: 'Ir al contacto de 7DStudio' },
       },
       {
         question: '¿Tengo que pagar una cuota mensual?',

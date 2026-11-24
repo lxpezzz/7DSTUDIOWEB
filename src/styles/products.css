@@ -70,6 +70,8 @@
 .products-uses__layout { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: 90px; }
 .products-uses__layout > div > p { margin-top: 22px; max-width: 36ch; color: var(--products-dark); line-height: 1.8; }
 .products-uses__layout > div > .products-uses__note { margin-top: 35px; font-size: 13px; }
+.products-uses__note a { color: var(--products-dark); font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+.products-uses__note a:hover { color: var(--products-ink); }
 .products-uses ul { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 0 30px; list-style: none; margin: 0; padding: 0; }
 .products-uses li { display: flex; gap: 14px; align-items: start; padding-block: 20px; border-bottom: 1px solid #cbbdc7; color: var(--products-dark); }
 .products-uses li h3 { font-size: 16px; }
@@ -80,6 +82,8 @@
 .products-process p { margin-top: 14px; color: var(--products-muted); font-size: 14px; line-height: 1.8; }
 .products-faq { display: grid; grid-template-columns: minmax(0,.85fr) minmax(0,1.15fr); gap: 70px; border-top: 1px solid var(--products-line); }
 .products-faq .products-link { margin-top: 24px; }
+.products-faq__links { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin-top: 24px; }
+.products-faq__links .products-link { margin-top: 0; }
 .products-faq details { border-bottom: 1px solid var(--products-line); }
 .products-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 64px; padding-block: 20px; font-size: 16px; font-weight: 450; line-height: 1.6; cursor: pointer; list-style: none; }
 .products-faq summary::-webkit-details-marker { display: none; }

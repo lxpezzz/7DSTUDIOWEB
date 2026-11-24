@@ -142,31 +142,32 @@ const contactHref = navigation.find((item) => item.label === "Contacto")!.href;
     background: rgb(248 247 244 / 97%);
   }
   .header__inner {
-    min-height: 104px;
+    min-height: clamp(76px, 11.6svh, 104px);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: clamp(16px, 2vw, 24px);
     border-bottom: 1px solid var(--color-line);
   }
   .nav {
     display: flex;
-    gap: 36px;
+    gap: clamp(12px, 2.5vw - 11px, 36px);
   }
   .brand {
     flex-shrink: 0;
   }
   .brand img {
     display: block;
-    width: 210px;
+    width: clamp(152px, 14.5vw, 210px);
     height: auto;
   }
   .nav a {
     display: inline-flex;
     align-items: center;
-    gap: 11px;
+    gap: 9px;
     min-height: 44px;
-    font-size: 15px;
+    font-size: clamp(13.5px, 1.15vw, 15px);
+    white-space: nowrap;
     text-decoration: underline;
     text-decoration-color: transparent;
     text-underline-offset: 6px;
@@ -180,7 +181,7 @@ const contactHref = navigation.find((item) => item.label === "Contacto")!.href;
   .mobile-menu {
     display: none;
   }
-  @media (max-width: 1023px) {
+  @media (max-width: 899px) {
     /* El menú fallback reserva su altura real sin depender de JavaScript. */
     .header:not(.header--enhanced) {
       position: static;
@@ -361,7 +362,7 @@ const contactHref = navigation.find((item) => item.label === "Contacto")!.href;
         window.scrollTo({ top: savedScrollY, behavior: "instant" });
         savedBodyStyles = null;
       }
-      if (matchMedia("(max-width: 1023px)").matches)
+      if (matchMedia("(max-width: 899px)").matches)
         toggle.focus({ preventScroll: true });
     });
     toggle.addEventListener("click", () => {
@@ -457,6 +458,6 @@ const contactHref = navigation.find((item) => item.label === "Contacto")!.href;
     };
     window.addEventListener("hashchange", syncActive);
     syncActive();
-    matchMedia("(min-width: 1024px)").addEventListener("change", close);
+    matchMedia("(min-width: 900px)").addEventListener("change", close);
   }
 </script>

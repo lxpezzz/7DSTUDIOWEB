@@ -40,7 +40,7 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
     aperture = clipPath;
     // Below 1024 the clone may be a clipped, single-column Bento. Keep native
     // Services navigation instead of exposing tiny or unreachable tablet targets.
-    eligible = hero.clientWidth >= 1024 && links.length === 3 && visuals.length === 3;
+    eligible = matchMedia('(min-width: 1024px)').matches && links.length === 3 && visuals.length === 3;
     if (eligible) {
       layer.style.width = projection.style.width;
       layer.style.height = projection.style.height;

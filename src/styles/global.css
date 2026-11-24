@@ -225,16 +225,24 @@ img {
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 899px) {
 
   :root {
     --header-height: 84px;
-    --mobile-nav-height: calc(88px + env(safe-area-inset-bottom));
   }
 
   /* Sin mejora JS, el header está en el flujo y no necesita compensación. */
   :root:has(.header:not(.header--enhanced)) {
     --header-height: 0px;
+  }
+}
+
+@media (max-width: 767px),
+  (max-width: 899px) and (pointer: coarse),
+  (max-width: 899px) and (max-aspect-ratio: 1/1) {
+
+  :root {
+    --mobile-nav-height: calc(88px + env(safe-area-inset-bottom));
   }
 
   body {

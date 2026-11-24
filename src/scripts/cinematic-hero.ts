@@ -90,10 +90,12 @@ export async function initCinematicHero() {
     createReplica();
     hero.classList.add('cinematic-projected');
     function align() {
-      const width = stage.clientWidth, height = window.innerHeight;
+      const width = stage.clientWidth, height = stage.clientHeight || window.innerHeight;
       const left = photo.offsetLeft, top = photo.offsetTop;
       const [x, y] = getComputedStyle(image).objectPosition.split(' ').map(value => Number.parseFloat(value) / 100);
-      const points = coverQuad(heroScene.screen, heroScene, { width: photo.clientWidth, height: photo.clientHeight }, { x, y })
+      const posX = Number.isFinite(x) ? x : heroScene.objectPosition.x;
+      const posY = Number.isFinite(y) ? y : heroScene.objectPosition.y;
+      const points = coverQuad(heroScene.screen, heroScene, { width: photo.clientWidth, height: photo.clientHeight }, { x: posX, y: posY })
         .map(point => ({ x: point.x + left, y: point.y + top })) as Quad;
       projection.style.width = `${width}px`;
       projection.style.height = `${height}px`;
@@ -109,7 +111,7 @@ export async function initCinematicHero() {
       foreground.style.left = `${left}px`;
       foreground.style.width = `${photo.clientWidth}px`;
       foreground.style.height = `${photo.clientHeight}px`;
-      foreground.querySelector('svg')!.setAttribute('preserveAspectRatio', x === 0 ? 'xMinYMid slice' : 'xMidYMid slice');
+      foreground.querySelector('svg')!.setAttribute('preserveAspectRatio', posX === 0 ? 'xMinYMid slice' : posX === 1 ? 'xMaxYMid slice' : 'xMidYMid slice');
     }
     const observer = new ResizeObserver(align);
     observer.observe(stage);
@@ -251,10 +253,16 @@ export async function initCinematicHero() {
       (projection.firstElementChild as HTMLElement).style.width = `${width}px`;
       posterSize = configurePoster(width, height);
       const [px, py] = getComputedStyle(image).objectPosition.split(' ').map(value => Number.parseFloat(value) / 100);
-      const position = { x: px ?? heroScene.objectPosition.x, y: py ?? heroScene.objectPosition.y };
+      const position = {
+        x: Number.isFinite(px) ? px : heroScene.objectPosition.x,
+        y: Number.isFinite(py) ? py : heroScene.objectPosition.y,
+      };
       const frame = { width: photo.clientWidth, height: photo.clientHeight };
       const left = photo.offsetLeft, top = photo.offsetTop;
-      foreground.querySelector('svg')!.setAttribute('preserveAspectRatio', position.x === 0 ? 'xMinYMid slice' : 'xMidYMid slice');
+      foreground.querySelector('svg')!.setAttribute(
+        'preserveAspectRatio',
+        position.x === 0 ? 'xMinYMid slice' : position.x === 1 ? 'xMaxYMid slice' : 'xMidYMid slice',
+      );
       quad = coverQuad(heroScene.screen, heroScene, frame, position).map(point => ({ x: point.x + left, y: point.y + top })) as Quad;
       projectPhoto = createPhotoProjector(quad, { x: left, y: top, ...frame });
       center = { x: quad.reduce((sum, point) => sum + point.x, 0) / 4, y: quad.reduce((sum, point) => sum + point.y, 0) / 4 };
@@ -276,16 +284,44 @@ export async function initCinematicHero() {
     measure();
     const timeline = gsap.timeline({
       scrollTrigger: {
-        trigger: hero, start: 'top top', end: () => `+=${height * heroScene.scrollViewports * visualEnd}`,
+        trigger: hero, start: 'top top', end: () => `+=${(stage.clientHeight || window.innerHeight) * heroScene.scrollViewports * visualEnd}`,
         // Un único reloj de scroll: no queda un tween con retraso que pueda volver
         // a pintar la foto o el clon después de mostrar el HTML real.
         pin: stage, pinSpacing: true, scrub: true, invalidateOnRefresh: true,
-        onRefreshInit: measure,
+        // onRefresh corre DESPUÉS de que ScrollTrigger revierte y remide el pin de stage,
+        // evitando medir dimensiones obsoletas del viewport anterior.
+        onRefresh: self => {
+          measure();
+          pastEnd = self.progress >= 1;
+          state.progress = self.progress * visualEnd;
+          render();
+        },
         onLeave: () => { pastEnd = true; state.progress = visualEnd; render(); },
         onEnterBack: self => { pastEnd = false; state.progress = self.progress * visualEnd; render(); },
       },
     });
     timeline.to(state, { progress: visualEnd, ease: 'none', duration: 1, onUpdate: render });
+    // Observa cambios del contenedor que no disparan resize de ventana (p. ej. cambio de altura o layout)
+    // y agrupa el refresh sin recalcular en cada frame.
+    let refreshTimer: number | undefined;
+    let lastObservedW = hero.clientWidth;
+    let lastObservedH = window.innerHeight;
+    let lastPhotoTop = photo.offsetTop;
+    const resizeObserver = new ResizeObserver(() => {
+      const nextW = hero.clientWidth;
+      const nextH = window.innerHeight;
+      const nextTop = photo.offsetTop;
+      if (nextW === lastObservedW && nextH === lastObservedH && nextTop === lastPhotoTop) return;
+      lastObservedW = nextW;
+      lastObservedH = nextH;
+      lastPhotoTop = nextTop;
+      window.clearTimeout(refreshTimer);
+      refreshTimer = window.setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 120);
+    });
+    resizeObserver.observe(hero);
+    resizeObserver.observe(photo);
     // Recupera el mismo encuadre tras recargar a mitad del recorrido.
     ScrollTrigger.refresh();
     const restoration = requestAnimationFrame(() => {
@@ -296,6 +332,8 @@ export async function initCinematicHero() {
       render();
     });
     return () => {
+      window.clearTimeout(refreshTimer);
+      resizeObserver.disconnect();
       cancelAnimationFrame(restoration);
       interaction.destroy();
       hero.classList.remove('cinematic-ready', 'cinematic-complete', 'cinematic-projected', 'cinematic-native-resolution');

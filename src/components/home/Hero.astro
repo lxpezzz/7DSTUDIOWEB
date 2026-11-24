@@ -1,50 +1,36 @@
 ---
+import { ArrowDown } from "lucide";
 import { heroScene } from "../../data/hero-scene";
-const maskId = `screen-opening-${crypto.randomUUID()}`;
+
+// Pixel transparente 1×1: evita descargar la foto 4K del proyector en móvil/tablet (< 1024px).
+const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
 ---
 
-<section class="cinematic-hero" aria-labelledby="hero-title">
+<section
+  class="cinematic-hero"
+  aria-labelledby="hero-title"
+  style={`--wall-bg-image: url(${heroScene.wallBackgroundImage});`}
+>
   <div class="cinematic-hero__stage">
-    <div class="cinematic-hero__photo" aria-hidden="true">
-      <img
-        src={heroScene.image}
-        width={heroScene.width}
-        height={heroScene.height}
-        alt=""
-        fetchpriority="high"
-        decoding="async"
-      />
-    </div>
-    <div class="cinematic-hero__projection" aria-hidden="true" inert></div>
-    <div class="cinematic-hero__poster" aria-hidden="true" inert hidden></div>
-    <div class="cinematic-hero__foreground" aria-hidden="true">
-      <svg
-        viewBox={`0 0 ${heroScene.width} ${heroScene.height}`}
-        preserveAspectRatio="xMidYMid slice"
-        focusable="false"
-      >
-        <defs>
-          <mask
-            id={maskId}
-            maskUnits="userSpaceOnUse"
-            x="0"
-            y="0"
+    <div class="cinematic-hero__camera" aria-hidden="true">
+      <div class="cinematic-hero__photo">
+        <picture>
+          <source media="(min-width: 1024px)" srcset={heroScene.image} type="image/webp" />
+          <img
+            src={BLANK_PIXEL}
             width={heroScene.width}
             height={heroScene.height}
-          >
-            <rect width={heroScene.width} height={heroScene.height} fill="white"
-            ></rect>
-            <polygon points={heroScene.opening} fill="black"></polygon>
-          </mask>
-        </defs>
-        <image
-          href={heroScene.image}
-          width={heroScene.width}
-          height={heroScene.height}
-          mask={`url(#${maskId})`}
-        />
-      </svg>
+            alt=""
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </picture>
+      </div>
+      <div class="cinematic-hero__bloom"></div>
     </div>
+    <div class="cinematic-hero__projection" aria-hidden="true" inert></div>
+    <div class="cinematic-hero__optical" aria-hidden="true"></div>
     <div class="cinematic-hero__interaction" hidden></div>
     <div class="cinematic-hero__outside">
       <div class="cinematic-hero__copy">
@@ -85,20 +71,24 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
         </div>
       </div>
       <a class="cinematic-hero__scroll" href="#servicios">
-        <span class="cinematic-hero__scroll-line" aria-hidden="true"></span>
         <span>DESLIZA HACIA ABAJO</span>
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.75"
-          aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"></path></svg
-        >
+        <span class="cinematic-hero__scroll-icon" aria-hidden="true">
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            {ArrowDown.map(([Tag, attributes]) => <Tag {...attributes} />)}
+          </svg>
+        </span>
       </a>
     </div>
-    <div class="cinematic-hero__debug" aria-hidden="true" hidden></div>
   </div>
 </section>
 
@@ -108,120 +98,38 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
 </script>
 
 <style>
+  /* Base: modo simplificado (pared limpia de la foto original).
+     Evita duplicar estilos entre SSR/móvil (< 1024px) y data-hero-mode="simplified". */
   .cinematic-hero {
     position: relative;
     z-index: 1;
   }
   .cinematic-hero__stage {
     position: relative;
-    height: 100svh;
-    min-height: 680px;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
     isolation: isolate;
-    background: var(--color-paper);
+    padding-top: var(--header-height);
+    background-color: #d6c8b9;
+    background-image:
+      linear-gradient(180deg, rgb(248 247 244 / 16%) 0%, rgb(248 247 244 / 26%) 100%),
+      var(--wall-bg-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
-  .cinematic-hero__photo,
-  .cinematic-hero__foreground {
-    position: absolute;
-    inset: 0;
-    transform-origin: 0 0;
-    pointer-events: none;
-  }
-  .cinematic-hero__interaction {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 2;
-    overflow: hidden;
-    transform-origin: 0 0;
-    pointer-events: none;
-  }
-  .cinematic-hero__interaction :global(a) {
-    position: absolute;
-    display: block;
-    pointer-events: auto;
-    cursor: pointer;
-  }
-  .cinematic-hero__interaction :global(a:focus-visible) {
-    outline: 3px solid #171717;
-    outline-offset: -4px;
-  }
-  .cinematic-hero__photo img,
-  .cinematic-hero__foreground svg {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-    object-position: 50% 50%;
-  }
-  .cinematic-hero__foreground {
-    z-index: 2;
+  .cinematic-hero__camera,
+  .cinematic-hero__projection,
+  .cinematic-hero__optical,
+  .cinematic-hero__interaction,
+  .cinematic-hero__scroll {
     display: none;
-    pointer-events: none;
-  }
-  .cinematic-hero__projection {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    overflow: hidden;
-    transform-origin: 0 0;
-    background: var(--color-paper);
-    pointer-events: none;
-    visibility: hidden;
-  }
-  /* Capa estática dedicada proyectada a ~0.35x del viewport (casi 1:1 con la pantalla
-     del portátil) para evitar el submuestreo bilineal de matrix3d() en p=0. */
-  .cinematic-hero__poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    overflow: hidden;
-    transform-origin: 0 0;
-    background: #f4f1eb;
-    pointer-events: none;
-  }
-  .cinematic-hero__poster :global(img) {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    display: block;
-    max-width: none;
-    pointer-events: none;
-  }
-  /* Sobremuestreo del HTML sin cambiar su composición ni los puntos proyectados.
-     Se fija el ancho lógico al medir, nunca durante los frames del zoom. */
-  .cinematic-hero__projection :global(.cinematic-hero__replica) {
-    transform-origin: 0 0;
-  }
-  .cinematic-hero__projection :global(header.cinematic-hero__replica-header) {
-    position: absolute;
-    inset: 0 0 auto;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .cinematic-hero__projection :global(header.cinematic-hero__replica-header .nav > span) {
-    display: inline-flex;
-    align-items: center;
-    gap: 11px;
-    min-height: 44px;
-    font-size: 15px;
-    white-space: nowrap;
-  }
-  @media (max-resolution: 1.49dppx) {
-    @supports (zoom: 2) {
-      .cinematic-hero:not(.cinematic-native-resolution) .cinematic-hero__projection :global(.cinematic-hero__replica) {
-        zoom: 2;
-        transform: scale(.5);
-      }
-    }
   }
   .cinematic-hero__outside {
     position: relative;
-    z-index: 3;
-    height: 100%;
+    z-index: 4;
+    padding: clamp(40px, 7.5vh, 80px) var(--gutter) clamp(44px, 8vh, 84px);
     pointer-events: none;
   }
   .cinematic-hero__copy,
@@ -229,18 +137,21 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     pointer-events: auto;
   }
   .cinematic-hero__copy {
-    position: absolute;
-    top: clamp(calc(var(--header-height) + 12px), 12.5svh, 136px);
-    left: var(--gutter);
-    width: min(29%, 440px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: clamp(360px, 72vw, 680px);
+    margin: 0 auto;
   }
   .cinematic-hero__eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    margin: 0 0 clamp(8px, 1.3svh, 14px);
-    color: var(--color-muted);
-    font-size: 11px;
+    margin: 0 0 clamp(12px, 1.8vw, 18px);
+    color: #36302a;
+    font-size: clamp(10px, 1.1vw, 11.5px);
     font-weight: 500;
     line-height: 1.4;
     letter-spacing: 0.16em;
@@ -253,24 +164,25 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     width: 24px;
     height: 1px;
     background: currentColor;
-    opacity: 0.55;
+    opacity: 0.6;
     flex-shrink: 0;
   }
   h1 {
-    margin: 0;
-    width: max-content;
-    max-width: calc(100vw - var(--gutter) * 2);
+    margin: 0 auto;
+    max-width: 14ch;
     color: var(--color-ink);
-    font-size: clamp(36px, min(4.6vw, 7.8svh), 84px);
+    font-size: clamp(34px, 6.2vw, 64px);
     font-weight: 550;
-    line-height: 0.96;
-    letter-spacing: -0.048em;
+    line-height: 1.01;
+    letter-spacing: -0.04em;
   }
+  /* Terracota oficial del logotipo 7DStudio (#985233). */
   .cinematic-hero__subtitle {
-    margin: clamp(8px, 1.5svh, 16px) 0 0;
-    color: #66615b;
-    font-size: clamp(24px, min(3.1vw, 4.9svh), 52px);
-    font-weight: 400;
+    margin: clamp(10px, 1.8vw, 16px) auto 0;
+    max-width: 18ch;
+    color: #985233;
+    font-size: clamp(21px, 3.6vw, 38px);
+    font-weight: 500;
     line-height: 1.1;
     letter-spacing: -0.032em;
   }
@@ -282,23 +194,25 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     text-decoration-skip-ink: auto;
   }
   .cinematic-hero__description {
-    max-width: 28ch;
-    margin: clamp(12px, 2svh, 22px) 0 clamp(14px, 2.6svh, 28px);
-    color: var(--color-muted);
-    font-size: clamp(15px, min(1.55vw, 2.4svh), 24px);
-    line-height: 1.48;
+    max-width: 40ch;
+    margin: clamp(18px, 2.4vw, 24px) auto clamp(24px, 3.2vw, 34px);
+    color: #2c2722;
+    font-size: clamp(15px, 1.8vw, 19px);
+    line-height: 1.52;
   }
   .cinematic-hero__actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     align-items: center;
-    gap: clamp(10px, 1.4svh, 14px) clamp(16px, 2vw, 26px);
+    gap: 14px 24px;
+    width: 100%;
   }
   .cinematic-hero__cta-primary {
-    min-height: clamp(46px, 5.8svh, 62px);
-    padding: clamp(11px, 1.6svh, 18px) clamp(18px, 2vw, 30px);
-    gap: clamp(12px, 1.4vw, 20px);
-    font-size: clamp(15px, min(1.35vw, 2.1svh), 20px);
+    min-height: clamp(50px, 5.5vw, 56px);
+    padding: 13px 24px;
+    gap: clamp(12px, 1.3vw, 18px);
+    font-size: clamp(15px, 1.5vw, 17px);
     white-space: nowrap;
   }
   .cinematic-hero__cta-secondary {
@@ -307,13 +221,13 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     gap: 9px;
     min-height: 44px;
     color: var(--color-ink);
-    font-size: clamp(15px, min(1.35vw, 2.1svh), 20px);
+    font-size: clamp(15px, 1.5vw, 17px);
     font-weight: 500;
     white-space: nowrap;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 6px;
-    text-decoration-color: rgba(23, 23, 23, 0.35);
+    text-decoration-color: rgba(23, 23, 23, 0.45);
     transition: text-decoration-color 0.25s ease, color 0.25s ease;
   }
   .cinematic-hero__cta-secondary svg {
@@ -326,40 +240,255 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
   .cinematic-hero__cta-secondary:focus-visible svg {
     transform: translate(3px, -3px);
   }
-  .cinematic-hero__scroll {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: clamp(20px, 5.5svh, 72px);
-    width: max-content;
-    margin-inline: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    min-height: 44px;
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    opacity: 0.96;
-    transition: opacity 0.25s ease;
+
+  /* Móvil estrecho (< 640px): apila verticalmente ambos CTA. */
+  @media (max-width: 639px) {
+    .cinematic-hero__actions {
+      flex-direction: column;
+      gap: 12px;
+    }
+    .cinematic-hero__cta-primary {
+      min-height: 50px;
+      padding: 13px 22px;
+      font-size: 15px;
+    }
+    .cinematic-hero__cta-secondary {
+      font-size: 15px;
+    }
   }
-  .cinematic-hero__scroll:hover {
-    opacity: 1;
+
+  /* Modo cinematográfico: solo >= 1024px y cuando el espacio geométrico real es suficiente. */
+  @media (min-width: 1024px) {
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__stage {
+      display: block;
+      height: 100svh;
+      min-height: 600px;
+      padding-top: 0;
+      background: #f4f1eb;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__camera,
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__projection,
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__optical,
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__interaction {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      pointer-events: none;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__camera {
+      inset: 0;
+      z-index: 0;
+    }
+    /* Respaldo sin JS: encuadra la fotografía bajo el header fijo. */
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__photo {
+      position: absolute;
+      inset: var(--header-height) 0 0;
+      pointer-events: none;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__photo picture,
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: 50% 45%;
+    }
+    /* Halo luminoso arquitectónico alrededor de la superficie proyectada en pared. */
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__bloom {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow:
+        0 0 34px rgb(255 252 245 / 48%),
+        0 0 8px rgb(255 253 249 / 34%);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__projection {
+      z-index: 1;
+      overflow: hidden;
+      background: #f4f1eb;
+      visibility: hidden;
+    }
+    /* Tratamiento óptico discreto (compositor-only, sin blur): caída direccional de luz
+       desde el proyector (abajo-derecha) e integración suave con el borde del yeso. */
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__optical {
+      z-index: 2;
+      opacity: 0;
+      background:
+        radial-gradient(
+          ellipse 95% 90% at 72% 84%,
+          rgb(255 251 244 / 10%) 0%,
+          rgb(255 251 244 / 0%) 52%,
+          rgb(162 148 132 / 16%) 100%
+        ),
+        linear-gradient(
+          155deg,
+          rgb(176 162 146 / 7%) 0%,
+          rgb(255 252 246 / 0%) 45%,
+          rgb(255 248 236 / 9%) 100%
+        );
+      box-shadow: inset 0 0 26px rgb(224 214 202 / 56%);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__interaction {
+      z-index: 3;
+      overflow: hidden;
+    }
+    .cinematic-hero__interaction :global(.cinematic-hero__interaction-inner) {
+      position: relative;
+      transform-origin: 50% 0;
+      pointer-events: none;
+    }
+    .cinematic-hero__interaction :global(a) {
+      position: absolute;
+      display: block;
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    .cinematic-hero__interaction :global(a:focus-visible) {
+      outline: 3px solid #171717;
+      outline-offset: -4px;
+    }
+    .cinematic-hero__projection :global(.cinematic-hero__replica) {
+      transform-origin: 50% 0;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__outside {
+      display: grid;
+      grid-template-columns: var(--projection-left, 42.5%) minmax(0, 1fr);
+      align-items: center;
+      height: 100%;
+      padding: var(--header-height) 0 clamp(58px, 8svh, 88px);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__copy {
+      grid-column: 1;
+      justify-self: end;
+      display: block;
+      width: fit-content;
+      max-width: calc(100% - var(--gutter) - clamp(26px, 3.4vw, 60px));
+      margin: 0 clamp(26px, 3.4vw, 60px) 0 var(--gutter);
+      text-align: left;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__eyebrow {
+      margin: 0 0 clamp(8px, 1.3svh, 14px);
+      color: #3a342e;
+      font-size: 11px;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) h1 {
+      margin: 0;
+      width: max-content;
+      max-width: 100%;
+      font-size: clamp(32px, min(4.1vw, 7.4svh), 78px);
+      line-height: 0.96;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__subtitle {
+      margin: clamp(8px, 1.5svh, 16px) 0 0;
+      max-width: none;
+      font-size: clamp(22px, min(2.8vw, 4.6svh), 48px);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__description {
+      max-width: 28ch;
+      margin: clamp(12px, 2svh, 22px) 0 clamp(14px, 2.6svh, 28px);
+      color: #312c27;
+      font-size: clamp(15px, min(1.4vw, 2.25svh), 21px);
+      line-height: 1.48;
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__actions {
+      justify-content: flex-start;
+      width: auto;
+      gap: clamp(10px, 1.4svh, 14px) clamp(16px, 1.8vw, 24px);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__cta-primary {
+      min-height: clamp(46px, 5.6svh, 58px);
+      padding: clamp(11px, 1.5svh, 16px) clamp(18px, 1.9vw, 26px);
+      font-size: clamp(15px, min(1.25vw, 1.95svh), 18px);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__cta-secondary {
+      font-size: clamp(15px, min(1.25vw, 1.95svh), 18px);
+    }
+    /* Cápsula flotante «DESLIZA HACIA ABAJO» con icono Lucide en círculo blanco. */
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__scroll {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(18px, 3.6svh, 38px);
+      transform: translateX(-50%);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 44px;
+      padding: 7px 8px 7px 18px;
+      border-radius: 999px;
+      background: rgb(23 23 23 / 84%);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+      box-shadow: 0 6px 20px rgb(23 23 23 / 16%);
+      transition: background-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    @supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+      .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__scroll {
+        background: rgb(23 23 23 / 78%);
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+      }
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__scroll:hover {
+      background: rgb(23 23 23 / 94%);
+      box-shadow: 0 8px 24px rgb(23 23 23 / 22%);
+    }
+    .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__scroll:focus-visible {
+      outline: 2px solid var(--color-ink);
+      outline-offset: 4px;
+    }
+    .cinematic-hero__scroll-icon {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      color: #171717;
+      flex-shrink: 0;
+    }
   }
-  .cinematic-hero__scroll svg {
-    transition: transform 0.25s ease;
+
+  /* Estados cinematográficos activos */
+  .cinematic-hero.cinematic-projected .cinematic-hero__projection {
+    visibility: visible;
   }
-  .cinematic-hero__scroll:hover svg,
-  .cinematic-hero__scroll:focus-visible svg {
-    transform: translateY(3px);
+  .cinematic-hero.cinematic-ready .cinematic-hero__stage {
+    min-height: 0;
   }
-  .cinematic-hero__scroll-line {
-    display: block;
-    width: 1px;
-    height: 22px;
-    background: currentColor;
-    opacity: 0.8;
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__camera,
+  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__projection {
+    will-change: transform, opacity;
+  }
+  .cinematic-hero.cinematic-complete .cinematic-hero__stage {
+    visibility: hidden;
+  }
+  .cinematic-hero.cinematic-complete {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  :global(.cinematic-ready ~ .services-surface) {
+    margin-top: -100svh;
+  }
+  :global(.cinematic-ready ~ .services-surface #servicios) {
+    scroll-margin-top: calc(-1 * (var(--header-height) + 24px));
+  }
+
+  /* Animaciones de entrada y flecha (respetando prefers-reduced-motion) */
+  @keyframes scroll-arrow-nudge {
+    0%, 100% {
+      transform: translateY(-1.5px);
+    }
+    50% {
+      transform: translateY(2px);
+    }
   }
   @keyframes hero-reveal {
     from {
@@ -390,170 +519,8 @@ const maskId = `screen-opening-${crypto.randomUUID()}`;
     .cinematic-hero__scroll {
       animation: hero-reveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.28s backwards;
     }
-  }
-  .cinematic-hero__debug {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .cinematic-hero.cinematic-projected .cinematic-hero__projection {
-    visibility: visible;
-  }
-  .cinematic-hero.cinematic-projected .cinematic-hero__foreground {
-    display: block;
-  }
-  /* Las reglas de presentación no deben anular el atributo hidden del traspaso. */
-  .cinematic-hero [hidden] {
-    display: none !important;
-  }
-  .cinematic-hero.cinematic-ready .cinematic-hero__stage {
-    min-height: 0;
-  }
-  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__photo,
-  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__foreground,
-  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__projection {
-    will-change: transform;
-  }
-  .cinematic-hero.cinematic-ready:not(.cinematic-complete) .cinematic-hero__poster {
-    will-change: transform, opacity;
-  }
-  .cinematic-hero.cinematic-complete .cinematic-hero__stage {
-    visibility: hidden;
-  }
-  /* El pin-spacer conserva su altura, pero no debe interceptar la sección real. */
-  .cinematic-hero.cinematic-complete {
-    visibility: hidden;
-    pointer-events: none;
-  }
-  :global(.cinematic-ready ~ .services-surface) {
-    margin-top: -100svh;
-  }
-  /* El padding interno de Servicios ya deja sus títulos bajo el header fijo.
-     Cancelar la compensación global para no aterrizar antes de liberar el pin. */
-  :global(.cinematic-ready ~ .services-surface #servicios) {
-    scroll-margin-top: calc(-1 * (var(--header-height) + 24px));
-  }
-  @media (min-width: 768px) and (max-width: 1279px) and (min-aspect-ratio: 1/1) {
-    .cinematic-hero__photo img {
-      object-position: 0% 50%;
-    }
-  }
-  @media (min-width: 768px) and (max-aspect-ratio: 1/1) {
-    .cinematic-hero__photo,
-    .cinematic-hero__foreground {
-      top: 180px;
-    }
-    .cinematic-hero__copy {
-      top: 102px;
-      width: 68%;
-      max-width: 520px;
-    }
-    .cinematic-hero__eyebrow {
-      margin-bottom: 10px;
-      font-size: 10px;
-    }
-    h1 {
-      width: auto;
-      font-size: clamp(34px, 4.4vw, 46px);
-    }
-    .cinematic-hero__subtitle {
-      margin-top: 8px;
-      font-size: clamp(19px, 2.4vw, 26px);
-    }
-    .cinematic-hero__description {
-      margin: 12px 0 16px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-    .cinematic-hero__cta-primary {
-      min-height: 46px;
-      padding: 12px 20px;
-    }
-    .cinematic-hero__scroll {
-      bottom: calc(var(--mobile-nav-height) + 16px);
-      color: var(--color-ink);
-      background: var(--color-paper);
-      padding-inline: 12px;
-    }
-  }
-  @media (max-width: 767px) {
-    .cinematic-hero__stage {
-      height: auto;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      padding-top: var(--header-height);
-    }
-    .cinematic-hero__outside {
-      display: contents;
-    }
-    .cinematic-hero__copy {
-      position: static;
-      order: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: auto;
-      max-width: none;
-      margin: 32px var(--gutter) 28px;
-    }
-    .cinematic-hero__eyebrow {
-      margin-bottom: 16px;
-      font-size: 10px;
-    }
-    h1 {
-      width: auto;
-      margin-inline: auto;
-      font-size: clamp(40px, 9.6vw, 56px);
-      line-height: 1.02;
-      max-width: 12ch;
-    }
-    .cinematic-hero__subtitle {
-      margin: 12px auto 0;
-      font-size: clamp(22px, 5.4vw, 30px);
-      max-width: 16ch;
-    }
-    .cinematic-hero__description {
-      margin: 20px auto 24px;
-      font-size: 15px;
-    }
-    .cinematic-hero__actions {
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-    .cinematic-hero__photo {
-      display: none;
-    }
-    .cinematic-hero.cinematic-projected .cinematic-hero__foreground,
-    .cinematic-hero__projection,
-    .cinematic-hero__poster {
-      display: none;
-    }
-    .cinematic-hero__scroll {
-      position: static;
-      order: 3;
-
-      /* Centrado horizontal */
-      align-self: center;
-      justify-content: center;
-      margin: 4px auto 20px;
-
-      /* Distribución del texto y la línea */
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-
-      /* Estética */
-      width: max-content;
-      max-width: 100%;
-      color: var(--color-ink);
-      white-space: nowrap;
-
-      /* Eliminar desplazamientos */
-      transform: none;
+    .cinematic-hero__scroll-icon svg {
+      animation: scroll-arrow-nudge 2.2s ease-in-out infinite;
     }
   }
 </style>

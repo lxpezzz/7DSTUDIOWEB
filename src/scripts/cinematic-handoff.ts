@@ -2,8 +2,6 @@ interface HandoffElements {
   hero: HTMLElement;
   stage: HTMLElement;
   layers: readonly HTMLElement[];
-  debug: HTMLElement;
-  debugMode: boolean;
 }
 
 // Oculta las capas DE VERDAD: visibility heredada no basta, porque la proyección
@@ -14,5 +12,4 @@ export function applyCinematicHandoff(elements: HandoffElements, complete: boole
     if (layer.hidden !== complete) layer.hidden = complete;
   }
   elements.stage.inert = complete;
-  elements.debug.hidden = complete || !elements.debugMode;
 }

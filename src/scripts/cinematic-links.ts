@@ -1,7 +1,9 @@
-// The visual clone stays inert. These three semantic links use its local layout
-// coordinates and the exact same projective matrix, never viewport hotspots.
+// El clon visual permanece inert. Estos tres enlaces semánticos usan sus
+// coordenadas locales exactas y la misma transformación 2D que la proyección.
 export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement, surface: HTMLElement) {
   const layer = hero.querySelector<HTMLElement>('.cinematic-hero__interaction')!;
+  const inner = document.createElement('div');
+  inner.className = 'cinematic-hero__interaction-inner';
   const cards = [...surface.querySelectorAll<HTMLAnchorElement>('a.service-card')];
   const visuals = [...projection.querySelectorAll<HTMLElement>('.service-card')];
   const links = cards.map(card => {
@@ -12,11 +14,12 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
     link.draggable = false;
     return link;
   });
-  layer.replaceChildren(...links);
+  inner.replaceChildren(...links);
+  layer.replaceChildren(inner);
+
   let eligible = false;
   let complete = false;
   let active = false;
-  let aperture = 'none';
   let lastClipPath = '';
 
   function sync(nextComplete: boolean) {
@@ -27,7 +30,7 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
     const from = nextActive ? cards : links;
     const to = nextActive ? links : cards;
     const focusedIndex = from.findIndex(link => link === focused);
-    // Enable the destination before moving focus; hide the source only afterward.
+    // Activar el destino antes de mover el foco; ocultar el origen después.
     if (nextActive) layer.hidden = false;
     else surface.inert = false;
     if (focusedIndex >= 0) to[focusedIndex].focus({ preventScroll: true });
@@ -36,22 +39,28 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
     active = nextActive;
   }
 
-  function measure(clipPath: string) {
-    aperture = clipPath;
-    // Below 1024 the clone may be a clipped, single-column Bento. Keep native
-    // Services navigation instead of exposing tiny or unreachable tablet targets.
-    eligible = matchMedia('(min-width: 1024px)').matches && links.length === 3 && visuals.length === 3;
+  function measure() {
+    eligible = links.length === 3 && visuals.length === 3;
     if (eligible) {
       layer.style.width = projection.style.width;
       layer.style.height = projection.style.height;
+      inner.style.width = projection.style.width;
+      inner.style.height = projection.style.height;
+      const replica = projection.firstElementChild as HTMLElement | null;
       visuals.forEach((card, index) => {
         let x = 0, y = 0;
-        for (let element: HTMLElement | null = card; element && element !== projection; element = element.offsetParent as HTMLElement | null) {
+        for (let element: HTMLElement | null = card; element && element !== replica && element !== projection; element = element.offsetParent as HTMLElement | null) {
           x += element.offsetLeft;
           y += element.offsetTop;
         }
         const style = getComputedStyle(card);
-        Object.assign(links[index].style, { left: `${x}px`, top: `${y}px`, width: style.width, height: style.height, borderRadius: style.borderRadius });
+        Object.assign(links[index].style, {
+          left: `${x}px`,
+          top: `${y}px`,
+          width: style.width,
+          height: style.height,
+          borderRadius: style.borderRadius,
+        });
       });
     }
     sync(complete);
@@ -59,13 +68,12 @@ export function createCinematicLinks(hero: HTMLElement, projection: HTMLElement,
 
   return {
     measure,
-    render(matrix: string, nextComplete: boolean, photoVisible: boolean) {
-      layer.style.transform = matrix;
-      // The notch/hand mask also clips hit-testing, not only the photograph.
-      const nextClipPath = photoVisible ? aperture : 'none';
-      if (nextClipPath !== lastClipPath) {
-        layer.style.clipPath = nextClipPath;
-        lastClipPath = nextClipPath;
+    render(outerTransform: string, innerTransform: string, clipPath: string, nextComplete: boolean) {
+      layer.style.transform = outerTransform;
+      inner.style.transform = innerTransform;
+      if (clipPath !== lastClipPath) {
+        layer.style.clipPath = clipPath;
+        lastClipPath = clipPath;
       }
       sync(nextComplete);
     },

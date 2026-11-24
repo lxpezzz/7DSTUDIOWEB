@@ -1,29 +1,27 @@
-import heroImage from '../images/hero/hero-7dstudio.webp?url';
-import screenPoster1920 from '../images/hero/hero-screen-1920.webp?url';
-import screenPoster1440 from '../images/hero/hero-screen-1440.webp?url';
-import screenPoster1280 from '../images/hero/hero-screen-1280.webp?url';
+import heroImage from '../images/hero/hero-projector.webp?url';
+import wallBackgroundImage from '../images/hero/hero-wall-mobile.webp?url';
 
-// Calibración sobre el PNG original de 1672 × 941, no sobre un recorte CSS.
-// Orden: superior izquierda, superior derecha, inferior derecha, inferior izquierda.
+// Calibración sobre la fotografía 4K definitiva del proyector (3840 × 2145).
+// Rectángulo iluminado en la pared detectado por gradiente de luminancia:
+// x ∈ [1643, 3424], y ∈ [209, 1305] → 1781 × 1096 px (relación 1.625).
 export const heroScene = {
-  width: 1672,
-  height: 941,
+  width: 3840,
+  height: 2145,
   image: heroImage,
-  screenPoster1920,
-  screenPoster1440,
-  screenPoster1280,
-  screen: [
-    [592 / 1672, 382 / 941],
-    [1035 / 1672, 374 / 941],
-    [1080 / 1672, 676 / 941],
-    [632 / 1672, 700 / 941],
-  ],
-  // Apertura visible: conserva la muesca, la mano y la silueta sobre el cristal.
-  // Estos puntos son píxeles de la misma imagen original.
-  opening: '592,382 795,378 797,385 842,384 844,378 1035,374 1073,622 1065,635 1062,650 1063,665 1059,677 1000,679 991,668 981,659 972,658 962,660 954,663 945,662 935,663 924,658 915,656 903,657 895,663 892,671 883,670 873,675 868,689 632,700',
-  objectPosition: { x: 0.5, y: 0.5 },
+  wallBackgroundImage,
+  screen: {
+    left: 1643 / 3840,
+    top: 209 / 2145,
+    width: 1781 / 3840,
+    height: 1096 / 2145,
+  },
+  // Encuadre en modo cinematográfico: mantiene siempre visible
+  // toda la proyección y el proyector sin recortar el borde derecho.
+  objectPosition: {
+    desktop: { x: 0.5, y: 0.45 },
+    compact: { x: 0.56, y: 0.45 },
+  },
   scrollViewports: 2,
-  // El zoom original llega a pantalla completa aquí: liberar el pin en ese punto,
-  // sin conservar el último 25% como una pantalla decorativa no interactiva.
+  // El acercamiento llega a escala 1:1 en este punto: libera el pin al instante.
   handoffProgress: 0.75,
 } as const;

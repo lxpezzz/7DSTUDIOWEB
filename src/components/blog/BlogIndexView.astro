@@ -1,0 +1,340 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../layout/Header.astro";
+import Footer from "../layout/Footer.astro";
+import Contact from "../home/Contact.astro";
+import type { CollectionEntry } from "astro:content";
+import { ArrowUpRight } from "lucide";
+import { site } from "../../data/site";
+
+interface Props {
+  posts: readonly CollectionEntry<"blog">[];
+}
+
+const { posts } = Astro.props;
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+
+const title = "Blog de diseño web, SEO local y NFC en Castellón | 7DStudio";
+const description =
+  "Guías prácticas de 7DStudio sobre diseño web, precios reales, posicionamiento en Google Maps, reseñas y soluciones QR/NFC para negocios en Castellón.";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: title,
+    description,
+    url: `${site.url}/blog/`,
+    inLanguage: "es-ES",
+    publisher: { "@id": `${site.url}/#business` },
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.data.title,
+      url: `${site.url}/blog/${post.id}/`,
+      datePublished: post.data.pubDate.toISOString(),
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${site.url}/` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${site.url}/blog/`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="blog-page">
+    <section class="blog-hero container" aria-labelledby="blog-title">
+      <nav class="blog-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Blog</span>
+      </nav>
+      <p class="blog-eyebrow">GUÍAS PRÁCTICAS / 7DStudio</p>
+      <h1 id="blog-title">
+        Recursos claros sobre <span class="heading-emphasis">web, SEO local y QR/NFC.</span>
+      </h1>
+      <p class="blog-hero__description">
+        Guías directas y sin humo para autónomos, comercios y pymes de Castellón
+        y provincia: precios reales, Google Maps, reseñas y herramientas útiles
+        para tu negocio.
+      </p>
+    </section>
+
+    <section class="blog-list container" aria-label="Artículos publicados">
+      <div class="blog-grid">
+        {
+          posts.map((post) => (
+            <article class="blog-card" aria-labelledby={`post-${post.id}`}>
+              <div class="blog-card__meta">
+                <span class="blog-card__category">{post.data.category}</span>
+                <span>{post.data.readingTime}</span>
+                <time datetime={post.data.pubDate.toISOString()}>
+                  {formatDate(post.data.pubDate)}
+                </time>
+              </div>
+              <h2 id={`post-${post.id}`}>
+                <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <p class="blog-card__summary">{post.data.summary}</p>
+              <a class="blog-link" href={`/blog/${post.id}/`}>
+                Leer guía completa
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  {ArrowUpRight.map(([Tag, attributes]) => (
+                    <Tag {...attributes} />
+                  ))}
+                </svg>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="blog-services container" aria-labelledby="blog-services-title">
+      <div class="blog-services__panel">
+        <div>
+          <p class="blog-eyebrow">SERVICIOS EN CASTELLÓN</p>
+          <h2 id="blog-services-title">¿Quieres aplicar estas mejoras en tu negocio?</h2>
+          <p>
+            Explora nuestras soluciones con precios claros o consulta nuestros
+            proyectos reales publicados.
+          </p>
+        </div>
+        <nav class="blog-services__links" aria-label="Accesos a servicios">
+          <a class="blog-link" href="/diseno-web/#presupuesto"
+            >Calculadora de diseño web <span aria-hidden="true">↗</span></a
+          >
+          <a class="blog-link" href="/seo-local/#planes"
+            >Planes de SEO local y Google Maps <span aria-hidden="true">↗</span></a
+          >
+          <a class="blog-link" href="/productos/"
+            >Productos QR y NFC personalizados <span aria-hidden="true">↗</span></a
+          >
+          <a class="blog-link" href="/proyectos/"
+            >Ver proyectos y casos reales <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </div>
+    </section>
+
+    <Contact
+      variant="pearl"
+      title="¿Tienes alguna duda sobre tu negocio?"
+      description="Cuéntanos qué quieres mejorar en Castellón o en remoto y te orientamos sin compromiso."
+    />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .blog-page {
+    --blog-muted: #655f58;
+    --blog-accent: #7e4c3d;
+    --blog-line: #d9d3ca;
+    padding-top: var(--header-height);
+    padding-bottom: 64px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .blog-page :where(h1, h2, p) {
+    margin: 0;
+  }
+  .blog-page :is(h1, h2) {
+    text-wrap: balance;
+  }
+  .blog-page :is(a, button):focus-visible {
+    outline: 2px solid var(--blog-accent);
+    outline-offset: 4px;
+  }
+  .blog-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 34px;
+    color: var(--blog-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .blog-breadcrumb a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .blog-eyebrow {
+    margin-bottom: 16px;
+    color: var(--blog-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  .blog-hero {
+    padding-block: 28px 56px;
+    border-bottom: 1px solid var(--blog-line);
+  }
+  .blog-hero h1 {
+    max-width: 22ch;
+    font-size: clamp(38px, 4.6vw, 62px);
+    font-weight: 480;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+  .blog-hero__description {
+    max-width: 62ch;
+    margin-top: 22px;
+    color: var(--blog-muted);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+  .blog-list {
+    padding-block: 64px;
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px;
+  }
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 30px;
+    border: 1px solid var(--blog-line);
+    border-radius: 14px;
+    background: #fff;
+  }
+  .blog-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    color: var(--blog-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .blog-card__category {
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: #efe3dc;
+    color: var(--blog-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .blog-card h2 {
+    margin-top: 16px;
+    font-size: clamp(22px, 2vw, 27px);
+    font-weight: 550;
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+  }
+  .blog-card h2 a:hover {
+    color: var(--blog-accent);
+  }
+  .blog-card__summary {
+    margin-top: 14px;
+    color: var(--blog-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .blog-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--blog-accent);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: #c7b4aa;
+    text-underline-offset: 5px;
+  }
+  .blog-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+  .blog-card .blog-link {
+    margin-top: auto;
+    padding-top: 18px;
+  }
+  .blog-services {
+    padding-bottom: 56px;
+  }
+  .blog-services__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+    gap: 28px 48px;
+    padding: clamp(26px, 3vw, 40px);
+    border: 1px solid var(--blog-line);
+    border-radius: 14px;
+    background: #efeae3;
+  }
+  .blog-services h2 {
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+  .blog-services p:not(.blog-eyebrow) {
+    max-width: 52ch;
+    margin-top: 12px;
+    color: var(--blog-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .blog-services__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+  @media (max-width: 959px) {
+    .blog-grid,
+    .blog-services__panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 599px) {
+    .blog-hero {
+      padding-block: 22px 40px;
+    }
+    .blog-list {
+      padding-block: 44px;
+    }
+    .blog-card {
+      padding: 22px 20px;
+    }
+  }
+</style>

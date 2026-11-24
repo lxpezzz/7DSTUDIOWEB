@@ -1,0 +1,431 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../layout/Header.astro";
+import Footer from "../layout/Footer.astro";
+import Contact from "../home/Contact.astro";
+import { render, type CollectionEntry } from "astro:content";
+import { ArrowLeft, ArrowUpRight } from "lucide";
+import { site } from "../../data/site";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  relatedPosts: readonly CollectionEntry<"blog">[];
+}
+
+const { post, relatedPosts } = Astro.props;
+const { Content } = await render(post);
+const pageUrl = `${site.url}/blog/${post.id}/`;
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.data.title,
+    description: post.data.description,
+    datePublished: post.data.pubDate.toISOString(),
+    dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+    inLanguage: "es-ES",
+    articleSection: post.data.category,
+    mainEntityOfPage: pageUrl,
+    url: pageUrl,
+    author: { "@id": `${site.url}/#business` },
+    publisher: { "@id": `${site.url}/#business` },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${site.url}/` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${site.url}/blog/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.data.title,
+        item: pageUrl,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={post.data.seoTitle}
+  description={post.data.description}
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="article-page">
+    <article class="article-shell container">
+      <header class="article-header">
+        <nav class="article-breadcrumb" aria-label="Ruta de navegación">
+          <a href="/">Inicio</a>
+          <span aria-hidden="true">/</span>
+          <a href="/blog/">Blog</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{post.data.category}</span>
+        </nav>
+        <div class="article-meta">
+          <span class="article-meta__category">{post.data.category}</span>
+          <span>{post.data.readingTime}</span>
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+        </div>
+        <h1>{post.data.title}</h1>
+        <p class="article-summary">{post.data.summary}</p>
+      </header>
+
+      <div class="article-prose">
+        <Content />
+      </div>
+
+      <aside class="article-cta" aria-labelledby="article-cta-title">
+        <div>
+          <p class="article-eyebrow">{post.data.relatedService.eyebrow}</p>
+          <h2 id="article-cta-title">{post.data.relatedService.title}</h2>
+          <p>{post.data.relatedService.text}</p>
+        </div>
+        <a class="button" href={post.data.relatedService.href}>
+          {post.data.relatedService.label} <span aria-hidden="true">↗</span>
+        </a>
+      </aside>
+    </article>
+
+    {
+      relatedPosts.length > 0 && (
+        <section class="article-more container" aria-labelledby="article-more-title">
+          <div class="article-more__heading">
+            <h2 id="article-more-title">Otras guías prácticas</h2>
+            <a class="article-link" href="/blog/">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                {ArrowLeft.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+              Volver al blog
+            </a>
+          </div>
+          <div class="article-more__grid">
+            {relatedPosts.map((item) => (
+              <article class="article-more__card">
+                <span class="article-meta__category">{item.data.category}</span>
+                <h3>
+                  <a href={`/blog/${item.id}/`}>{item.data.title}</a>
+                </h3>
+                <a class="article-link" href={`/blog/${item.id}/`}>
+                  Leer guía
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    {ArrowUpRight.map(([Tag, attributes]) => (
+                      <Tag {...attributes} />
+                    ))}
+                  </svg>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <Contact
+      variant="pearl"
+      title="¿Hablamos de tu proyecto en Castellón?"
+      description="Cuéntanos qué necesita tu negocio y te orientamos con claridad y sin compromiso."
+    />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .article-page {
+    --art-muted: #5d5750;
+    --art-accent: #7e4c3d;
+    --art-line: #d9d3ca;
+    padding-top: var(--header-height);
+    padding-bottom: 64px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .article-page :is(a, button):focus-visible {
+    outline: 2px solid var(--art-accent);
+    outline-offset: 4px;
+  }
+  .article-shell {
+    padding-block: 28px 64px;
+  }
+  .article-header {
+    max-width: 780px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--art-line);
+  }
+  .article-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+    color: var(--art-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .article-breadcrumb a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+    margin-bottom: 20px;
+    color: var(--art-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .article-meta__category {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 4px;
+    background: #efe3dc;
+    color: var(--art-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .article-header h1 {
+    margin: 0;
+    font-size: clamp(34px, 4.1vw, 54px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.038em;
+    text-wrap: balance;
+  }
+  .article-summary {
+    margin: 22px 0 0;
+    color: var(--art-muted);
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .article-prose {
+    max-width: 72ch;
+    padding-block: 42px 52px;
+    font-size: 16px;
+    line-height: 1.85;
+    color: #292724;
+  }
+  .article-prose :global(h2) {
+    margin: 44px 0 16px;
+    color: var(--color-ink);
+    font-size: clamp(24px, 2.3vw, 31px);
+    font-weight: 550;
+    line-height: 1.22;
+    letter-spacing: -0.03em;
+    text-wrap: balance;
+  }
+  .article-prose :global(h3) {
+    margin: 28px 0 10px;
+    color: var(--color-ink);
+    font-size: 20px;
+    font-weight: 550;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .article-prose :global(p) {
+    margin: 0 0 18px;
+  }
+  .article-prose :global(ul),
+  .article-prose :global(ol) {
+    margin: 0 0 22px;
+    padding-left: 22px;
+  }
+  .article-prose :global(li) {
+    margin-bottom: 10px;
+  }
+  .article-prose :global(a) {
+    color: var(--art-accent);
+    font-weight: 550;
+    text-decoration: underline;
+    text-decoration-color: #c7b4aa;
+    text-underline-offset: 4px;
+  }
+  .article-prose :global(a:hover) {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+  .article-prose :global(strong) {
+    color: var(--color-ink);
+    font-weight: 650;
+  }
+  .article-prose :global(table) {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    margin: 26px 0 30px;
+    border-collapse: collapse;
+    border: 1px solid var(--art-line);
+    border-radius: 10px;
+    background: #fff;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .article-prose :global(th),
+  .article-prose :global(td) {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--art-line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .article-prose :global(th) {
+    background: #efeae3;
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .article-prose :global(tr:last-child td) {
+    border-bottom: 0;
+  }
+  .article-eyebrow {
+    margin: 0 0 12px;
+    color: var(--art-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  .article-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 40px;
+    max-width: 920px;
+    padding: clamp(24px, 3vw, 38px);
+    border: 1px solid var(--art-line);
+    border-radius: 14px;
+    background: #efeae3;
+  }
+  .article-cta h2 {
+    margin: 0;
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+  .article-cta p:not(.article-eyebrow) {
+    max-width: 52ch;
+    margin: 12px 0 0;
+    color: var(--art-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .article-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--art-accent);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: #c7b4aa;
+    text-underline-offset: 5px;
+  }
+  .article-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+  .article-more {
+    padding-block: 56px;
+    border-top: 1px solid var(--art-line);
+  }
+  .article-more__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .article-more h2 {
+    margin: 0;
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+  .article-more__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .article-more__card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 24px;
+    border: 1px solid var(--art-line);
+    border-radius: 12px;
+    background: #fff;
+  }
+  .article-more__card h3 {
+    margin: 14px 0 12px;
+    font-size: 18px;
+    font-weight: 550;
+    line-height: 1.32;
+    letter-spacing: -0.02em;
+  }
+  .article-more__card h3 a:hover {
+    color: var(--art-accent);
+  }
+  .article-more__card .article-link {
+    margin-top: auto;
+  }
+  @media (max-width: 959px) {
+    .article-more__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 599px) {
+    .article-shell {
+      padding-block: 22px 44px;
+    }
+    .article-summary {
+      font-size: 16px;
+    }
+    .article-prose {
+      padding-block: 32px 40px;
+      font-size: 15px;
+    }
+  }
+</style>

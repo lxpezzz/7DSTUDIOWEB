@@ -1,7 +1,9 @@
 ---
 import { site, getNavigation } from "../../data/site";
 import { brand } from "../../data/brand";
+import { hasPublishedBlogPosts } from "../../utils/blog";
 const navigation = getNavigation(Astro.url.pathname);
+const showBlog = await hasPublishedBlogPosts();
 ---
 
 <footer class="footer container">
@@ -23,6 +25,7 @@ const navigation = getNavigation(Astro.url.pathname);
     <nav class="footer__nav" aria-label="Navegación de pie de página">
       {navigation.map((item) => <a href={item.href}>{item.label}</a>)}
       <a href="/proyectos/">Proyectos</a>
+      {showBlog && <a href="/blog/">Blog</a>}
     </nav>
     <div class="footer__contact">
       <span>Hablemos.</span><a href={site.phoneHref}>{site.phone}</a><a

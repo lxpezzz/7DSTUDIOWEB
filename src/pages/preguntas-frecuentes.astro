@@ -7,6 +7,9 @@ import { Plus, Minus } from "lucide";
 import { faqCategories } from "../data/faqs";
 import { site } from "../data/site";
 import { formatEmphasizedText } from "../utils/format-text";
+import { hasPublishedBlogPosts } from "../utils/blog";
+
+const showBlog = await hasPublishedBlogPosts();
 
 const structuredData = [
   {
@@ -56,6 +59,14 @@ const structuredData = [
         QR/NFC y condiciones de trabajo desde Castellón de la Plana. Sin
         complicaciones ni tecnicismos.
       </p>
+      {
+        showBlog && (
+          <a class="faq-text-link faq-hero__blog" href="/blog/">
+            Explorar nuestras guías prácticas en el blog{" "}
+            <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
     </section>
 
     <div class="faq-layout container">
@@ -240,6 +251,10 @@ const structuredData = [
     color: var(--faq-muted);
     font-size: 17px;
     line-height: 1.8;
+  }
+
+  .faq-hero__blog {
+    margin-top: 14px;
   }
 
   .faq-layout {

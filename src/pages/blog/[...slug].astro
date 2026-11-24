@@ -1,0 +1,45 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BlogIndexView from "../../components/blog/BlogIndexView.astro";
+import BlogPostView from "../../components/blog/BlogPostView.astro";
+import { getPublishedBlogPosts } from "../../utils/blog";
+
+type PageProps =
+  | { kind: "index"; posts: readonly CollectionEntry<"blog">[] }
+  | {
+      kind: "post";
+      post: CollectionEntry<"blog">;
+      relatedPosts: readonly CollectionEntry<"blog">[];
+    };
+
+export async function getStaticPaths() {
+  const posts = await getPublishedBlogPosts();
+  // Si no hay artículos publicados, no se genera ni /blog/ ni ninguna entrada (ni entra en el sitemap).
+  if (posts.length === 0) return [];
+
+  return [
+    {
+      params: { slug: undefined },
+      props: { kind: "index", posts } satisfies PageProps,
+    },
+    ...posts.map((post) => ({
+      params: { slug: post.id },
+      props: {
+        kind: "post",
+        post,
+        relatedPosts: posts.filter((item) => item.id !== post.id),
+      } satisfies PageProps,
+    })),
+  ];
+}
+
+const props = Astro.props as PageProps;
+---
+
+{
+  props.kind === "index" ? (
+    <BlogIndexView posts={props.posts} />
+  ) : (
+    <BlogPostView post={props.post} relatedPosts={props.relatedPosts} />
+  )
+}

@@ -1,0 +1,674 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import Contact from "../../components/home/Contact.astro";
+import { Image } from "astro:assets";
+import { ArrowUpRight } from "lucide";
+import {
+  getClientProjects,
+  getDemoProjects,
+  getDemoUrl,
+  getProjectCaseStudyHref,
+} from "../../data/projects";
+import { site } from "../../data/site";
+
+const clientProjects = getClientProjects();
+const demoProjects = getDemoProjects();
+
+const title = "Proyectos y portfolio de diseño web en Castellón | 7DStudio";
+const description =
+  "Portfolio de diseño web de 7DStudio en Castellón. Descubre proyectos reales de clientes y demos interactivas diseñadas a medida para negocios locales.";
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description,
+    url: `${site.url}/proyectos/`,
+    isPartOf: { "@id": `${site.url}/#website` },
+    about: { "@id": `${site.url}/#business` },
+    mainEntity: {
+      "@type": "ItemList",
+      name: "Proyectos reales de diseño web · 7DStudio",
+      itemListElement: clientProjects.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: project.title,
+        url: `${site.url}${getProjectCaseStudyHref(project) ?? "/proyectos/"}`,
+      })),
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${site.url}/` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Proyectos",
+        item: `${site.url}/proyectos/`,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="projects-page">
+    <section class="projects-hero container" aria-labelledby="projects-page-title">
+      <nav class="projects-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">Proyectos</span>
+      </nav>
+      <p class="projects-eyebrow">PORTFOLIO Y CASOS REALES / 7DStudio</p>
+      <h1 id="projects-page-title">
+        Proyectos de diseño web que <span class="heading-emphasis">presentan cada negocio con claridad.</span>
+      </h1>
+      <p class="projects-hero__description">
+        Selección de trabajos desarrollados desde Castellón de la Plana.
+        Diferenciamos claramente nuestros proyectos reales de clientes de las
+        demostraciones conceptuales para que sepas exactamente qué estás viendo.
+      </p>
+      <div class="projects-hero__actions">
+        <a class="button" href="/diseno-web/#presupuesto"
+          >Calcular presupuesto de mi web <span aria-hidden="true">↗</span></a
+        >
+        <a class="projects-link" href="#proyectos-reales"
+          >Proyectos reales ({clientProjects.length}) <span aria-hidden="true">↓</span></a
+        >
+        <a class="projects-link" href="#demos-conceptuales"
+          >Demos conceptuales ({demoProjects.length}) <span aria-hidden="true">↓</span></a
+        >
+      </div>
+    </section>
+
+    <section
+      id="proyectos-reales"
+      class="projects-section container"
+      aria-labelledby="real-projects-title"
+    >
+      <div class="projects-section__heading">
+        <div>
+          <p class="projects-eyebrow">CLIENTES REALES</p>
+          <h2 id="real-projects-title">
+            Webs publicadas para <span class="heading-underline">negocios reales.</span>
+          </h2>
+        </div>
+        <p>
+          Cada proyecto responde a las necesidades concretas del cliente:
+          arquitectura clara, diseño a medida, adaptación móvil y base SEO lista
+          para crecer.
+        </p>
+      </div>
+
+      <div class="client-grid">
+        {
+          clientProjects.map((project, index) => {
+            const caseHref = getProjectCaseStudyHref(project);
+            const liveHref = getDemoUrl(project.demoUrl);
+            return (
+              <article
+                class="client-card"
+                aria-labelledby={`client-${project.id}`}
+              >
+                <a class="client-card__media" href={caseHref ?? liveHref}>
+                  <Image
+                    src={project.image}
+                    width={1280}
+                    widths={[480, 640, 960, 1280]}
+                    sizes="(min-width: 1200px) 580px, (min-width: 768px) 46vw, 94vw"
+                    format="webp"
+                    quality={86}
+                    alt={project.image.alt}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchpriority={index === 0 ? "high" : undefined}
+                    decoding="async"
+                  />
+                </a>
+                <div class="client-card__body">
+                  <div class="client-card__meta">
+                    <span class="client-card__badge">Proyecto real</span>
+                    <span>{project.sector}</span>
+                    {project.caseStudy?.location && (
+                      <span>· {project.caseStudy.location}</span>
+                    )}
+                  </div>
+                  <h3 id={`client-${project.id}`}>{project.title}</h3>
+                  <p class="client-card__description">{project.description}</p>
+                  {project.highlights && project.highlights.length > 0 && (
+                    <ul class="client-card__tags" role="list">
+                      {project.highlights.map((item) => (
+                        <li>{item}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <div class="client-card__actions">
+                    {caseHref && (
+                      <a class="projects-link projects-link--strong" href={caseHref}>
+                        Ver caso de proyecto
+                        <svg
+                          width="17"
+                          height="17"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          {ArrowUpRight.map(([Tag, attributes]) => (
+                            <Tag {...attributes} />
+                          ))}
+                        </svg>
+                      </a>
+                    )}
+                    {liveHref && (
+                      <a
+                        class="projects-link"
+                        href={liveHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Visitar web publicada
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          aria-hidden="true"
+                        >
+                          {ArrowUpRight.map(([Tag, attributes]) => (
+                            <Tag {...attributes} />
+                          ))}
+                        </svg>
+                        <span class="sr-only">
+                          {" "}de {project.title} (se abre en una pestaña nueva)
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </section>
+
+    <section
+      id="demos-conceptuales"
+      class="projects-section projects-demos"
+      aria-labelledby="demos-title"
+    >
+      <div class="container">
+        <div class="projects-section__heading">
+          <div>
+            <p class="projects-eyebrow">EXPLORACIÓN DE DISEÑO</p>
+            <h2 id="demos-title">
+              Demos conceptuales <span class="heading-aside">interactivas.</span>
+            </h2>
+          </div>
+          <p>
+            Demostraciones creadas por 7DStudio —no encargos de clientes— para
+            mostrar dirección visual, ritmo editorial e interacciones aplicadas
+            a distintos sectores locales.
+          </p>
+        </div>
+
+        <div class="demo-grid">
+          {
+            demoProjects.map((demo) => {
+              const href = getDemoUrl(demo.demoUrl);
+              return (
+                <article class="demo-card" aria-labelledby={`demo-${demo.id}`}>
+                  <div class="demo-card__media">
+                    <Image
+                      src={demo.image}
+                      width={960}
+                      widths={[320, 480, 640, 960]}
+                      sizes="(min-width: 1200px) 380px, (min-width: 768px) 46vw, 94vw"
+                      format="webp"
+                      quality={84}
+                      alt={demo.image.alt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div class="demo-card__meta">
+                    <span class="demo-card__badge">Demo conceptual</span>
+                    <span>{demo.sector}</span>
+                  </div>
+                  <h3 id={`demo-${demo.id}`}>{demo.title}</h3>
+                  <p class="demo-card__description">{demo.description}</p>
+                  {demo.highlights && demo.highlights.length > 0 && (
+                    <p class="demo-card__highlights">
+                      {demo.highlights.join(" · ")}
+                    </p>
+                  )}
+                  {href && (
+                    <a
+                      class="projects-link"
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Explorar demo
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        {ArrowUpRight.map(([Tag, attributes]) => (
+                          <Tag {...attributes} />
+                        ))}
+                      </svg>
+                      <span class="sr-only">
+                        {" "}— {demo.title} (se abre en una pestaña nueva)
+                      </span>
+                    </a>
+                  )}
+                </article>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="projects-bridge container" aria-labelledby="projects-bridge-title">
+      <div class="projects-bridge__panel">
+        <div>
+          <p class="projects-eyebrow">SERVICIOS RELACIONADOS</p>
+          <h2 id="projects-bridge-title">¿Buscas una web a medida para tu negocio en Castellón?</h2>
+          <p>
+            Calcula un presupuesto orientativo al instante o combina tu nueva
+            página web con posicionamiento local en Google Maps y soportes
+            QR/NFC para tu local.
+          </p>
+        </div>
+        <nav class="projects-bridge__links" aria-label="Explorar servicios de 7DStudio">
+          <a class="projects-link projects-link--strong" href="/diseno-web/#presupuesto"
+            >Calculadora de diseño web en Castellón <span aria-hidden="true">↗</span></a
+          >
+          <a class="projects-link" href="/seo-local/"
+            >Planes de SEO local y Google Maps <span aria-hidden="true">↗</span></a
+          >
+          <a class="projects-link" href="/productos/"
+            >Tarjetas NFC y placas QR para reseñas <span aria-hidden="true">↗</span></a
+          >
+        </nav>
+      </div>
+    </section>
+
+    <Contact
+      variant="pearl"
+      title="¿Empezamos tu próximo proyecto?"
+      description="Trabajamos desde Castellón de la Plana con autónomos y pymes de toda la provincia y en remoto. Cuéntanos qué necesita tu negocio."
+    />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .projects-page {
+    --proj-muted: #655f58;
+    --proj-accent: #7e4c3d;
+    --proj-line: #d9d3ca;
+    --proj-surface: #ece7e0;
+    padding-top: var(--header-height);
+    padding-bottom: 64px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .projects-page :where(h1, h2, h3, p, ul) {
+    margin: 0;
+  }
+  .projects-page :is(h1, h2, h3) {
+    text-wrap: balance;
+  }
+  .projects-page :is(a, button):focus-visible {
+    outline: 2px solid var(--proj-accent);
+    outline-offset: 4px;
+  }
+  .projects-page section {
+    scroll-margin-top: calc(var(--header-height) + 24px);
+  }
+  .projects-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 34px;
+    color: var(--proj-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .projects-breadcrumb a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .projects-eyebrow {
+    margin-bottom: 16px;
+    color: var(--proj-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  .projects-hero {
+    padding-block: 28px 64px;
+    border-bottom: 1px solid var(--proj-line);
+  }
+  .projects-hero h1 {
+    max-width: 22ch;
+    font-size: clamp(38px, 4.6vw, 64px);
+    font-weight: 480;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+  .projects-hero__description {
+    max-width: 62ch;
+    margin-top: 24px;
+    color: var(--proj-muted);
+    font-size: 17px;
+    line-height: 1.8;
+  }
+  .projects-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    margin-top: 30px;
+  }
+  .projects-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    color: var(--proj-accent);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: #c7b4aa;
+    text-underline-offset: 5px;
+  }
+  .projects-link--strong {
+    color: var(--color-ink);
+    font-weight: 600;
+    text-decoration-color: currentColor;
+  }
+  .projects-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+  .projects-section {
+    padding-block: 72px;
+  }
+  .projects-section__heading {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: end;
+    gap: 24px 48px;
+    margin-bottom: 42px;
+  }
+  .projects-section h2 {
+    font-size: clamp(30px, 3.2vw, 44px);
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: -0.035em;
+  }
+  .projects-section__heading > p {
+    max-width: 48ch;
+    color: var(--proj-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .client-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px;
+  }
+  .client-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--proj-line);
+    border-radius: 14px;
+    background: #fff;
+    overflow: hidden;
+  }
+  .client-card__media {
+    display: block;
+    aspect-ratio: 16 / 10;
+    padding: 18px;
+    border-bottom: 1px solid var(--proj-line);
+    background: var(--proj-surface);
+  }
+  .client-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid #d7d0c7;
+    border-radius: 6px;
+    background: #fff;
+  }
+  .client-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 26px 28px 24px;
+  }
+  .client-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    color: var(--proj-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .client-card__badge {
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #efe3dc;
+    color: var(--proj-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .client-card h3 {
+    margin-top: 14px;
+    font-size: clamp(22px, 2vw, 28px);
+    font-weight: 550;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+  .client-card__description {
+    margin-top: 12px;
+    color: var(--proj-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .client-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 0;
+    list-style: none;
+  }
+  .client-card__tags li {
+    padding: 4px 10px;
+    border: 1px solid var(--proj-line);
+    border-radius: 5px;
+    background: var(--color-paper);
+    color: var(--proj-muted);
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .client-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    margin-top: auto;
+    padding-top: 22px;
+    border-top: 1px solid var(--proj-line);
+  }
+  .projects-demos {
+    background: #efeae3;
+    border-block: 1px solid var(--proj-line);
+  }
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 28px;
+  }
+  .demo-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 20px;
+    border: 1px solid var(--proj-line);
+    border-radius: 12px;
+    background: var(--color-paper);
+  }
+  .demo-card__media {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--proj-line);
+    border-radius: 7px;
+    background: #fff;
+  }
+  .demo-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .demo-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 16px;
+    color: var(--proj-muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+  .demo-card__badge {
+    padding: 2px 7px;
+    border: 1px solid var(--proj-line);
+    border-radius: 4px;
+    color: var(--color-ink);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .demo-card h3 {
+    margin-top: 12px;
+    font-size: 20px;
+    font-weight: 550;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+  }
+  .demo-card__description {
+    margin-top: 10px;
+    color: var(--proj-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .demo-card__highlights {
+    margin-top: 12px;
+    color: var(--proj-accent);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .demo-card .projects-link {
+    margin-top: auto;
+    padding-top: 14px;
+  }
+  .projects-bridge {
+    padding-block: 64px 56px;
+  }
+  .projects-bridge__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: 32px 48px;
+    padding: clamp(26px, 3vw, 40px);
+    border: 1px solid var(--proj-line);
+    border-radius: 14px;
+    background: #fff;
+  }
+  .projects-bridge h2 {
+    font-size: clamp(24px, 2.5vw, 34px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+  .projects-bridge p:not(.projects-eyebrow) {
+    max-width: 54ch;
+    margin-top: 14px;
+    color: var(--proj-muted);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .projects-bridge__links {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  @media (max-width: 1023px) {
+    .projects-section__heading,
+    .projects-bridge__panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .demo-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 767px) {
+    .projects-hero {
+      padding-block: 22px 44px;
+    }
+    .projects-section {
+      padding-block: 52px;
+    }
+    .client-grid,
+    .demo-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 24px;
+    }
+    .client-card__body {
+      padding: 22px 20px 20px;
+    }
+  }
+</style>

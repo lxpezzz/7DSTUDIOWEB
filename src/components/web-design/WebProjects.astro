@@ -1,5 +1,5 @@
 ---
-import { projects, getDemoUrl } from "../../data/projects";
+import { projects, getDemoUrl, getProjectCaseStudyHref } from "../../data/projects";
 import { Image } from "astro:assets";
 const items = projects.filter(
   (project) => project.type === "client" || project.type === "demo",
@@ -23,6 +23,9 @@ const hasBothCategories =
       Explora algunas de las páginas que hemos diseñado y descubre diferentes
       formas de presentar un negocio online.
     </p>
+    <a class="web-text-link" href="/proyectos/"
+      >Ver portfolio completo y casos reales <span aria-hidden="true">↗</span></a
+    >
   </div>
   {
     hasBothCategories && (
@@ -63,7 +66,10 @@ const hasBothCategories =
   <div id="web-projects-grid" class="web-projects__grid">
     {
       items.map((project) => {
-        const href = getDemoUrl(project.demoUrl);
+        const caseHref = getProjectCaseStudyHref(project);
+        const externalHref = getDemoUrl(project.demoUrl);
+        const href = caseHref ?? externalHref;
+        const isExternal = !caseHref && Boolean(externalHref);
         const Card = href ? "a" : "article";
         return (
           <Card
@@ -71,8 +77,8 @@ const hasBothCategories =
             data-project={project.id}
             data-category={project.type}
             href={href}
-            target={href ? "_blank" : undefined}
-            rel={href ? "noopener noreferrer" : undefined}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
           >
             <div class="web-project__image">
               <Image
@@ -101,8 +107,11 @@ const hasBothCategories =
               <h3>{project.title.trim()}</h3>
               {href ? (
                 <span class="web-project__link">
-                  Ver proyecto <span aria-hidden="true">↗</span>
-                  <span class="sr-only"> (se abre en una pestaña nueva)</span>
+                  {caseHref ? "Ver caso de proyecto" : "Ver demo"}{" "}
+                  <span aria-hidden="true">↗</span>
+                  {isExternal && (
+                    <span class="sr-only"> (se abre en una pestaña nueva)</span>
+                  )}
                 </span>
               ) : (
                 <span class="web-project__pending">

@@ -1,5 +1,5 @@
 ---
-import { projects, getDemoUrl } from '../../data/projects';
+import { projects, getDemoUrl, getProjectCaseStudyHref } from '../../data/projects';
 import { ArrowUpRight } from 'lucide';
 import { Image } from 'astro:assets';
 
@@ -8,7 +8,10 @@ const items = projects.filter(project => project.type === 'client' || project.ty
 
 <div class="about-projects">
   {items.map(project => {
-    const href = getDemoUrl(project.demoUrl);
+    const caseHref = getProjectCaseStudyHref(project);
+    const externalHref = getDemoUrl(project.demoUrl);
+    const href = caseHref ?? externalHref;
+    const isExternal = !caseHref && Boolean(externalHref);
     return (
       <article class="about-project" aria-labelledby={`about-project-${project.id}`}>
         <div class="about-project__image">
@@ -30,12 +33,16 @@ const items = projects.filter(project => project.type === 'client' || project.ty
         </div>
         <h3 id={`about-project-${project.id}`}>{project.title.trim()}</h3>
         {href ? (
-          <a href={href} target="_blank" rel="noopener noreferrer">
-            Visitar {project.title.trim()}
+          <a
+            href={href}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+          >
+            {caseHref ? `Ver caso de ${project.title.trim()}` : `Visitar ${project.title.trim()}`}
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               {ArrowUpRight.map(([Tag, attributes]) => <Tag {...attributes} />)}
             </svg>
-            <span class="sr-only"> (se abre en una pestaña nueva)</span>
+            {isExternal && <span class="sr-only"> (se abre en una pestaña nueva)</span>}
           </a>
         ) : (
           <p class="about-project__preview">Vista previa de una demostración, no un proyecto de cliente.</p>

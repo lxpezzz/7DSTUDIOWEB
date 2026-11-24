@@ -1,5 +1,5 @@
 ---
-import { getDemoUrl, type Project } from "../../data/projects";
+import { getDemoUrl, getProjectCaseStudyHref, type Project } from "../../data/projects";
 import { Image } from "astro:assets";
 interface Props {
   items: readonly Project[];
@@ -22,15 +22,18 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
   >
     {
       items.map((project) => {
+        const caseHref = getProjectCaseStudyHref(project);
         const demoUrl = getDemoUrl(project.demoUrl);
-        const Card = demoUrl ? "a" : "article";
+        const cardHref = caseHref ?? demoUrl;
+        const isExternal = !caseHref && Boolean(demoUrl);
+        const Card = cardHref ? "a" : "article";
         return (
           <Card
-            class:list={["project", { "project--linked": !!demoUrl }]}
+            class:list={["project", { "project--linked": !!cardHref }]}
             data-project-id={project.id}
-            href={demoUrl}
-            target={demoUrl ? "_blank" : undefined}
-            rel={demoUrl ? "noopener noreferrer" : undefined}
+            href={cardHref}
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
           >
             <div class="project__image">
               <Image
@@ -63,11 +66,11 @@ const catalogueId = `project-catalogue-${crypto.randomUUID()}`;
                 {project.highlights.join(" · ")}
               </p>
             )}
-            {demoUrl && (
+            {cardHref && (
               <span class="text-link project__link">
-                {project.type === "demo" ? "Explorar demo" : "Explorar proyecto"}
+                {caseHref ? "Ver caso de proyecto" : project.type === "demo" ? "Explorar demo" : "Explorar proyecto"}
                 <span class="sr-only">
-                  {" "}— {project.title} (se abre en una pestaña nueva)
+                  {" "}— {project.title}{isExternal ? " (se abre en una pestaña nueva)" : ""}
                 </span>
                 <svg
                   width="17"

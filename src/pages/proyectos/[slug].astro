@@ -1,0 +1,576 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/layout/Header.astro";
+import Footer from "../../components/layout/Footer.astro";
+import Contact from "../../components/home/Contact.astro";
+import { Image } from "astro:assets";
+import { ArrowLeft, ArrowUpRight, Check } from "lucide";
+import {
+  getProjectCaseStudies,
+  getDemoUrl,
+  getProjectCaseStudyHref,
+  type Project,
+  type ProjectCaseStudy,
+} from "../../data/projects";
+import { site } from "../../data/site";
+
+export function getStaticPaths() {
+  return getProjectCaseStudies().map((project) => ({
+    params: { slug: project.caseStudy.slug },
+    props: { project },
+  }));
+}
+
+interface Props {
+  project: Project & { caseStudy: ProjectCaseStudy };
+}
+
+const { project } = Astro.props;
+const { caseStudy } = project;
+const liveHref = getDemoUrl(project.demoUrl);
+const otherProjects = getProjectCaseStudies().filter(
+  (item) => item.id !== project.id,
+);
+const pageUrl = `${site.url}/proyectos/${caseStudy.slug}/`;
+
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: caseStudy.seoTitle,
+    description: caseStudy.seoDescription,
+    url: pageUrl,
+    isPartOf: { "@id": `${site.url}/#website` },
+    mainEntity: {
+      "@type": "CreativeWork",
+      name: project.title,
+      description: caseStudy.subtitle,
+      url: liveHref ?? pageUrl,
+      creator: { "@id": `${site.url}/#business` },
+      about: project.sector,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${site.url}/` },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Proyectos",
+        item: `${site.url}/proyectos/`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: project.title,
+        item: pageUrl,
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={caseStudy.seoTitle}
+  description={caseStudy.seoDescription}
+  structuredData={structuredData}
+>
+  <Header />
+  <main id="contenido" class="case-page">
+    <section class="case-hero container" aria-labelledby="case-title">
+      <nav class="case-breadcrumb" aria-label="Ruta de navegación">
+        <a href="/">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <a href="/proyectos/">Proyectos</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{project.title}</span>
+      </nav>
+      <p class="case-eyebrow">PROYECTO REAL · {project.sector.toUpperCase()}</p>
+      <h1 id="case-title">{caseStudy.headline}</h1>
+      <p class="case-hero__subtitle">{caseStudy.subtitle}</p>
+      <div class="case-hero__actions">
+        {
+          liveHref && (
+            <a
+              class="button"
+              href={liveHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Visitar web publicada <span aria-hidden="true">↗</span>
+              <span class="sr-only">
+                {" "}de {project.title} (se abre en una pestaña nueva)
+              </span>
+            </a>
+          )
+        }
+        <a class="case-link" href="/diseno-web/#presupuesto">
+          Calcular presupuesto de una web similar <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <dl class="case-meta" aria-label="Ficha técnica del proyecto">
+        <div>
+          <dt>Cliente</dt>
+          <dd>{project.title}</dd>
+        </div>
+        <div>
+          <dt>Sector</dt>
+          <dd>{project.sector}</dd>
+        </div>
+        <div>
+          <dt>Ámbito</dt>
+          <dd>{caseStudy.location}</dd>
+        </div>
+        <div>
+          <dt>Servicios</dt>
+          <dd>{caseStudy.services.join(" · ")}</dd>
+        </div>
+      </dl>
+
+      <figure class="case-showcase">
+        <Image
+          src={project.image}
+          width={1440}
+          widths={[480, 768, 1080, 1440]}
+          sizes="(min-width: 1360px) 1240px, 94vw"
+          format="webp"
+          quality={88}
+          alt={project.image.alt}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption>
+          Vista de la web publicada de {project.title} ({project.sector}).
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="case-narrative container" aria-label="Enfoque del proyecto">
+      <div class="case-narrative__grid">
+        <article class="case-block">
+          <p class="case-eyebrow">01 / PUNTO DE PARTIDA</p>
+          <h2>{caseStudy.challengeTitle}</h2>
+          {caseStudy.challenge.map((paragraph) => <p>{paragraph}</p>)}
+        </article>
+        <article class="case-block">
+          <p class="case-eyebrow">02 / SOLUCIÓN APLICADA</p>
+          <h2>{caseStudy.solutionTitle}</h2>
+          {caseStudy.solution.map((paragraph) => <p>{paragraph}</p>)}
+        </article>
+      </div>
+    </section>
+
+    <section class="case-points" aria-labelledby="case-points-title">
+      <div class="container">
+        <p class="case-eyebrow">03 / CLAVES DEL PROYECTO</p>
+        <h2 id="case-points-title">Qué se trabajó en esta web.</h2>
+        <div class="case-points__grid">
+          {
+            caseStudy.keyPoints.map((point) => (
+              <article class="case-point">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  {Check.map(([Tag, attributes]) => (
+                    <Tag {...attributes} />
+                  ))}
+                </svg>
+                <h3>{point.title}</h3>
+                <p>{point.text}</p>
+              </article>
+            ))
+          }
+        </div>
+        <div class="case-related-links">
+          {
+            caseStudy.relatedLinks.map((link) => (
+              <a class="case-link case-link--strong" href={link.href}>
+                {link.label}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  {ArrowUpRight.map(([Tag, attributes]) => (
+                    <Tag {...attributes} />
+                  ))}
+                </svg>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    {
+      otherProjects.length > 0 && (
+        <section class="case-more container" aria-labelledby="case-more-title">
+          <div class="case-more__heading">
+            <h2 id="case-more-title">Otros proyectos reales</h2>
+            <a class="case-link" href="/proyectos/">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                {ArrowLeft.map(([Tag, attributes]) => (
+                  <Tag {...attributes} />
+                ))}
+              </svg>
+              Volver a todos los proyectos
+            </a>
+          </div>
+          <div class="case-more__grid">
+            {otherProjects.map((item) => (
+              <a class="case-more__card" href={getProjectCaseStudyHref(item)}>
+                <div class="case-more__media">
+                  <Image
+                    src={item.image}
+                    width={960}
+                    widths={[320, 480, 640, 960]}
+                    sizes="(min-width: 1024px) 560px, 94vw"
+                    format="webp"
+                    quality={85}
+                    alt={item.image.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                <div class="case-more__content">
+                  <p class="case-more__sector">{item.sector}</p>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <span class="case-link case-link--strong">
+                    Ver caso de proyecto <span aria-hidden="true">↗</span>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <Contact
+      variant="pearl"
+      title="¿Quieres una web pensada para tu negocio?"
+      description="Trabajamos desde Castellón de la Plana con autónomos y pymes de toda la provincia y en remoto. Cuéntanos qué necesitas."
+    />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<style>
+  .case-page {
+    --case-muted: #655f58;
+    --case-accent: #7e4c3d;
+    --case-line: #d9d3ca;
+    --case-surface: #ece7e0;
+    padding-top: var(--header-height);
+    padding-bottom: 64px;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  .case-page :where(h1, h2, h3, p, dl, dd, figure) {
+    margin: 0;
+  }
+  .case-page :is(h1, h2, h3) {
+    text-wrap: balance;
+  }
+  .case-page :is(a, button):focus-visible {
+    outline: 2px solid var(--case-accent);
+    outline-offset: 4px;
+  }
+  .case-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 34px;
+    color: var(--case-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .case-breadcrumb a:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .case-eyebrow {
+    margin-bottom: 16px;
+    color: var(--case-accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+  }
+  .case-hero {
+    padding-block: 28px 64px;
+  }
+  .case-hero h1 {
+    max-width: 22ch;
+    font-size: clamp(38px, 4.6vw, 62px);
+    font-weight: 480;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+  .case-hero__subtitle {
+    max-width: 60ch;
+    margin-top: 22px;
+    color: var(--case-muted);
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .case-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    margin-top: 28px;
+  }
+  .case-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--case-accent);
+    font-size: 14px;
+    font-weight: 550;
+    line-height: 1.5;
+    text-decoration: underline;
+    text-decoration-color: #c7b4aa;
+    text-underline-offset: 5px;
+  }
+  .case-link--strong {
+    color: var(--color-ink);
+    font-weight: 600;
+    text-decoration-color: currentColor;
+  }
+  .case-link:hover {
+    color: var(--color-ink);
+    text-decoration-color: currentColor;
+  }
+  .case-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px 28px;
+    margin-top: 44px;
+    padding-block: 24px;
+    border-block: 1px solid var(--case-line);
+  }
+  .case-meta dt {
+    color: var(--case-muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .case-meta dd {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .case-showcase {
+    margin-top: 36px;
+    padding: clamp(14px, 2.2vw, 28px);
+    border: 1px solid var(--case-line);
+    border-radius: 16px;
+    background: var(--case-surface);
+  }
+  .case-showcase img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #d7d0c7;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .case-showcase figcaption {
+    margin-top: 14px;
+    color: var(--case-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .case-narrative {
+    padding-block: 20px 72px;
+  }
+  .case-narrative__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 56px;
+  }
+  .case-block h2 {
+    font-size: clamp(26px, 2.6vw, 36px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+  .case-block p:not(.case-eyebrow) {
+    margin-top: 18px;
+    color: var(--case-muted);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .case-points {
+    padding-block: 72px;
+    background: #efeae3;
+    border-block: 1px solid var(--case-line);
+  }
+  .case-points h2 {
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+  .case-points__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    margin-top: 36px;
+  }
+  .case-point {
+    padding: 22px;
+    border: 1px solid var(--case-line);
+    border-radius: 12px;
+    background: var(--color-paper);
+  }
+  .case-point svg {
+    color: var(--case-accent);
+  }
+  .case-point h3 {
+    margin-top: 16px;
+    font-size: 18px;
+    font-weight: 550;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+  .case-point p {
+    margin-top: 10px;
+    color: var(--case-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .case-related-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    margin-top: 34px;
+    padding-top: 24px;
+    border-top: 1px solid var(--case-line);
+  }
+  .case-more {
+    padding-block: 72px 56px;
+  }
+  .case-more__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .case-more h2 {
+    font-size: clamp(26px, 2.5vw, 34px);
+    font-weight: 500;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+  }
+  .case-more__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .case-more__card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: 32px;
+    padding: 22px;
+    border: 1px solid var(--case-line);
+    border-radius: 14px;
+    background: #fff;
+  }
+  .case-more__card:hover {
+    border-color: var(--case-accent);
+  }
+  .case-more__media {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--case-line);
+    border-radius: 8px;
+    background: var(--case-surface);
+  }
+  .case-more__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  .case-more__sector {
+    color: var(--case-accent);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .case-more__content h3 {
+    margin-top: 8px;
+    font-size: 24px;
+    font-weight: 550;
+    letter-spacing: -0.025em;
+  }
+  .case-more__content p:not(.case-more__sector) {
+    margin-top: 10px;
+    color: var(--case-muted);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  .case-more__content .case-link {
+    margin-top: 14px;
+  }
+  @media (max-width: 1023px) {
+    .case-meta,
+    .case-points__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .case-narrative__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 36px;
+    }
+  }
+  @media (max-width: 767px) {
+    .case-hero {
+      padding-block: 22px 44px;
+    }
+    .case-meta,
+    .case-points__grid,
+    .case-more__card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .case-points,
+    .case-more {
+      padding-block: 52px;
+    }
+  }
+</style>

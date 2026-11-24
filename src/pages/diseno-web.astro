@@ -21,6 +21,7 @@ import {
 } from "lucide";
 import { site } from "../data/site";
 import { webFaqs as faqs } from "../data/serviceFaqs";
+import { formatEmphasizedText } from "../utils/format-text";
 import "../styles/web-design.css";
 
 const benefits = [
@@ -102,24 +103,21 @@ const channels = [
     icon: MessageCircle,
   },
 ];
-function emphasizeFaqText(text: string, phrases: readonly string[]) {
-  const pattern = phrases
-    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-    .join("|");
-  return text
-    .split(new RegExp(`(${pattern})`, "g"))
-    .filter(Boolean)
-    .map((part) => ({
-      text: part,
-      tag: phrases.includes(part) ? ("strong" as const) : ("span" as const),
-    }));
-}
 const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Diseño web en Castellón para negocios",
+    serviceType: "Diseño web",
+    url: `${site.url}/diseno-web/`,
+    provider: { "@id": `${site.url}/#business` },
+    areaServed: { "@type": "Place", name: "Castellón de la Plana, España" },
+  },
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Inicio", item: site.url },
+      { "@type": "ListItem", position: 1, name: "Inicio", item: `${site.url}/` },
       {
         "@type": "ListItem",
         position: 2,
@@ -189,7 +187,7 @@ const structuredData = [
         </h2><p>
           Cuando alguien descubre tu negocio, quiere saber qué haces, qué
           servicios ofreces y cómo contactar contigo. Si esa información no está
-          clara, el cliente eligirá otras opciones.
+          clara, el cliente elegirá otras opciones.
         </p>
       </div>
       <div class="web-comparison">
@@ -313,7 +311,7 @@ const structuredData = [
       </div>
       <p class="web-caption">
         Una buena web no sustituye lo que hace grande a tu negocio. Lo
-        complementa y ayuda a que más personas lo descubran..
+        complementa y ayuda a que más personas lo descubran.
       </p>
     </section>
 
@@ -512,7 +510,7 @@ const structuredData = [
                 <summary>
                   <>
                     <span>
-                      {emphasizeFaqText(faq.question, faq.questionStrong).map(
+                      {formatEmphasizedText(faq.question, faq.questionStrong).map(
                         ({ text, tag: Tag }) => (
                           <Tag>{text}</Tag>
                         ),
@@ -523,7 +521,7 @@ const structuredData = [
                 </summary>
                 {faq.answer.split("\n\n").map((paragraph) => (
                   <p>
-                    {emphasizeFaqText(paragraph, faq.answerStrong).map(
+                    {formatEmphasizedText(paragraph, faq.answerStrong).map(
                       ({ text, tag: Tag }) => (
                         <Tag>{text}</Tag>
                       ),

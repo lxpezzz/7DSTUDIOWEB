@@ -18,6 +18,7 @@ import {
 } from "lucide";
 import { site } from "../data/site";
 import { seoFaqs as faqs } from "../data/serviceFaqs";
+import { formatEmphasizedText } from "../utils/format-text";
 
 const title = "SEO local en Castellón | 7DStudio";
 const description =
@@ -58,24 +59,6 @@ const work = [
     text: "Analizamos las visualizaciones, interacciones y otros datos disponibles para conocer cómo evoluciona tu presencia local.",
   },
 ];
-function formatFaqText(text: string, strong: string[], italic: string[] = []) {
-  const phrases = [...strong, ...italic];
-  if (phrases.length === 0) return [{ text, tag: "span" as const }];
-  const pattern = phrases
-    .map((phrase) => phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-    .join("|");
-  return text
-    .split(new RegExp(`(${pattern})`, "g"))
-    .filter(Boolean)
-    .map((part) => ({
-      text: part,
-      tag: strong.includes(part)
-        ? ("strong" as const)
-        : italic.includes(part)
-          ? ("em" as const)
-          : ("span" as const),
-    }));
-}
 const structuredData = [
   {
     "@context": "https://schema.org",
@@ -85,8 +68,15 @@ const structuredData = [
     url: `${site.url}/seo-local/`,
     about: {
       "@type": "Service",
-      name: "SEO local",
-      provider: { "@type": "Organization", name: site.name, url: site.url },
+      name: "SEO local en Castellón",
+      serviceType: "SEO local",
+      provider: {
+        "@id": `${site.url}/#business`,
+        "@type": "Organization",
+        name: site.name,
+        url: `${site.url}/`,
+      },
+      areaServed: { "@type": "Place", name: "Castellón de la Plana, España" },
     },
   },
   {
@@ -421,7 +411,7 @@ const structuredData = [
             <details>
               <summary>
                 <span>
-                  {formatFaqText(faq.question, faq.questionStrong).map(
+                  {formatEmphasizedText(faq.question, faq.questionStrong).map(
                     ({ text, tag: Tag }) => (
                       <Tag>{text}</Tag>
                     ),
@@ -431,7 +421,7 @@ const structuredData = [
               </summary>
               {faq.answer.split("\n\n").map((paragraph) => (
                 <p>
-                  {formatFaqText(
+                  {formatEmphasizedText(
                     paragraph,
                     faq.answerStrong,
                     faq.answerItalic,

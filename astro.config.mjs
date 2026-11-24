@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import { legal, legalLinks } from './src/data/legal.ts';
 
@@ -14,5 +13,4 @@ export default defineConfig({
       return !pathname.startsWith('/demos/') && (legal.publicationReady || !isLegalPage);
     },
   })],
-  vite: { plugins: [tailwindcss()] },
 });

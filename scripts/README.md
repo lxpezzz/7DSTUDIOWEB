@@ -25,7 +25,7 @@ Ejecutar contra la compilación estática actual, no contra artefactos antiguos.
 
 ## Contrato actual
 
-- Navegación entre páginas; menú móvil mediante diálogo hasta 1023 px.
+- Navegación entre páginas; menú móvil mediante diálogo hasta 899 px.
 - Header en el flujo sin JS en móvil, fijo al mejorar con JS; anclas accesibles.
 - Tres tarjetas de Servicios enlazadas a sus páginas publicadas.
 - Portfolio con proyectos existentes y demo de Huella; no se exige estado vacío.
@@ -47,8 +47,6 @@ tarjetas, efectos de hover y ciclo de vida de la proyección cinematográfica.
 Los avisos de mejores prácticas fuera de WCAG y de la incidencia de nombres
 accesibles se registran por separado, no se ocultan.
 
-Los scripts de sello (`verify-seal.mjs`) son comprobaciones históricas de un
-componente que no está en la home actual; no son una puerta de lanzamiento.
 Las pruebas específicas de símbolo/encabezados conservadas pueden ejecutarse
 para cambios de esas superficies, pero no sustituyen esta regresión.
 

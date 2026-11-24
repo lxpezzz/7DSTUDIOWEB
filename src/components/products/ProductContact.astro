@@ -178,6 +178,7 @@ const privacyReady = site.privacyReady;
           value="accepted"
           required
           disabled={!privacyReady}
+          aria-describedby={!privacyReady ? "product-form-notice" : undefined}
         /><span
           >He leído y acepto <a
             href={site.privacyPolicyUrl}

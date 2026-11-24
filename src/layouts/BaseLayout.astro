@@ -20,15 +20,24 @@ const {
   canonicalPath = Astro.url.pathname,
 } = Astro.props;
 const canonical = new URL(canonicalPath, site.url).href;
+const businessId = `${site.url}/#business`;
 const schema = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
+  "@id": businessId,
   name: site.name,
-  url: site.url,
+  url: `${site.url}/`,
   logo: new URL(brand.logo, site.url).href,
   image: new URL(brand.socialImage, site.url).href,
   description: site.description,
-  telephone: "+34621200800",
+  telephone: site.phoneHref.replace(/^tel:/, ""),
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Castellón de la Plana",
+    postalCode: "12004",
+    addressRegion: "Castellón",
+    addressCountry: "ES",
+  },
   areaServed: { "@type": "Place", name: "Castellón de la Plana, España" },
   hasOfferCatalog: {
     "@type": "OfferCatalog",
@@ -61,6 +70,7 @@ const schema = {
       type="font/woff2"
       crossorigin
     />
+    <slot name="head" />
     <meta name="theme-color" content="#F8F7F4" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
@@ -81,7 +91,14 @@ const schema = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(brand.twitterImage, site.url).href} />
     <meta name="twitter:image:alt" content="7DStudio — Diseño web y SEO local en Castellón" />
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {
+      !noindex && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(schema).replace(/</g, "\\u003c")}
+        />
+      )
+    }
     {
       structuredData.map((data) => (
         <script

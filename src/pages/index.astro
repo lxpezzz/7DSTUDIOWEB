@@ -8,8 +8,40 @@ import Projects from '../components/home/Projects.astro';
 import Process from '../components/home/Process.astro';
 import Contact from '../components/home/Contact.astro';
 import Footer from '../components/layout/Footer.astro';
+import { heroScene } from '../data/hero-scene';
+import { site } from '../data/site';
+
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    url: `${site.url}/`,
+    name: site.name,
+    inLanguage: 'es-ES',
+    publisher: { '@id': `${site.url}/#business` },
+  },
+];
 ---
-<BaseLayout>
+<BaseLayout structuredData={structuredData}>
+  <Fragment slot="head">
+    <link
+      rel="preload"
+      as="image"
+      href={heroScene.image}
+      type="image/webp"
+      media="(min-width: 1024px) and (min-height: 520px) and (min-aspect-ratio: 136/100)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href={heroScene.wallBackgroundImage}
+      type="image/webp"
+      media="(max-width: 1023px), (max-height: 519px), (max-aspect-ratio: 135/100)"
+      fetchpriority="high"
+    />
+  </Fragment>
   <Header />
   <main id="contenido">
     <Hero />

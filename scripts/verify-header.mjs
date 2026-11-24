@@ -22,10 +22,10 @@ try {
           const first = document.querySelector('main nav[aria-label="Ruta de navegación"]') || document.querySelector('h1');
           return { header: header.getBoundingClientRect().toJSON(), first: first.getBoundingClientRect().toJSON(), position: getComputedStyle(header).position, overflow: document.documentElement.scrollWidth > innerWidth };
         });
-        assert.equal(geometry.position, !javaScriptEnabled && width < 1024 ? 'static' : 'fixed');
+        assert.equal(geometry.position, !javaScriptEnabled && width < 900 ? 'static' : 'fixed');
         assert.ok(geometry.first.top >= geometry.header.bottom - 1, `${route} ${width} JS=${javaScriptEnabled}: primer contenido tapado`);
         assert.equal(geometry.overflow, false);
-        if (width < 1024 && javaScriptEnabled) {
+        if (width < 900 && javaScriptEnabled) {
           const toggle = page.getByRole('button', { name: 'Abrir navegación', exact: true });
           await toggle.click();
           const dialog = page.getByRole('dialog');

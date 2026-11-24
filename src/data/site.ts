@@ -22,7 +22,7 @@ export const site = {
 export const navigation = [
   { label: 'Inicio', href: '/' },
   { label: 'Diseño web', href: '/diseno-web/' },
-  { label: 'Seo Local', href: '/seo-local/' },
+  { label: 'SEO Local', href: '/seo-local/' },
   { label: 'Productos', href: '/productos/' },
   { label: 'Quiénes somos', href: '/quienes-somos/' },
   { label: 'Preguntas frecuentes', href: '/preguntas-frecuentes/' },

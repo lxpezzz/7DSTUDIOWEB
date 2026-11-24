@@ -15,7 +15,11 @@ const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
     <div class="cinematic-hero__camera" aria-hidden="true">
       <div class="cinematic-hero__photo">
         <picture>
-          <source media="(min-width: 1024px)" srcset={heroScene.image} type="image/webp" />
+          <source
+            media="(min-width: 1024px) and (min-height: 520px) and (min-aspect-ratio: 136/100)"
+            srcset={heroScene.image}
+            type="image/webp"
+          />
           <img
             src={BLANK_PIXEL}
             width={heroScene.width}
@@ -257,8 +261,9 @@ const BLANK_PIXEL = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAAL
     }
   }
 
-  /* Modo cinematográfico: solo >= 1024px y cuando el espacio geométrico real es suficiente. */
-  @media (min-width: 1024px) {
+  /* Modo cinematográfico: solo cuando el espacio geométrico real es suficiente
+     (evita saltos CLS y descargas innecesarias en tablets 4:3 como 1024×768). */
+  @media (min-width: 1024px) and (min-height: 520px) and (min-aspect-ratio: 136/100) {
     .cinematic-hero:not([data-hero-mode="simplified"]) .cinematic-hero__stage {
       display: block;
       height: 100svh;

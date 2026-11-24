@@ -6,7 +6,7 @@ estén pendientes la revisión legal/comercial y las comprobaciones operativas.*
 ## Artefacto
 
 1. Ejecutar `npm run check`, `npm run build` y las regresiones de `scripts/README.md`.
-2. Revisar `RESUMEN_FASE4_7DSTUDIO.md` y los pendientes con el titular.
+2. Revisar `docs/md/RESUMEN_FASE4_7DSTUDIO.md` y los pendientes con el titular.
 3. La salida es estática: subir **solo el contenido de `dist/`**, no la carpeta
    contenedora ni el repositorio. No se necesita Node, PHP, `npm install` ni un
    adaptador Astro en el hosting para servir esta web.
